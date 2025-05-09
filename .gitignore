@@ -1,0 +1,43 @@
+# Python 기본 캐시 파일
+__pycache__/
+*.py[cod]
+*.pyo
+
+# 환경 설정 파일
+.env
+*.env
+
+# IDE 및 편집기 관련 파일
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 운영 체제 관련 파일
+.DS_Store
+Thumbs.db
+
+# 로그 파일
+*.log
+
+# 가상 환경
+venv/
+.env/
+*.venv
+
+# 빌드 파일
+build/
+dist/
+*.egg-info/
+
+# # Pygame 프로젝트 관련
+# *.ogg
+# *.wav
+# *.mp3
+# *.png
+# *.jpg
+# *.jpeg
+# *.bmp
+# *.gif
+# *.tiff
+# *.ico
