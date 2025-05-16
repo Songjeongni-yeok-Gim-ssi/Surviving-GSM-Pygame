@@ -1,7 +1,6 @@
 import pygame
-from pygame.locals import QUIT
-from settings import *  # 설정 값 가져오기
-from entity import Entity
+from pygame.locals import *
+from settings import *
 
 class Game:
     '''
@@ -10,38 +9,49 @@ class Game:
     def __init__(self):
         self.running = True
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))  # 화면 객체를 저장
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.state = GameState.MAIN_MENU 
+        self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE)
+
+        # 실제 게임에서 사용할 변수들
+        self.all_sprites = pygame.sprite.Group()
+
         
-        # 플레이어 엔티티 생성 및 추가
-        self.all_sprites = pygame.sprite.Group() # 엔티티 그룹 생성
-        self.player = Entity(100, 100, 50, 50, Color.RED.value)  # 빨간색 사각형
-        self.all_sprites.add(self.player)
-
-
     def process_events(self):
+        '''
+            사용자의 Input을 토대로 이벤트를 발생시키는 메서드
+        '''
         for event in pygame.event.get():
             if event.type == QUIT:
                 self.running = False
+            elif self.state == GameState.MAIN_MENU and event.type == KEYDOWN:
+                self.state = GameState.PLAYING
 
     def update(self):
-        # 게임 오브젝트 업데이트 로직을 여기에 추가합니다.
-        
-        # 모든 스프라이트 업데이트
-        self.all_sprites.update()
+        '''
+            동적 객체를 표현하기 위한 메서드
+        '''
+        if self.state == GameState.PLAYING:
+            self.all_sprites.update()
 
     def draw(self):
-        # 화면을 그리는 로직을 여기에 추가합니다.
-        self.screen.fill(Color.BLACK.value)  # 배경색을 검정으로 설정
-        
-        # 추가적인 그리기 로직을 여기에 작성
-        self.all_sprites.draw(self.screen)  # 모든 스프라이트 그리기
-        
-        pygame.display.flip()  # 화면 업데이트
+        '''
+            정적인 화면을 출력하는 메서드
+        '''
+        if self.state == GameState.MAIN_MENU:
+            self.screen.fill(Color.BLACK.value)
+    
+        elif self.state == GameState.PLAYING:
+            self.screen.fill(Color.WHITE.value)
+        pygame.display.flip()
 
     def run(self):
+        '''
+            게임 루프 메서드
+        '''
         while self.running:
             self.process_events()
             self.update()
             self.draw()
-            self.clock.tick(FPS)  # FPS 설정
+            self.clock.tick(FPS)
 
