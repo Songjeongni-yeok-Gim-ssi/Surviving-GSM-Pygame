@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 # settings.py
 
@@ -15,8 +15,13 @@ class Color(Enum):
   GREEN = (0, 255, 0)
   BLUE = (0, 0, 255)
 
+# Screens
+class GameState(Enum):
+  MAIN_MENU = auto()
+  PLAYING = auto()
+
 # Font settings
-FONT_NAME = 'arial'
+FONT_NAME = 'malgungothic'
 FONT_SIZE = 32
 
 # Sound settings
