@@ -11,9 +11,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.state = GameState.MAIN_MENU 
-        self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE)
-
-        # 실제 게임에서 사용할 변수들
+        self.font = pygame.font.Font(FONT_NAME, FONT_SIZE)
         self.all_sprites = pygame.sprite.Group()
 
         

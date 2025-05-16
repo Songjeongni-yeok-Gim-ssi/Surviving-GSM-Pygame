@@ -21,7 +21,7 @@ class GameState(Enum):
   PLAYING = auto()
 
 # Font settings
-FONT_NAME = 'malgungothic'
+FONT_NAME = 'assets/fonts/neodgm.ttf'
 FONT_SIZE = 32
 
 # Sound settings
