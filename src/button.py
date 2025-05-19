@@ -7,14 +7,15 @@ class Button:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     
     '''
-        text는 버튼 위에 쓸 text를 입력, color는 평소 색, hilightColor는 마우스가 위에 있을 때의 색
+        text는 버튼 위에 쓸 text를 입력, color는 평소 색, hilightColor는 마우스가 위에 있을 때의 색, buttonAction은 버튼을 눌렀을 때 실행할 액션
     '''
-    def __init__(self, x, y, width, height, text, color, hilightColor, textColor):
+    def __init__(self, x, y, width, height, text, color, hilightColor, textColor, buttonAction):
         self.button_color = color
         self.button_hilightColor = hilightColor
         self.text_color = textColor
         self.button = pygame.Rect(x, y, width, height)
         self.button_text = text
+        self.button_action = buttonAction
     
     '''
         버튼을 그리는 함수
@@ -29,4 +30,6 @@ class Button:
         text_rect = self.text.get_rect(center=self.button.center)
         Button.screen.blit(self.text, text_rect)
     
-    
+    def excuteButton(self, event, *args):
+        if event.type == pygame.MOUSEBUTTONDOWN and self.button.collidepoint(event.pos):
+            self.button_action(args)
