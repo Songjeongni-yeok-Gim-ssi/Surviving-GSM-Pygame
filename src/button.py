@@ -39,5 +39,20 @@ class Button:
         if event.type == pygame.MOUSEBUTTONDOWN and self.button.collidepoint(event.pos):
             self.button_action(args)
     
+    '''
+        버튼이 사라지게 하는 함수
+    '''
     def deleteButton(self):
         Button.buttonList.remove(self)
+        
+    '''
+        버튼을 모두 사라지게 하는 함수
+    '''
+    def clearButton(self):
+        Button.buttonList.clear()
+        
+    '''
+        버튼이 리스트 내에서 몇 번째 인덱스에 있는지를 반환하는 함수
+    '''
+    def getIndex(self):
+        return Button.buttonList.index(self)
