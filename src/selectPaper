@@ -1,0 +1,15 @@
+import pygame
+from pygame.locals import QUIT
+from settings import *  # 설정 값 가져오기
+from entity import Entity
+
+class SelectPaper(Entity):
+    
+    '''
+        title은 이벤트 제목, text는 이벤트 설명, buttons는 이벤트의 선택지들을 설정
+    '''
+    def __init__(self, title, text, *buttons, x = SCREEN_WIDTH / 2, y = SCREEN_HEIGHT / 2, width = 600, height = 400, color = Color.WHITE):
+        super().__init__(x, y, width, height, color)
+        self.title = title
+        self.text = text
+        self.buttons = buttons
