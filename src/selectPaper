@@ -7,9 +7,9 @@ from button import Button
 class SelectPaper(Entity):
     
     '''
-        title은 이벤트 제목, text는 이벤트 설명, buttons는 이벤트의 선택지들을 설정
+        title은 이벤트 제목, text는 이벤트 설명, buttons는 이벤트의 선택지들을 설정, condition은 Select
     '''
-    def __init__(self, imagePath, title, text, *buttons : Button, x = SCREEN_WIDTH / 2, y = SCREEN_HEIGHT / 2, width = SCREEN_WIDTH / 1.3, height = SCREEN_HEIGHT / 1.3, color = Color.WHITE):
+    def __init__(self, imagePath, title, text, *buttons : Button, condition, x = SCREEN_WIDTH / 2, y = SCREEN_HEIGHT / 2, width = SCREEN_WIDTH / 1.3, height = SCREEN_HEIGHT / 1.3, color = Color.WHITE):
         super().__init__(x, y, width, height, color)
         self.x = x
         self.y = y
@@ -18,10 +18,22 @@ class SelectPaper(Entity):
         self.title = title
         self.text = text
         self.buttons = buttons
+        self.titleSurface = pygame.font.SysFont(None, bold=True, size=width / 10)
+        self.textSurface = pygame.font.SysFont(None, bold=False, size=width / 15)
+        self.condition = condition
+        for button in buttons:
+            button.button_action += self.conditionToFalse
+    
+    def conditionToFalse(self):
+        self.condition = False
     
     def drawPaper(self):
         Button.screen.blit(self.image, (self.x, self.y / 2))
-        
+        Button.screen.blit(self.titleSurface, (self.x, self.y))
+        Button.screen.blit(self.textSurface, (self.x, self.y + 50))
         
         for button in self.buttons:
             button.drawButton()
+    
+    def update(self):
+        pass # 조건 충족시 drawPaper

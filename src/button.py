@@ -4,7 +4,7 @@ from settings import *  # 설정 값 가져오기
 from entity import Entity
 from pygame.event import Event
 
-class Button:
+class Button(Entity):
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     buttonList = [] # 현재 생성된 버튼 객체가 들어있는 리스트
     
@@ -36,9 +36,9 @@ class Button:
     '''
         버튼 실행을 감지하는 함수
     '''
-    def excuteButton(self, event : Event, *args):
+    def excuteButton(self, event : Event):
         if event.type == pygame.MOUSEBUTTONDOWN and self.button.collidepoint(event.pos):
-            self.button_action(args)
+            self.button_action()
     
     '''
         버튼이 사라지게 하는 함수
@@ -57,3 +57,8 @@ class Button:
     '''
     def getIndex(self):
         return Button.buttonList.index(self)
+
+    def update(self):
+        self.drawButton()
+        for event in pygame.event.get():
+            self.excuteButton(event)
