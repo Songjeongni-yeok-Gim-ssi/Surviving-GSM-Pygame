@@ -48,11 +48,14 @@ class Button(Entity):
             버튼이 사라지게 하는 함수
         '''
         Button.buttonList.remove(self)
+        self.gameInstance.all_sprites.remove(self)
     
     def clearButton(self):    
         '''
             버튼을 모두 사라지게 하는 함수
         '''
+        for button in Button.buttonList:
+            self.gameInstance.all_sprites.remove(button)
         Button.buttonList.clear()
     
     def getIndex(self):    
