@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import QUIT
 from settings import *  # 설정 값 가져오기
 from entity import Entity
+from pygame.event import Event
 
 class Button:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -10,7 +11,7 @@ class Button:
     '''
         text는 버튼 위에 쓸 text를 입력, color는 평소 색, hilightColor는 마우스가 위에 있을 때의 색, buttonAction은 버튼을 눌렀을 때 실행할 함수 혹은 람다식
     '''
-    def __init__(self, x, y, width, height, text, color, hilightColor, textColor, buttonAction):
+    def __init__(self, x, y, width, height, text, color, hilightColor, buttonAction : function, textColor = Color.BLACK):
         self.button_color = color
         self.button_hilightColor = hilightColor
         self.text_color = textColor
@@ -35,7 +36,7 @@ class Button:
     '''
         버튼 실행을 감지하는 함수
     '''
-    def excuteButton(self, event, *args):
+    def excuteButton(self, event : Event, *args):
         if event.type == pygame.MOUSEBUTTONDOWN and self.button.collidepoint(event.pos):
             self.button_action(args)
     
