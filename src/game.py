@@ -6,15 +6,22 @@ class Game:
     '''
         Game 실행을 위한 Game 객체 입니다.
     '''
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, "_instance"):         
+            cls._instance = super().__new__(cls) 
+        return cls._instance       
+    
     def __init__(self):
-        self.running = True
-        self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.state = GameState.MAIN_MENU 
-        self.font = pygame.font.Font(FONT_NAME, FONT_SIZE)
-        self.all_sprites = pygame.sprite.Group()
+        cls = type(self)
+        if not hasattr(cls, "_init"):
+            self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+            self.running = True
+            self.clock = pygame.time.Clock()
+            self.state = GameState.MAIN_MENU 
+            self.font = pygame.font.Font(FONT_NAME, FONT_SIZE)
+            self.all_sprites = pygame.sprite.Group()
+            cls._init = True
 
-        
     def process_events(self):
         '''
             사용자의 Input을 토대로 이벤트를 발생시키는 메서드
