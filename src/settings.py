@@ -3,8 +3,8 @@ from enum import Enum, auto
 # settings.py
 
 # Game settings
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 768
 FPS = 60
 
 # Colors

@@ -47,7 +47,16 @@ class Game:
             self.screen.fill(Color.BLACK.value)
     
         elif self.state == GameState.PLAYING:
-            self.screen.fill(Color.WHITE.value)
+            bg = pygame.image.load('assets/imgs/gsm_meister_highschool_cover.jpeg')
+            bg = pygame.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+            bg_rect = bg.get_rect(center=self.screen.get_rect().center)
+            self.screen.blit(bg, bg_rect)
+            
+            game_title = self.font.render("GSM에서 살아남기", True, Color.BLACK.value)
+            game_title_rect = game_title.get_rect()
+            game_title_rect.centerx = round(SCREEN_WIDTH / 2)
+            game_title_rect.y = 300
+            self.screen.blit(game_title, game_title_rect)
         pygame.display.flip()
 
     def run(self):
