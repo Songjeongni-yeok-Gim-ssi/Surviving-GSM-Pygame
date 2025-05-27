@@ -12,6 +12,7 @@ class Button(Entity):
         '''
         text는 버튼 위에 쓸 text를 입력, color는 평소 색, hilightColor는 마우스가 위에 있을 때의 색, buttonAction은 버튼을 눌렀을 때 실행할 함수 혹은 람다식
         '''
+        self.isActive = True
         self.button_color = color
         self.button_hilightColor = hilightColor
         self.text_color = textColor
