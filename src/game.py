@@ -72,74 +72,112 @@ class Game:
             manager=self.manager
         )
         
-        # 게임 화면용 UI 패널 (반투명 배경)
+        # 게임 화면용 UI 패널 (더 큰 크기로 조정)
         self.game_ui_panel = pygame_gui.elements.UIPanel(
-            relative_rect=pygame.Rect(50, 50, 300, 200),
+            relative_rect=pygame.Rect(50, 50, 400, 280),
             manager=self.manager,
             object_id='#game_ui_panel'
         )
         
         # 게임 상태 라벨들
         self.time_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 10, 280, 30),
-            text='시간: 오전 12:00',
+            relative_rect=pygame.Rect(10, 10, 380, 30),
+            text='1학년 1주차 월요일 오전 09:00',
+            manager=self.manager,
+            container=self.game_ui_panel
+        )
+        
+        self.progress_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 45, 380, 25),
+            text='전체 진행도: 0.0% | 학년 진행도: 2.0%',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.health_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 50, 280, 30),
+            relative_rect=pygame.Rect(10, 75, 280, 30),
             text='체력: 100/100',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.money_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 90, 280, 30),
+            relative_rect=pygame.Rect(10, 105, 280, 30),
             text='돈: 10,000원',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
-        # 시간 속도 조절 버튼들 (게임 UI 패널에 추가)
+        # 시간 속도 조절 섹션
         self.time_speed_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 130, 100, 25),
+            relative_rect=pygame.Rect(10, 140, 100, 25),
             text='시간 속도:',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.speed_1x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(110, 130, 40, 25),
+            relative_rect=pygame.Rect(110, 140, 40, 25),
             text='1x',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.speed_2x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(155, 130, 40, 25),
+            relative_rect=pygame.Rect(155, 140, 40, 25),
             text='2x',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.speed_5x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(200, 130, 40, 25),
+            relative_rect=pygame.Rect(200, 140, 40, 25),
             text='5x',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
+        # 개발자 도구 섹션
+        self.dev_tools_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 175, 100, 25),
+            text='개발자 도구:',
+            manager=self.manager,
+            container=self.game_ui_panel
+        )
+        
+        self.skip_year_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(110, 175, 80, 25),
+            text='학년 스킵',
+            manager=self.manager,
+            container=self.game_ui_panel
+        )
+        
+        self.reset_time_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(195, 175, 80, 25),
+            text='시간 리셋',
+            manager=self.manager,
+            container=self.game_ui_panel
+        )
+        
+        # 졸업 상태 라벨
+        self.graduation_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 210, 380, 30),
+            text='',
+            manager=self.manager,
+            container=self.game_ui_panel
+        )
+        self.graduation_label.hide()  # 처음에는 숨김
+        
         # 선택지 버튼들
         self.choice_button1 = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 150, 500, 300, 50),
-            text='기숙사 가기',
+            text='기숙사 가기 (1시간 소모)',
             manager=self.manager
         )
         
         self.choice_button2 = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 150, 560, 300, 50),
-            text='늦지 않게 공부하기',
+            text='공부하기 (3시간 소모)',
             manager=self.manager
         )
         
@@ -217,13 +255,13 @@ class Game:
                     
                 elif event.ui_element == self.choice_button1:
                     print("기숙사로 이동!")
-                    # 선택지 1 처리 - 시간이 좀 더 흘러가게 할 수 있음
-                    self.time_manager.game_minutes += 30  # 30분 추가
+                    # 1시간 소모
+                    self.time_manager.total_seconds += 60 * 60
                     
                 elif event.ui_element == self.choice_button2:
                     print("공부하기 선택!")
-                    # 선택지 2 처리 - 시간이 더 많이 흘러가게 할 수 있음
-                    self.time_manager.game_minutes += 60  # 1시간 추가
+                    # 3시간 소모
+                    self.time_manager.total_seconds += 3 * 60 * 60
                 
                 elif event.ui_element == self.back_button:
                     print("메인 메뉴로 돌아가기!")
@@ -243,6 +281,17 @@ class Game:
                 elif event.ui_element == self.speed_5x_button:
                     self.time_manager.set_time_speed(5.0)
                     print("시간 속도: 5배속")
+                
+                # 개발자 도구 버튼들
+                elif event.ui_element == self.skip_year_button:
+                    if self.time_manager.skip_to_next_year():
+                        print(f"학년 스킵 완료! 현재: {self.time_manager.current_year}학년")
+                    else:
+                        print("더 이상 스킵할 수 없습니다.")
+                
+                elif event.ui_element == self.reset_time_button:
+                    print("시간 리셋!")
+                    self.time_manager.reset()
             
             # 기존 키보드 이벤트도 유지 (백업용)
             elif event.type == KEYDOWN:
@@ -251,6 +300,15 @@ class Game:
                         self.state = GameState.MAIN_MENU
                         self.time_manager.reset()  # ESC로 나갈 때도 시간 초기화
                         self.show_main_menu_ui()
+                
+                # 개발자 단축키
+                elif event.key == K_F1:  # F1로 학년 스킵
+                    if self.state == GameState.PLAYING:
+                        self.time_manager.skip_to_next_year()
+                        
+                elif event.key == K_F2:  # F2로 시간 리셋
+                    if self.state == GameState.PLAYING:
+                        self.time_manager.reset()
             
             # UI 매니저에 이벤트 전달 (중요!)
             self.manager.process_events(event)
@@ -277,23 +335,45 @@ class Game:
             # 게임 오브젝트 업데이트
             self.all_sprites.update()
             
-            # 시간에 따른 게임 로직 (예시)
-            time_info = self.time_manager.get_current_time_info()
-            
-            # 특정 시간대에 따른 이벤트 처리 예시
-            if time_info['hour'] == 6 and time_info['minute'] == 0:
-                print("아침 6시입니다! 기상 시간!")
-            elif time_info['hour'] == 22 and time_info['minute'] == 0:
-                print("밤 10시입니다! 취침 시간!")
+            # 시간에 따른 게임 로직
+            self.handle_time_events()
+    
+    def handle_time_events(self):
+        '''시간에 따른 게임 이벤트 처리'''
+        time_info = self.time_manager.get_current_time_info()
+        
+        # 학년 변경 이벤트
+        if hasattr(self, '_last_year'):
+            if self._last_year != time_info['year'] and not time_info['is_graduated']:
+                print(f"축하합니다! {time_info['year']}학년이 되었습니다!")
+        self._last_year = time_info['year']
+        
+        # 졸업 이벤트
+        if time_info['is_graduated'] and not hasattr(self, '_graduation_announced'):
+            print("🎓 축하합니다! GSM을 졸업하셨습니다! 🎓")
+            self._graduation_announced = True
     
     def update_game_ui(self):
         '''
             게임 UI를 현재 상태에 맞게 업데이트
         '''
+        time_info = self.time_manager.get_current_time_info()
+        
         # 시간 라벨 업데이트
-        time_string = self.time_manager.get_time_string()
         speed_info = f" ({self.time_manager.time_speed}x)"
-        self.time_label.set_text(time_string + speed_info)
+        self.time_label.set_text(time_info['time_string'] + speed_info)
+        
+        # 진행도 라벨 업데이트
+        progress = time_info['progress']
+        progress_text = f"전체 진행도: {progress['total_progress']:.1f}% | 학년 진행도: {progress['year_progress']:.1f}%"
+        self.progress_label.set_text(progress_text)
+        
+        # 졸업 상태 표시
+        if time_info['is_graduated']:
+            self.graduation_label.set_text("🎓 졸업 완료! 축하합니다! 🎓")
+            self.graduation_label.show()
+        else:
+            self.graduation_label.hide()
         
         # 다른 UI 요소들도 필요에 따라 업데이트
         # self.health_label.set_text(f'체력: {current_health}/100')
@@ -319,20 +399,34 @@ class Game:
                 bg = pygame.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
                 self.screen.blit(bg, (0, 0))
             except:
-                # 이미지가 없으면 단색 배경
-                self.screen.fill(Color.BLUE.value)
+                # 이미지가 없으면 학년에 따른 배경색
+                time_info = self.time_manager.get_current_time_info()
+                if time_info['is_graduated']:
+                    self.screen.fill((255, 215, 0))  # 졸업 - 금색
+                elif time_info['year'] == 1:
+                    self.screen.fill((100, 149, 237))  # 1학년 - 파란색
+                elif time_info['year'] == 2:
+                    self.screen.fill((60, 179, 113))   # 2학년 - 초록색
+                else:
+                    self.screen.fill((220, 20, 60))    # 3학년 - 빨간색
             
             # 게임 스프라이트들 그리기
             self.all_sprites.draw(self.screen)
             
-            # 시간에 따른 화면 효과 (예시)
-            time_info = self.time_manager.get_current_time_info()
-            if time_info['hour'] >= 20 or time_info['hour'] <= 6:
-                # 밤시간에는 어두운 오버레이
-                night_overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-                night_overlay.set_alpha(50)
-                night_overlay.fill((0, 0, 50))
-                self.screen.blit(night_overlay, (0, 0))
+            # 졸업 축하 효과
+            if self.time_manager.graduation_completed:
+                # 간단한 축하 효과 (점점 깜빡이는 텍스트)
+                import math
+                alpha = int(127 + 127 * math.sin(pygame.time.get_ticks() * 0.01))
+                congrat_surface = pygame.Surface((SCREEN_WIDTH, 100))
+                congrat_surface.set_alpha(alpha)
+                congrat_surface.fill((255, 255, 255))
+                
+                font = pygame.font.Font(None, 48)
+                text = font.render("🎓 CONGRATULATIONS! 🎓", True, (255, 215, 0))
+                text_rect = text.get_rect(center=(SCREEN_WIDTH//2, 50))
+                congrat_surface.blit(text, text_rect)
+                self.screen.blit(congrat_surface, (0, SCREEN_HEIGHT//2 - 50))
         
         # UI 요소들 그리기 (중요!)
         self.manager.draw_ui(self.screen)
