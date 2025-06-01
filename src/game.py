@@ -171,20 +171,20 @@ class Game:
         # 선택지 버튼들
         self.choice_button1 = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 150, 500, 300, 50),
-            text='기숙사 가기 (1시간 소모)',
+            text='기숙사 가기',
             manager=self.manager
         )
         
         self.choice_button2 = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 150, 560, 300, 50),
-            text='공부하기 (3시간 소모)',
+            text='공부하기',
             manager=self.manager
         )
         
         # 메인 메뉴로 돌아가기 버튼
         self.back_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect(10, SCREEN_HEIGHT - 60, 100, 50),
-            text='메인 메뉴',
+            text='나가기',
             manager=self.manager
         )
         
