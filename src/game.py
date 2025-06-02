@@ -188,8 +188,34 @@ class Game:
             manager=self.manager
         )
         
+        # 도움말 패널 추가 (마지막에 생성하여 최상위에 표시)
+        self.help_panel = pygame_gui.elements.UIPanel(
+            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 300, SCREEN_HEIGHT//2 - 200, 600, 400),
+            manager=self.manager,
+            object_id='#help_panel'
+        )
+        
+        # 도움말 텍스트
+        help_text = "당신은 현재 광주 소프트웨어 마이스터 고등학교에 입학한 학생 중 한 명입니다. 당신의 일과는 7:00 A.M ~ 10:00 P.M까지 학교에서 공부하며 남은 시간은 기숙사에서 공부나 휴식을 하는 것입니다. 당신의 목표는 취업. 어떤 전공을 선택하든 자유입니다! 그럼 행운을 빕니다!"
+        self.help_text_label = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect(20, 20, 560, 300),
+            html_text=help_text,
+            manager=self.manager,
+            container=self.help_panel,
+            object_id='#help_text_box'  # 테마에서 정의한 ID
+        )
+        
+        # 도움말 닫기 버튼
+        self.help_close_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(250, 340, 100, 40),
+            text='닫기',
+            manager=self.manager,
+            container=self.help_panel
+        )
+        
         # 처음에는 메인 메뉴만 보이게
         self.show_main_menu_ui()
+        self.help_panel.hide()  # 도움말 패널은 처음에 숨김
 
     def hide_all_ui(self):
         '''
@@ -200,6 +226,9 @@ class Game:
         self.start_button.hide()
         self.help_button.hide()
         self.exit_button.hide()
+        
+        # 도움말 패널 숨기기
+        self.help_panel.hide()
         
         # 게임 UI 숨기기
         self.game_ui_panel.hide()
@@ -247,7 +276,20 @@ class Game:
                     
                 elif event.ui_element == self.help_button:
                     print("도움말 열기!")
-                    # 도움말 화면 로직 추가 가능
+                    self.help_panel.show()
+                    # 도움말이 열렸을 때 다른 버튼들 숨기기
+                    self.start_button.hide()
+                    self.help_button.hide()
+                    self.exit_button.hide()
+                    
+                elif event.ui_element == self.help_close_button:
+                    print("도움말 닫기!")
+                    self.help_panel.hide()
+                    # 도움말이 닫혔을 때 다른 버튼들 다시 보이기
+                    if self.state == GameState.MAIN_MENU:
+                        self.start_button.show()
+                        self.help_button.show()
+                        self.exit_button.show()
                     
                 elif event.ui_element == self.exit_button:
                     print("게임 종료!")
