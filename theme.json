@@ -151,5 +151,19 @@
     "misc": {
       "text_shadow": "1"
     }
+  },
+
+  "#help_text_box": {
+    "colours": {
+      "normal_text": "#FFFFFF",
+      "text_shadow": "#000000"
+    },
+    "font": {
+      "name": "assets/fonts/neodgm.ttf",
+      "size": "24"
+    },
+    "misc": {
+      "text_shadow": "1"
+    }
   }
 }
