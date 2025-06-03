@@ -165,5 +165,20 @@
     "misc": {
       "text_shadow": "1"
     }
+  },
+
+  "#select_paper_title": {
+    "colours": {
+      "normal_text": "#FFFFFF",
+      "text_shadow": "#000000"
+    },
+    "font": {
+      "name": "assets/fonts/neodgm.ttf",
+      "size": "50",
+      "bold": "1"
+    },
+    "misc": {
+      "text_shadow": "1"
+    }
   }
 }
