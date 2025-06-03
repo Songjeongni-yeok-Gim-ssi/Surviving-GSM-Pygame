@@ -13,8 +13,9 @@ class Subject(Enum):
 class Study:
     '''공부 테크 트리를 관리하는 클래스 입니다.'''
     studyList = {{False, False, False, False, False}, {False, False, False, False, False}, {False, False, False, False, False}, {False, False, False, False, False}}
-    '''이미 찍은 테크 트리인지 아직 찍지 않은 테크 트리인지 알려주는 역할을 합니다. (바깥 리스트는 과목, 내부 리스트는 레벨)'''
+    '''이미 찍은 테크 트리인지 아직 찍지 않은 테크 트리인지 알려주는 역할을 합니다. 이미 배운 공부한 내용(True)은 밝게 표시, 아직 공부하지 않은 내용(False)은 어둡게 표시 (바깥 리스트는 과목, 내부 리스트는 레벨)'''
     
+    @classmethod
     def study(self, subject : Subject, level, price):
         '''subject는 과목, level은 해당 과목 테크 트리의 레벨 price는 해당 테크를 해제하는데 드는 비용'''
         if subject == Subject.FrontEnd:
@@ -26,7 +27,9 @@ class Study:
         elif subject == Subject.FunctionClass:
             self.Function(subject, level, price)
     
+    @classmethod
     def Front(self, subject : Subject, level, price):
+        '''프론트엔드를 공부하는 함수'''
         if price <= Stat.intuitivePoint + Stat.majorSubjectPoint:
             Stat.intuitivePoint = Stat.intuitivePoint - price
             if Stat.intuitivePoint < 0:
@@ -38,7 +41,9 @@ class Study:
         else:
             self.fail()
     
+    @classmethod
     def Back(self, subject : Subject, level, price):
+        '''백엔드를 공부하는 함수'''
         if price <= Stat.interpretPoint + Stat.majorSubjectPoint:
             Stat.interpretPoint = Stat.interpretPoint - price
             if Stat.interpretPoint < 0:
@@ -49,7 +54,9 @@ class Study:
         else:
             self.fail()
     
+    @classmethod
     def PublicCor(self, subject : Subject, level, price):
+        '''공기업 쪽을 공부하는 함수'''
         if price <= Stat.normalSubjectPoint:
             Stat.normalSubjectPoint = Stat.normalSubjectPoint - price
             
@@ -57,7 +64,9 @@ class Study:
         else:
             self.fail()
     
+    @classmethod
     def Function(self, subject : Subject, level, price):
+        '''기능반 쪽을 공부하는 함수'''
         if price <= Stat.normalSubjectPoint:
             Stat.normalSubjectPoint = Stat.normalSubjectPoint - price
             
@@ -65,6 +74,7 @@ class Study:
         else:
             self.fail()
     
+    @classmethod
     def fail(self):
         # 스탯 포인트가 부족합니다.
         pass

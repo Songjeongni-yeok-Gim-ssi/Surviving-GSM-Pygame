@@ -1,54 +1,57 @@
 import pygame
+import pygame_gui
 from pygame.locals import QUIT
 from settings import *  # 설정 값 가져오기
 from entity import Entity
-from button import Button
 from game import Game
 
-class SelectPaper(Entity):
-    pause = False
-    
-    def __init__(self, imagePath, title, text, *buttons : Button, condition, x = SCREEN_WIDTH / 2, y = SCREEN_HEIGHT / 2, width = SCREEN_WIDTH / 1.3, height = SCREEN_HEIGHT / 1.3, color = Color.WHITE):
+class SelectPaper:
+    def __init__(self, imagePath, title, text, manager : pygame_gui.UIManager, *buttons : pygame_gui.elements.UIButton):
         '''
-            title은 이벤트 제목, text는 이벤트 설명, buttons는 이벤트의 선택지들을 설정, condition은 SelectPaper가 뜨는 조건, imagePath는 이벤트 상황을 표현하는 그림의 경로
+            title은 이벤트 제목(html태크 없이 순수 문자열로), text는 이벤트 설명, uiManager는 UI를 draw하던 UIManager를 받는다., buttons는 이벤트의 선택지들을 설정, condition은 선택지가 뜨는 조건, imagePath는 이벤트 상황을 표현하는 그림의 경로
         '''
-        super().__init__(x, y, width, height, color)
-        self.x = x
-        self.y = y
-        self.image = pygame.image.load(imagePath)
-        self.image = pygame.transform.scale(self.image, (width / 1.1, height / 3))
-        self.title = title
-        self.text = text
-        self.buttons = buttons
-        self.titleSurface = pygame.font.SysFont(None, bold=True, size=width / 10)
-        self.textSurface = pygame.font.SysFont(None, bold=False, size=width / 15)
-        self.condition = condition
-        self.gameInstance = Game()
-        self.gameInstance.all_sprites.add(self)
-        for button in buttons:
-            button.button_action += self.conditionToFalse
-    
-    def conditionToFalse(self):
-        '''
-            선택지에 뜬 버튼을 누를 시 확정적으로 호출될 함수
-        '''
-        self.condition = False
-    
-    def drawPaper(self):
-        '''
-            선택지 화면을 그리는 함수
-        '''
-        self.gameInstance.screen.blit(self.image, (self.x, self.y / 2))
-        self.gameInstance.screen.blit(self.titleSurface, (self.x, self.y))
-        self.gameInstance.screen.blit(self.textSurface, (self.x, self.y + 50))
+        self.x = SCREEN_WIDTH / 2
+        self.y = SCREEN_HEIGHT / 2
+        self.width = SCREEN_WIDTH / 1.3
+        self.height = SCREEN_HEIGHT / 1.3
+        image_rect = pygame.image.load(imagePath).convert_alpha()
         
-        for button in self.buttons:
-            button.drawButton()
+        self.panel = pygame_gui.elements.UIPanel(
+            relative_rect=pygame.Rect((self.x, self.y), (self.width, self.height)),
+            starting_height=1,
+            manager=manager,
+            object_id="#select_paper_panel"
+        )
+        
+        self.image = pygame_gui.elements.UIImage(
+            relative_rect=pygame.Rect((self.x, self.y / 2), (self.width / 1.1, self.height / 3)),
+            image_surface=image_rect,
+            manager=manager,
+            container=self.panel,
+            object_id="#select_paper_image"
+        )
+        
+        self.title = pygame_gui.elements.UITextBox(
+            html_text=f"<h1>{title}</h1>",
+            relative_rect=pygame.Rect((self.x, self.y), (self.width, self.width / 10)),
+            manager=manager,
+            container=self.panel,
+            object_id="#select_paper_title"
+        )
+        
+        self.text = pygame_gui.elements.UITextBox(
+            html_text=text,
+            relative_rect=pygame.Rect((self.x, self.y + 50 + (self.height / 4 - 50)), (self.width, self.height / 2 - 50)),
+            manager=manager,
+            container=self.panel,
+            object_id="#select_paper_text"
+        )
+        
+        self.manager = manager
+        self.buttons = buttons
+        self.gameInstance = Game()
     
-    def update(self):
-        if self.condition:
-            SelectPaper.pause = True
-            self.drawPaper()
-        else:
-            SelectPaper.pause = False
-            self.gameInstance.all_sprites.remove(self)
+    def kill(self):
+        self.panel.kill()
+        for button in self.buttons:
+            button.kill()
