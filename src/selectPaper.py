@@ -7,7 +7,7 @@ from entity import Entity
 class SelectPaper:
     def __init__(self, imagePath, title, text, manager : pygame_gui.UIManager, *buttons : pygame_gui.elements.UIButton):
         '''
-            title은 이벤트 제목(html태크 없이 순수 문자열로), text는 이벤트 설명, uiManager는 UI를 draw하던 UIManager를 받는다., buttons는 이벤트의 선택지들을 설정, condition은 선택지가 뜨는 조건, imagePath는 이벤트 상황을 표현하는 그림의 경로
+            title은 이벤트 제목(html태그 없이 순수 문자열로), text는 이벤트 설명, manager는 UI를 draw하던 UIManager를 받는다., buttons는 이벤트의 선택지들을 설정, condition은 선택지가 뜨는 조건, imagePath는 이벤트 상황을 표현하는 그림의 경로
         '''
         self.x = SCREEN_WIDTH / 8
         self.y = SCREEN_HEIGHT / 10
@@ -49,7 +49,8 @@ class SelectPaper:
         self.manager = manager
         self.buttons = buttons
     
-    def kill(self):
+    def close(self):
+        '''선택지를 선택하게 되면 반드시 호출 되어야 합니다.'''
         self.panel.kill()
         for button in self.buttons:
             button.kill()
