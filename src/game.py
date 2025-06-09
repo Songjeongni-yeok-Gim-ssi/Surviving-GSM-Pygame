@@ -3,6 +3,7 @@ import pygame_gui
 from pygame.locals import *
 from settings import *
 from gameTimeManager import GameTimeManager
+from selectPaper import SelectPaper
 
 class Game:
     '''
@@ -213,9 +214,27 @@ class Game:
             container=self.help_panel
         )
         
+        # 예제 SelectPaper용 버튼 생성 (SelectPaper 패널 내부에 생성)
+        self.paper_ok_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(0, 0, 150, 50),  # 임시 위치, SelectPaper에서 재조정됨
+            text='확인',
+            manager=self.manager
+        )
+
+        # 예제 SelectPaper 생성 (이미지는 첨부하신 이미지 사용)
+        self.example_select_paper = SelectPaper(
+            'assets/imgs/exit.png',  # 첨부하신 이미지를 여기에 저장했다고 가정
+            'GSM에서 살아남기',
+            '안녕하세요! GSM에서 살아남기 게임에 오신 것을 환영합니다.<br><br>이 게임에서는 GSM 학생으로서 3년간의 학교 생활을 경험하게 됩니다. 공부, 취업 준비, 그리고 다양한 선택지들이 여러분을 기다리고 있습니다.<br><br>시작하기 전에 도움말을 확인하시면 게임에 대해 더 자세히 알아볼 수 있습니다.',
+            self.manager,
+            self.paper_ok_button
+        )
+        
         # 처음에는 메인 메뉴만 보이게
         self.show_main_menu_ui()
         self.help_panel.hide()  # 도움말 패널은 처음에 숨김
+        self.example_select_paper.panel.hide()  # SelectPaper는 처음에 숨김
+        self.paper_ok_button.hide()  # 확인 버튼도 처음에 숨김
 
     def hide_all_ui(self):
         '''
@@ -235,6 +254,10 @@ class Game:
         self.choice_button1.hide()
         self.choice_button2.hide()
         self.back_button.hide()
+        
+        # SelectPaper 관련 UI 숨기기
+        self.example_select_paper.panel.hide()
+        self.paper_ok_button.hide()
 
     def show_main_menu_ui(self):
         '''
@@ -255,6 +278,8 @@ class Game:
         self.choice_button1.show()
         self.choice_button2.show()
         self.back_button.show()
+        self.example_select_paper.panel.show()  # SelectPaper 보이기
+        self.paper_ok_button.show()  # 확인 버튼도 보이기
 
     def process_events(self):
         '''
@@ -271,8 +296,9 @@ class Game:
                 if event.ui_element == self.start_button:
                     print("게임 시작!")
                     self.state = GameState.PLAYING
-                    self.time_manager.reset()  # 게임 시작 시 시간 초기화
+                    self.time_manager.reset()
                     self.show_game_ui()
+                    self.example_select_paper.panel.show()  # SelectPaper 보이기
                     
                 elif event.ui_element == self.help_button:
                     print("도움말 열기!")
@@ -334,6 +360,9 @@ class Game:
                 elif event.ui_element == self.reset_time_button:
                     print("시간 리셋!")
                     self.time_manager.reset()
+                
+                elif event.ui_element == self.paper_ok_button:
+                    self.example_select_paper.close()
             
             # 기존 키보드 이벤트도 유지 (백업용)
             elif event.type == KEYDOWN:

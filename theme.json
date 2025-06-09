@@ -180,5 +180,18 @@
     "misc": {
       "text_shadow": "1"
     }
+  },
+  "#select_paper_text": {
+    "colours": {
+      "normal_text": "#FFFFFF",
+      "text_shadow": "#000000"
+    },
+    "font": {
+      "name": "assets/fonts/neodgm.ttf",
+      "size": "24"
+    },
+    "misc": {
+      "text_shadow": "1"
+    }
   }
 }
