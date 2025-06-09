@@ -71,6 +71,6 @@ class SelectPaper:
     
     def close(self):
         '''선택지를 선택하게 되면 반드시 호출 되어야 합니다.'''
+        # 모든 UI 요소 정리
         self.panel.kill()
-        for button in self.buttons:
-            button.kill()
+        self.scrollingContainer.kill()
