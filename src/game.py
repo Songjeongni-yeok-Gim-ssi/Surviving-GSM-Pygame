@@ -3,6 +3,7 @@ import pygame_gui
 from pygame.locals import *
 from settings import *
 from gameTimeManager import GameTimeManager
+from selectPaper import SelectPaper
 
 class Game:
     '''
