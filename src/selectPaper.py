@@ -18,14 +18,14 @@ class SelectPaper:
         
         self.panel = pygame_gui.elements.UIPanel(
             relative_rect=pygame.Rect((self.x, self.y), (self.width, self.height)),
-            starting_height=1,
+            starting_height=100,
             manager=manager,
             object_id="#select_paper_panel"
         )
         
         self.scrollingContainer = pygame_gui.elements.UIScrollingContainer(
             relative_rect=pygame.Rect((self.x, self.y), (self.width, self.height)),
-            starting_height=2,
+            starting_height=101,
             manager=manager,
             object_id="#select_paper_panel"
         )

@@ -275,6 +275,18 @@ class Game:
                     self.time_manager.reset()  # 게임 시작 시 시간 초기화
                     self.show_game_ui()
                     
+                    # 게임 시작 시 선택지 표시
+                    self.current_select_paper = SelectPaper(
+                        'assets/imgs/exit.png',  # 기숙사 이미지 경로
+                        'GSM 입학 첫날',
+                        '광주 소프트웨어 마이스터 고등학교에 입학하신 것을 축하드립니다!\n\n앞으로 3년간의 학교생활이 시작됩니다. 어떤 전공을 선택하실 건가요?',
+                        self.manager,
+                        '웹 개발',  # 웹 개발 전공
+                        '모바일 앱 개발',  # 모바일 앱 개발 전공
+                        '게임 개발',  # 게임 개발 전공
+                        '인공지능'  # 인공지능 전공
+                    )
+                    
                 elif event.ui_element == self.help_button:
                     print("도움말 열기!")
                     self.help_panel.show()
@@ -298,9 +310,43 @@ class Game:
                     
                 elif event.ui_element == self.choice_button1:
                     print("기숙사로 이동!")
+                    # 선택지 예제 추가
+                    self.current_select_paper = SelectPaper(
+                        'assets/imgs/exit.png',  # 기숙사 이미지 경로
+                        '기숙사에서의 선택',
+                        '기숙사에 도착했습니다. 이제 무엇을 하시겠습니까?',
+                        self.manager,
+                        '잠자기',  # 체력 회복
+                        '공부하기',  # 지식 증가
+                        '친구와 대화하기'  # 친밀도 증가
+                    )
                     # 1시간 소모
                     self.time_manager.total_seconds += 60 * 60
+                
+                # SelectPaper 버튼 이벤트 처리
+                elif hasattr(self, 'current_select_paper') and event.ui_element in self.current_select_paper.buttons:
+                    button_index = self.current_select_paper.buttons.index(event.ui_element)
+                    if hasattr(self, '_is_first_selection'):  # 기존 선택지 처리
+                        if button_index == 0:  # 잠자기
+                            print("잠을 잡니다... 체력이 회복됩니다.")
+                            # TODO: 체력 회복 로직 추가
+                        elif button_index == 1:  # 공부하기
+                            print("공부를 시작합니다... 지식이 증가합니다.")
+                            # TODO: 지식 증가 로직 추가
+                        elif button_index == 2:  # 친구와 대화하기
+                            print("친구와 대화를 시작합니다... 친밀도가 증가합니다.")
+                            # TODO: 친밀도 증가 로직 추가
+                    else:  # 전공 선택 처리
+                        majors = ['웹 개발', '모바일 앱 개발', '게임 개발', '인공지능']
+                        selected_major = majors[button_index]
+                        print(f"{selected_major} 전공을 선택하셨습니다!")
+                        # TODO: 전공 선택에 따른 게임 로직 추가
+                        self._is_first_selection = True
                     
+                    # 선택지 닫기
+                    self.current_select_paper.close()
+                    delattr(self, 'current_select_paper')
+                
                 elif event.ui_element == self.choice_button2:
                     print("공부하기 선택!")
                     # 3시간 소모
