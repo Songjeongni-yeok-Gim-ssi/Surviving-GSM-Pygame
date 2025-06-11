@@ -6,6 +6,7 @@ class GameTimeManager:
         self.WEEKS_PER_YEAR = 50
         self.TOTAL_YEARS = 3
         self.SECONDS_PER_DAY = 12  # 1일 = 12초 (실시간)
+        self.is_paused = False  # 시간 멈춤 상태
         
     def reset(self):
         """시간을 초기화"""
@@ -16,10 +17,11 @@ class GameTimeManager:
         self.current_hour = 9  # 현재 시간 (기본 오전 9시 시작)
         self.current_minute = 0
         self.graduation_completed = False
+        self.is_paused = False  # 시간 멈춤 상태 초기화
         
     def update(self, delta_time):
         """시간 업데이트 (delta_time은 실제 초 단위)"""
-        if self.graduation_completed:
+        if self.graduation_completed or self.is_paused:  # 시간이 멈춰있으면 업데이트하지 않음
             return
             
         # 1배속 기준: 실제 12초 = 게임 1일
@@ -137,3 +139,11 @@ class GameTimeManager:
             'progress': progress,
             'is_graduated': self.graduation_completed
         }
+    
+    def pause_time(self):
+        """시간을 멈춤"""
+        self.is_paused = True
+        
+    def resume_time(self):
+        """시간을 다시 흐르게 함"""
+        self.is_paused = False
