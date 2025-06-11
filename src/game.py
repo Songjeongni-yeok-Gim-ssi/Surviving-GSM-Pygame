@@ -276,6 +276,7 @@ class Game:
                     self.show_game_ui()
                     
                     # 게임 시작 시 선택지 표시
+                    self.time_manager.pause_time()  # 시간 멈춤
                     self.current_select_paper = SelectPaper(
                         'assets/imgs/exit.png',  # 기숙사 이미지 경로
                         'GSM 입학 첫날',
@@ -311,6 +312,7 @@ class Game:
                 elif event.ui_element == self.choice_button1:
                     print("기숙사로 이동!")
                     # 선택지 예제 추가
+                    self.time_manager.pause_time()  # 시간 멈춤
                     self.current_select_paper = SelectPaper(
                         'assets/imgs/exit.png',  # 기숙사 이미지 경로
                         '기숙사에서의 선택',
@@ -346,6 +348,7 @@ class Game:
                     # 선택지 닫기
                     self.current_select_paper.close()
                     delattr(self, 'current_select_paper')
+                    self.time_manager.resume_time()  # 시간 다시 흐르게
                 
                 elif event.ui_element == self.choice_button2:
                     print("공부하기 선택!")
