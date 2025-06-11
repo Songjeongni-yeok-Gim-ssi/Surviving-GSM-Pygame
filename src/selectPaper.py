@@ -14,7 +14,24 @@ class SelectPaper:
         self.y = SCREEN_HEIGHT / 10
         self.width = SCREEN_WIDTH / 1.3
         self.height = SCREEN_HEIGHT / 1.3
-        image_rect = pygame.image.load(imagePath).convert_alpha()
+        
+        # 이미지 로드 및 1:1 비율 처리
+        original_image = pygame.image.load(imagePath).convert_alpha()
+        image_size = min(self.width / 1.1, self.height / 3)  # 1:1 비율을 위한 크기 계산
+        image_surface = pygame.Surface((image_size, image_size), pygame.SRCALPHA)
+        image_surface.fill((0, 0, 0, 0))  # 투명 배경
+        
+        # 이미지 크기 조정
+        img_width, img_height = original_image.get_size()
+        scale = min(image_size / img_width, image_size / img_height)
+        new_width = int(img_width * scale)
+        new_height = int(img_height * scale)
+        scaled_image = pygame.transform.smoothscale(original_image, (new_width, new_height))
+        
+        # 이미지를 중앙에 배치
+        x_offset = (image_size - new_width) // 2
+        y_offset = (image_size - new_height) // 2
+        image_surface.blit(scaled_image, (x_offset, y_offset))
         
         self.panel = pygame_gui.elements.UIPanel(
             relative_rect=pygame.Rect((self.x, self.y), (self.width, self.height)),
@@ -31,8 +48,8 @@ class SelectPaper:
         )
         
         self.image = pygame_gui.elements.UIImage(
-            relative_rect=pygame.Rect((self.x / 4, self.y / 4), (self.width / 1.1, self.height / 3)),
-            image_surface=image_rect,
+            relative_rect=pygame.Rect((self.width/2 - image_size/2, self.y / 4), (image_size, image_size)),
+            image_surface=image_surface,
             manager=manager,
             container=self.scrollingContainer,
             object_id="#select_paper_image"
