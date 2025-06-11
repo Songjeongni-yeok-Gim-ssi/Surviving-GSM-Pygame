@@ -14,10 +14,11 @@ class SelectPaper:
         self.y = SCREEN_HEIGHT / 10
         self.width = SCREEN_WIDTH / 1.3
         self.height = SCREEN_HEIGHT / 1.3
+        self.manager = manager  # manager 저장
         
         # 이미지 로드 및 1:1 비율 처리
         original_image = pygame.image.load(imagePath).convert_alpha()
-        image_size = min(self.width / 1.1, self.height / 3)  # 1:1 비율을 위한 크기 계산
+        image_size = min(self.width / 1.1, self.height / 3) * 2  # 1:1 비율을 위한 크기 계산 (2배로 증가)
         image_surface = pygame.Surface((image_size, image_size), pygame.SRCALPHA)
         image_surface.fill((0, 0, 0, 0))  # 투명 배경
         
@@ -48,7 +49,7 @@ class SelectPaper:
         )
         
         self.image = pygame_gui.elements.UIImage(
-            relative_rect=pygame.Rect((self.width/2 - image_size/2, self.y / 4), (image_size, image_size)),
+            relative_rect=pygame.Rect((self.width/2 - image_size/2, self.y / 8), (image_size, image_size)),
             image_surface=image_surface,
             manager=manager,
             container=self.scrollingContainer,
@@ -56,17 +57,17 @@ class SelectPaper:
         )
         
         self.title = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((-3, self.y * 3), (self.width, self.width / 10)),
+            relative_rect=pygame.Rect((-3, self.y / 8 + image_size + 20), (self.width, self.width / 10)),
             text=title,
             manager=manager,
             container=self.scrollingContainer,
             object_id="#select_paper_title"
         )
         
-        self.text = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((-3, self.y * 4), (self.width, self.height / 2 - 50)),
-            text=text,
-            manager=manager,
+        self.text = pygame_gui.elements.UITextBox(
+            relative_rect=pygame.Rect((-3, self.y / 8 + image_size + self.width / 10 + 40), (self.width - 20, self.height / 2)),
+            html_text=text,
+            manager=self.manager,
             container=self.scrollingContainer,
             object_id="#select_paper_text"
         )
@@ -75,16 +76,14 @@ class SelectPaper:
         
         for i in range(buttonTexts.__len__()):
             self.buttons.append(pygame_gui.elements.UIButton(
-                relative_rect=pygame.Rect((0, self.y * 8 + (self.width / 10 + 10) * i), (self.width, self.width / 10)),
+                relative_rect=pygame.Rect((0, self.y / 8 + image_size + self.width / 10 + self.height / 2 + 60 + (self.width / 10 + 10) * i), (self.width, self.width / 10)),
                 text=buttonTexts[i],
                 manager=manager,
                 container=self.scrollingContainer,
                 object_id="#select_paper_button_group"
             ))
         
-        self.scrollingContainer.set_scrollable_area_dimensions((self.width - 20, self.y * 8 + (self.width / 10 + 10) * buttonTexts.__len__()))
-        
-        self.manager = manager
+        self.scrollingContainer.set_scrollable_area_dimensions((self.width - 20, self.y / 8 + image_size + self.width / 10 + self.height / 2 + 60 + (self.width / 10 + 10) * buttonTexts.__len__()))
     
     def close(self):
         '''선택지를 선택하게 되면 반드시 호출 되어야 합니다.'''
