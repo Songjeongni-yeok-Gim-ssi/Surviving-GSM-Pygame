@@ -37,7 +37,7 @@ class GameTimeManager:
     def _calculate_time_units(self):
         """총 초를 기반으로 년/주/일/시/분 계산"""
         total_minutes = int(self.total_seconds // 60)
-        total_hours = total_minutes // 60
+        total_hours = total_minutes // 60 + 9
         total_days = total_hours // 24
         total_weeks = total_days // 7
         
@@ -54,7 +54,7 @@ class GameTimeManager:
         
         # 현재 시간 계산 (9시부터 시작)
         hours_in_current_day = total_hours % 24
-        self.current_hour = (9 + hours_in_current_day) % 24
+        self.current_hour = (hours_in_current_day) % 24
         self.current_minute = total_minutes % 60
     
     def skip_to_next_year(self):
