@@ -440,7 +440,7 @@ class Game:
                     
                     # 전공 선택 처리
                     if hasattr(self, '_is_major_selection'):
-                        self._handle_major_selection(['개발', '공기업', '기능반'][button_index])
+                        self._handle_event_choice('major_selection', button_index)
                         delattr(self, '_is_major_selection')
                     
                     # 이벤트 선택 처리
@@ -542,7 +542,7 @@ class Game:
                 # 학년 변경 시 고정 이벤트 발생
                 if time_info['year'] == 1:
                     print("[전공 선택] 1학년 전공 선택 이벤트를 트리거합니다.")
-                    self._trigger_major_selection()
+                    self._trigger_event('major_selection')
         self._last_year = time_info['year']
         
         # 시간에 따른 이벤트 체크
@@ -561,12 +561,6 @@ class Game:
                     if isinstance(event['choices'], dict):
                         # 전공에 따른 선택지 처리
                         major_type = Stat.major
-                        if major_type == 'developer':
-                            major_type = 'developer'
-                        elif major_type == 'functional':
-                            major_type = 'functional'
-                        elif major_type == 'public':
-                            major_type = 'public'
                         choices = event['choices'][major_type]
                         choice_texts = [choice['text'] for choice in choices]
                     else:
@@ -643,29 +637,10 @@ class Game:
         '''
             정적인 화면을 출력하는 메서드
         '''
-        if self.state == GameState.MAIN_MENU:
+        if self.state == GameState.MAIN_MENU or self.state == GameState.PLAYING:
             bg = pygame.image.load('assets/imgs/gsm_meister_highschool_cover.jpeg')
             bg = pygame.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
             self.screen.blit(bg, (0, 0))
-
-    
-        elif self.state == GameState.PLAYING:
-            # 게임 화면 배경
-            try:
-                bg = pygame.image.load('assets/imgs/gsm_meister_highschool_cover.jpeg')
-                bg = pygame.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
-                self.screen.blit(bg, (0, 0))
-            except:
-                # 이미지가 없으면 학년에 따른 배경색
-                time_info = self.time_manager.get_current_time_info()
-                if time_info['is_graduated']:
-                    self.screen.fill((255, 215, 0))  # 졸업 - 금색
-                elif time_info['year'] == 1:
-                    self.screen.fill((100, 149, 237))  # 1학년 - 파란색
-                elif time_info['year'] == 2:
-                    self.screen.fill((60, 179, 113))   # 2학년 - 초록색
-                else:
-                    self.screen.fill((220, 20, 60))    # 3학년 - 빨간색
             
             # 게임 스프라이트들 그리기
             self.all_sprites.draw(self.screen)
@@ -692,16 +667,6 @@ class Game:
         self.manager.draw_ui(self.screen)
         pygame.display.flip()
 
-    def run(self):
-        '''
-            게임 루프 메서드
-        '''
-        while self.running:
-            self.process_events()
-            self.update()
-            self.draw()
-            self.clock.tick(FPS)
-
     def _trigger_event(self, event_name, event_type='fixed'):
         """이벤트 발생 (고정/랜덤 이벤트 통합)"""
         print(f"\n[이벤트 트리거] {event_name} 이벤트를 트리거합니다.")
@@ -721,16 +686,11 @@ class Game:
             if isinstance(event['choices'], dict):
                 # 전공에 따른 선택지 처리
                 major_type = Stat.major
-                if major_type == 'developer':
-                    major_type = 'developer'
-                elif major_type == 'functional':
-                    major_type = 'functional'
-                elif major_type == 'public':
-                    major_type = 'public'
                 choices = event['choices'][major_type]
                 choice_texts = [choice['text'] for choice in choices]
             else:
-                choice_texts = [choice['text'] for choice in event['choices']]
+                choices = event['choices']
+                choice_texts = [choice['text'] for choice in choices]
             
             print(f"[선택지] {choice_texts}")
             
@@ -751,19 +711,6 @@ class Game:
             if event_name == 'major_selection':
                 self._is_major_selection = True
 
-    def _trigger_major_selection(self):
-        """전공 선택 이벤트 발생"""
-        self._trigger_event('major_selection', 'fixed')
-
-    def _handle_major_selection(self, choice):
-        """전공 선택 처리"""
-        event = self.event_manager.get_fixed_event('major_selection')
-        if event:
-            for i, choice_data in enumerate(event['choices']):
-                if choice_data['text'] == choice:
-                    choice_data['effect']()
-                    break
-
     def _handle_event_choice(self, event_name, choice_index):
         """이벤트 선택 처리"""
         print(f"\n[이벤트 선택] {event_name} 이벤트의 {choice_index}번 선택지를 처리합니다.")
@@ -772,12 +719,6 @@ class Game:
             if isinstance(event['choices'], dict):
                 # 전공에 따른 선택지 처리
                 major_type = Stat.major
-                if major_type == 'developer':
-                    major_type = 'developer'
-                elif major_type == 'functional':
-                    major_type = 'functional'
-                elif major_type == 'public':
-                    major_type = 'public'
                 choices = event['choices'][major_type]
             else:
                 choices = event['choices']
@@ -785,3 +726,13 @@ class Game:
             if 0 <= choice_index < len(choices):
                 print(f"[선택지 효과] {choices[choice_index]['text']} 선택지의 효과를 적용합니다.")
                 choices[choice_index]['effect']()
+
+    def run(self):
+        '''
+            게임 루프 메서드
+        '''
+        while self.running:
+            self.process_events()
+            self.update()
+            self.draw()
+            self.clock.tick(FPS)
