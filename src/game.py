@@ -4,6 +4,8 @@ from pygame.locals import *
 from settings import *
 from gameTimeManager import GameTimeManager
 from selectPaper import SelectPaper
+from events import EventManager
+from statAndStatPoint import Stat
 
 class Game:
     '''
@@ -33,6 +35,9 @@ class Game:
             
             # 시간 관리자 초기화
             self.time_manager = GameTimeManager()
+            
+            # 이벤트 매니저 초기화
+            self.event_manager = EventManager()
             
             # UI 요소들 초기화
             self.init_ui_elements()
@@ -88,73 +93,73 @@ class Game:
             container=self.game_ui_panel
         )
         
-        self.progress_label = pygame_gui.elements.UILabel(
+        self.total_progress_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect(10, 45, 380, 25),
-            text='전체 진행도: 0.0% | 학년 진행도: 2.0%',
+            text='전체 진행도: 0.0%',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
-        self.health_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 75, 280, 30),
-            text='체력: 100/100',
-            manager=self.manager,
-            container=self.game_ui_panel
-        )
-        
-        self.money_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 105, 280, 30),
-            text='돈: 10,000원',
+        self.year_progress_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 70, 380, 25),
+            text='학년 진행도: 0.0%',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         # 시간 속도 조절 섹션
         self.time_speed_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 140, 100, 25),
+            relative_rect=pygame.Rect(10, 100, 100, 25),
             text='시간 속도:',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.speed_1x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(110, 140, 40, 25),
+            relative_rect=pygame.Rect(110, 100, 40, 25),
             text='1x',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.speed_2x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(155, 140, 40, 25),
+            relative_rect=pygame.Rect(155, 100, 40, 25),
             text='2x',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.speed_5x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(200, 140, 40, 25),
+            relative_rect=pygame.Rect(200, 100, 40, 25),
             text='5x',
+            manager=self.manager,
+            container=self.game_ui_panel
+        )
+        
+        self.speed_50x_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(355, 100, 40, 25),
+            text='50x',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         # 개발자 도구 섹션
         self.dev_tools_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 175, 100, 25),
+            relative_rect=pygame.Rect(10, 135, 100, 25),
             text='개발자 도구:',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.skip_year_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(110, 175, 80, 25),
+            relative_rect=pygame.Rect(10, 165, 80, 25),
             text='학년 스킵',
             manager=self.manager,
             container=self.game_ui_panel
         )
         
         self.reset_time_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(195, 175, 80, 25),
+            relative_rect=pygame.Rect(95, 165, 80, 25),
             text='시간 리셋',
             manager=self.manager,
             container=self.game_ui_panel
@@ -162,25 +167,12 @@ class Game:
         
         # 졸업 상태 라벨
         self.graduation_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 210, 380, 30),
+            relative_rect=pygame.Rect(10, 200, 380, 30),
             text='',
             manager=self.manager,
             container=self.game_ui_panel
         )
         self.graduation_label.hide()  # 처음에는 숨김
-        
-        # 선택지 버튼들
-        self.choice_button1 = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 150, 500, 300, 50),
-            text='기숙사 가기',
-            manager=self.manager
-        )
-        
-        self.choice_button2 = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 150, 560, 300, 50),
-            text='공부하기',
-            manager=self.manager
-        )
         
         # 메인 메뉴로 돌아가기 버튼
         self.back_button = pygame_gui.elements.UIButton(
@@ -233,8 +225,6 @@ class Game:
         
         # 게임 UI 숨기기
         self.game_ui_panel.hide()
-        self.choice_button1.hide()
-        self.choice_button2.hide()
         self.back_button.hide()
 
     def show_main_menu_ui(self):
@@ -253,8 +243,6 @@ class Game:
         '''
         self.hide_all_ui()
         self.game_ui_panel.show()
-        self.choice_button1.show()
-        self.choice_button2.show()
         self.back_button.show()
 
     def process_events(self):
@@ -274,19 +262,6 @@ class Game:
                     self.state = GameState.PLAYING
                     self.time_manager.reset()  # 게임 시작 시 시간 초기화
                     self.show_game_ui()
-                    
-                    # 게임 시작 시 선택지 표시
-                    self.time_manager.pause_time()  # 시간 멈춤
-                    self.current_select_paper = SelectPaper(
-                        'assets/imgs/exit.png',  # 기숙사 이미지 경로
-                        'GSM 입학 첫날',
-                        '광주 소프트웨어 마이스터 고등학교에 입학하신 것을 축하드립니다!\n\n앞으로 3년간의 학교생활이 시작됩니다. 어떤 전공을 선택하실 건가요?',
-                        self.manager,
-                        '웹 개발',  # 웹 개발 전공
-                        '모바일 앱 개발',  # 모바일 앱 개발 전공
-                        '게임 개발',  # 게임 개발 전공
-                        '인공지능'  # 인공지능 전공
-                    )
                     
                 elif event.ui_element == self.help_button:
                     print("도움말 열기!")
@@ -308,52 +283,25 @@ class Game:
                 elif event.ui_element == self.exit_button:
                     print("게임 종료!")
                     self.running = False
-                    
-                elif event.ui_element == self.choice_button1:
-                    print("기숙사로 이동!")
-                    # 선택지 예제 추가
-                    self.time_manager.pause_time()  # 시간 멈춤
-                    self.current_select_paper = SelectPaper(
-                        'assets/imgs/exit.png',  # 기숙사 이미지 경로
-                        '기숙사에서의 선택',
-                        '기숙사에 도착했습니다. 이제 무엇을 하시겠습니까?',
-                        self.manager,
-                        '잠자기',  # 체력 회복
-                        '공부하기',  # 지식 증가
-                        '친구와 대화하기'  # 친밀도 증가
-                    )
-                    # 1시간 소모
-                    self.time_manager.total_seconds += 60 * 60
                 
                 # SelectPaper 버튼 이벤트 처리
                 elif hasattr(self, 'current_select_paper') and event.ui_element in self.current_select_paper.buttons:
                     button_index = self.current_select_paper.buttons.index(event.ui_element)
-                    if hasattr(self, '_is_first_selection'):  # 기존 선택지 처리
-                        if button_index == 0:  # 잠자기
-                            print("잠을 잡니다... 체력이 회복됩니다.")
-                            # TODO: 체력 회복 로직 추가
-                        elif button_index == 1:  # 공부하기
-                            print("공부를 시작합니다... 지식이 증가합니다.")
-                            # TODO: 지식 증가 로직 추가
-                        elif button_index == 2:  # 친구와 대화하기
-                            print("친구와 대화를 시작합니다... 친밀도가 증가합니다.")
-                            # TODO: 친밀도 증가 로직 추가
-                    else:  # 전공 선택 처리
-                        majors = ['웹 개발', '모바일 앱 개발', '게임 개발', '인공지능']
-                        selected_major = majors[button_index]
-                        print(f"{selected_major} 전공을 선택하셨습니다!")
-                        # TODO: 전공 선택에 따른 게임 로직 추가
-                        self._is_first_selection = True
+                    
+                    # 전공 선택 처리
+                    if hasattr(self, '_is_major_selection'):
+                        self._handle_major_selection(['개발', '공기업', '기능반'][button_index])
+                        delattr(self, '_is_major_selection')
+                    
+                    # 이벤트 선택 처리
+                    elif hasattr(self, '_current_event'):
+                        self._handle_event_choice(self._current_event, button_index)
+                        delattr(self, '_current_event')
                     
                     # 선택지 닫기
                     self.current_select_paper.close()
                     delattr(self, 'current_select_paper')
                     self.time_manager.resume_time()  # 시간 다시 흐르게
-                
-                elif event.ui_element == self.choice_button2:
-                    print("공부하기 선택!")
-                    # 3시간 소모
-                    self.time_manager.total_seconds += 3 * 60 * 60
                 
                 elif event.ui_element == self.back_button:
                     print("메인 메뉴로 돌아가기!")
@@ -373,6 +321,9 @@ class Game:
                 elif event.ui_element == self.speed_5x_button:
                     self.time_manager.set_time_speed(5.0)
                     print("시간 속도: 5배속")
+                elif event.ui_element == self.speed_50x_button:
+                    self.time_manager.set_time_speed(50.0)
+                    print("시간 속도: 50배속")
                 
                 # 개발자 도구 버튼들
                 elif event.ui_element == self.skip_year_button:
@@ -437,14 +388,54 @@ class Game:
         # 학년 변경 이벤트
         if hasattr(self, '_last_year'):
             if self._last_year != time_info['year'] and not time_info['is_graduated']:
-                print(f"축하합니다! {time_info['year']}학년이 되었습니다!")
+                print(f"\n[학년 변경] {time_info['year']}학년이 되었습니다!")
+                # 학년 변경 시 고정 이벤트 발생
+                if time_info['year'] == 1:
+                    print("[전공 선택] 1학년 전공 선택 이벤트를 트리거합니다.")
+                    self._trigger_major_selection()
         self._last_year = time_info['year']
+        
+        # 시간에 따른 이벤트 체크
+        triggered_events = self.event_manager.check_time_triggered_events(time_info)
+        for event_name in triggered_events:
+            print(f"\n[이벤트 처리] {event_name} 이벤트를 처리합니다.")
+            if not hasattr(self, 'current_select_paper'):  # 현재 선택지가 없을 때만 새 이벤트 트리거
+                if event_name in self.event_manager.events['fixed_events']:
+                    self._trigger_fixed_event(event_name)
+                elif event_name in self.event_manager.events['random_events']:
+                    event = self.event_manager.events['random_events'][event_name]
+                    self.time_manager.pause_time()
+                    self._current_event = event_name
+                    
+                    # 선택지 텍스트 추출
+                    if isinstance(event['choices'], dict):
+                        # 전공에 따른 선택지 처리
+                        major_type = 'normal' if Stat.major in ['개발', '공기업'] else Stat.major
+                        choices = event['choices'][major_type]
+                        choice_texts = [choice['text'] for choice in choices]
+                    else:
+                        choice_texts = [choice['text'] for choice in event['choices']]
+                    
+                    try:
+                        # SelectPaper 생성
+                        self.current_select_paper = SelectPaper(
+                            'assets/imgs/exit.png',
+                            event['title'],
+                            event['text'],
+                            self.manager,
+                            *choice_texts
+                        )
+                        print("[SelectPaper] 생성 완료")
+                    except Exception as e:
+                        print(f"[에러] SelectPaper 생성 실패: {str(e)}")
+            else:
+                print(f"[이벤트 대기] {event_name} 이벤트는 현재 선택지가 닫힐 때까지 대기합니다.")
         
         # 졸업 이벤트
         if time_info['is_graduated'] and not hasattr(self, '_graduation_announced'):
-            print("🎓 축하합니다! GSM을 졸업하셨습니다! 🎓")
+            print("\n[졸업] 🎓 축하합니다! GSM을 졸업하셨습니다! 🎓")
             self._graduation_announced = True
-    
+
     def update_game_ui(self):
         '''
             게임 UI를 현재 상태에 맞게 업데이트
@@ -457,8 +448,8 @@ class Game:
         
         # 진행도 라벨 업데이트
         progress = time_info['progress']
-        progress_text = f"전체 진행도: {progress['total_progress']:.1f}% | 학년 진행도: {progress['year_progress']:.1f}%"
-        self.progress_label.set_text(progress_text)
+        self.total_progress_label.set_text(f"전체 진행도: {progress['total_progress']:.1f}%")
+        self.year_progress_label.set_text(f"학년 진행도: {progress['year_progress']:.1f}%")
         
         # 졸업 상태 표시
         if time_info['is_graduated']:
@@ -533,3 +524,97 @@ class Game:
             self.update()
             self.draw()
             self.clock.tick(FPS)
+
+    def _trigger_major_selection(self):
+        """전공 선택 이벤트 발생"""
+        self.time_manager.pause_time()
+        event = self.event_manager.get_fixed_event('major_selection')
+        if event:
+            self.current_select_paper = SelectPaper(
+                'assets/imgs/exit.png',
+                event['title'],
+                event['text'],
+                self.manager,
+                *[choice['text'] for choice in event['choices']]
+            )
+
+    def _handle_major_selection(self, choice):
+        """전공 선택 처리"""
+        event = self.event_manager.get_fixed_event('major_selection')
+        if event:
+            for i, choice_data in enumerate(event['choices']):
+                if choice_data['text'] == choice:
+                    choice_data['effect']()
+                    break
+
+    def _trigger_random_event(self, location):
+        """랜덤 이벤트 발생"""
+        event = self.event_manager.get_random_event(location)
+        if event:
+            self.time_manager.pause_time()
+            
+            try:
+                # SelectPaper 생성
+                self.current_select_paper = SelectPaper(
+                'assets/imgs/exit.png',
+                event['title'],
+                event['text'],
+                self.manager,
+                *[choice['text'] for choice in event['choices']]
+            )
+                print("[SelectPaper] 생성 완료")
+            except Exception as e:
+                print(f"[에러] SelectPaper 생성 실패: {str(e)}")
+
+    def _handle_event_choice(self, event_name, choice_index):
+        """이벤트 선택 처리"""
+        print(f"\n[이벤트 선택] {event_name} 이벤트의 {choice_index}번 선택지를 처리합니다.")
+        event = self.event_manager.get_fixed_event(event_name)
+        if event and 'choices' in event:
+            if isinstance(event['choices'], dict):
+                # 전공에 따른 선택지 처리
+                major_type = 'normal' if Stat.major in ['개발', '공기업'] else Stat.major
+                choices = event['choices'][major_type]
+            else:
+                choices = event['choices']
+            
+            if 0 <= choice_index < len(choices):
+                print(f"[선택지 효과] {choices[choice_index]['text']} 선택지의 효과를 적용합니다.")
+                choices[choice_index]['effect']()
+
+    def _trigger_fixed_event(self, event_name):
+        """고정 이벤트 발생"""
+        print(f"\n[이벤트 트리거] {event_name} 이벤트를 트리거합니다.")
+        event = self.event_manager.get_fixed_event(event_name)
+        if event:
+            print(f"[이벤트 상세] {event_name} 이벤트의 선택지를 생성합니다.")
+            self.time_manager.pause_time()
+            self._current_event = event_name
+            
+            # 선택지 텍스트 추출 로직 수정
+            if isinstance(event['choices'], dict):
+                # 전공에 따른 선택지 처리
+                major_type = 'normal' if Stat.major in ['개발', '공기업'] else Stat.major
+                choices = event['choices'][major_type]
+                choice_texts = [choice['text'] for choice in choices]
+            else:
+                choice_texts = [choice['text'] for choice in event['choices']]
+            
+            print(f"[선택지] {choice_texts}")
+            
+            try:
+                # SelectPaper 생성
+                self.current_select_paper = SelectPaper(
+                    'assets/imgs/exit.png',
+                    event['title'],
+                    event['text'],
+                    self.manager,
+                    *choice_texts
+                )
+                print("[SelectPaper] 생성 완료")
+            except Exception as e:
+                print(f"[에러] SelectPaper 생성 실패: {str(e)}")
+            
+            # 전공 선택 이벤트인 경우 플래그 설정
+            if event_name == 'major_selection':
+                self._is_major_selection = True
