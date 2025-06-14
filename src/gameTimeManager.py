@@ -94,41 +94,12 @@ class GameTimeManager:
             
         return f"{self.current_year}학년 {self.current_week}주차 {day_name}요일 {period} {hour_12:02d}:{self.current_minute:02d}"
     
-    def get_progress_info(self):
-        """진행도 정보 반환"""
-        if self.graduation_completed:
-            return {
-                'year': self.TOTAL_YEARS,
-                'week': self.WEEKS_PER_YEAR,
-                'total_progress': 100.0,
-                'year_progress': 100.0,
-                'is_graduated': True
-            }
-            
-        total_weeks_completed = (self.current_year - 1) * self.WEEKS_PER_YEAR + (self.current_week - 1)
-        total_weeks_needed = self.TOTAL_YEARS * self.WEEKS_PER_YEAR
-        total_progress = (total_weeks_completed / total_weeks_needed) * 100
-        
-        year_progress = ((self.current_week - 1) / self.WEEKS_PER_YEAR) * 100
-        
-        return {
-            'year': self.current_year,
-            'week': self.current_week,
-            'day': self.current_day,
-            'total_progress': total_progress,
-            'year_progress': year_progress,
-            'weeks_completed': total_weeks_completed,
-            'total_weeks': total_weeks_needed,
-            'is_graduated': False
-        }
-    
     def set_time_speed(self, speed):
         """시간 흐름 속도 설정"""
         self.time_speed = max(0.1, speed)
         
     def get_current_time_info(self):
         """현재 시간 정보를 딕셔너리로 반환"""
-        progress = self.get_progress_info()
         return {
             'year': self.current_year,  
             'week': self.current_week,
@@ -136,7 +107,6 @@ class GameTimeManager:
             'hour': self.current_hour,
             'minute': self.current_minute,
             'time_string': self.get_time_string(),
-            'progress': progress,
             'is_graduated': self.graduation_completed
         }
     

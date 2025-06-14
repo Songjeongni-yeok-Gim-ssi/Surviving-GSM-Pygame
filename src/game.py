@@ -542,7 +542,7 @@ class Game:
                 # 학년 변경 시 고정 이벤트 발생
                 if time_info['year'] == 1:
                     print("[전공 선택] 1학년 전공 선택 이벤트를 트리거합니다.")
-                    self._trigger_event('major_selection')
+                    self._trigger_event('major_selection', 'fixed')
         self._last_year = time_info['year']
         
         # 시간에 따른 이벤트 체크
