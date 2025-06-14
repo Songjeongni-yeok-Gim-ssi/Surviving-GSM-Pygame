@@ -467,13 +467,10 @@ class Game:
             정적인 화면을 출력하는 메서드
         '''
         if self.state == GameState.MAIN_MENU:
-            # 메인 메뉴 배경 그라데이션
-            for y in range(SCREEN_HEIGHT):
-                color_ratio = y / SCREEN_HEIGHT
-                r = int(20 + (50 * color_ratio))
-                g = int(20 + (30 * color_ratio))
-                b = int(40 + (60 * color_ratio))
-                pygame.draw.line(self.screen, (r, g, b), (0, y), (SCREEN_WIDTH, y))
+            bg = pygame.image.load('assets/imgs/gsm_meister_highschool_cover.jpeg')
+            bg = pygame.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+            self.screen.blit(bg, (0, 0))
+
     
         elif self.state == GameState.PLAYING:
             # 게임 화면 배경
