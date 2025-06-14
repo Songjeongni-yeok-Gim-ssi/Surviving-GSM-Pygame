@@ -99,22 +99,18 @@ def get_events_data():
                 'title': '싱가포르 연수',
                 'text': '아기다리고 고기다리던 싱가포르 연수 기회가 왔다!',
                 'time_trigger': {
-                    'week': 50,
+                    'week': 19,
                     'day': 1,
                     'hour': 9
                 },
                 'choices': [
                     {
-                        'text': '적극적으로 참여하며 네트워킹한다.',
-                        'effect': lambda: {'good': 10, 'responsibility': 8, 'fame': 8, 'majorSubjectPoint': 5, 'fatigue': 15}
+                        'text': '선생님 말씀에 따라 일정 잘 지키며 안전하게 다녀오자!',
+                        'effect': lambda: {'good': 5, 'fatigue': 10, 'responsibility': 15}
                     },
                     {
-                        'text': '관광을 즐기며 적당히 참여한다.',
-                        'effect': lambda: {'evil': 3, 'fatigue': -10}
-                    },
-                    {
-                        'text': '학습에만 집중한다.',
-                        'effect': lambda: {'majorSubjectPoint': 10, 'responsibility': 5, 'fatigue': 20}
+                        'text': '난 친구들과 노는게 중요해!',
+                        'effect': lambda: {'evil': 5, 'fame': -15}
                     }
                 ]
             },
@@ -164,6 +160,204 @@ def get_events_data():
                         }
                     ]
                 }
+            },
+            'functional_competition': {
+                'title': '기능 대회',
+                'text': '기능 대회가 시작됩니다. 과연 결과는?!?!?!?!?!?!',
+                'time_trigger': {
+                    'week': 6,
+                    'day': 3,
+                    'hour': 12
+                },
+                'choices': [
+                    {
+                        'text': '과연 결과는?!?!?!?!?!?!',
+                        'effect': lambda: {'functionalCompetition': 0, 'fatigue': 0}  # 실제 효과는 게임 로직에서 처리
+                    }
+                ]
+            },
+            'functional_competition_prep': {
+                'title': '기능 대회 대비 출결',
+                'text': '기능 대회를 위한 준비 시간입니다. 어떻게 공부할까요?',
+                'time_trigger': {
+                    'week': 2,
+                    'day': 1,
+                    'hour': 8
+                },
+                'choices': [
+                    {
+                        'text': '기능 대회 문제를 풀며 공부한다.',
+                        'effect': lambda: {'functionalCompetition': 100, 'fatigue': 50}
+                    },
+                    {
+                        'text': '개인 공부를 이어간다.',
+                        'effect': lambda: {'functionalCompetition': 30, 'fatigue': 10}
+                    },
+                    {
+                        'text': '빠르게 문제를 푸는 방법을 집중적으로 공부한다.',
+                        'effect': lambda: {'functionalCompetition': 70, 'fatigue': 35}
+                    }
+                ]
+            },
+            'vacation_stay': {
+                'title': '방학 기능 대회 대비 잔류',
+                'text': '방학 동안 학교에 남아서 기능 대회를 준비할까요?',
+                'time_trigger': {
+                    'week': 50,
+                    'day': 5,
+                    'hour': 16
+                },
+                'choices': [
+                    {
+                        'text': '한다',
+                        'effect': lambda: {'functionalCompetition': 150, 'fatigue': 90}
+                    },
+                    {
+                        'text': '안 한다',
+                        'effect': lambda: {'fame': -25, 'fatigue': -100}  # 피로도 완전 회복
+                    }
+                ]
+            },
+            'hackathon': {
+                'title': '연합 해커톤',
+                'text': '연합 해커톤이 열린다. 참여해볼까?',
+                'time_trigger': {
+                    'week': 28,
+                    'day': 1,
+                    'hour': 9
+                },
+                'choices': [
+                    {
+                        'text': '참여한다.',
+                        'effect': lambda: {'majorSubjectPoint': 15, 'fatigue': 5}
+                    },
+                    {
+                        'text': '참여하지 않는다.',
+                        'effect': lambda: None
+                    }
+                ]
+            },
+            'korean_history_exam': {
+                'title': '한국사 검정 능력 시험',
+                'text': '"00아 너 공기업 준비하지? 나랑 여름방학에 같이 한국사 볼래?" 공기업을 준비하는 친구가 나에게 같이 한국사를 응시하자고 제안했다. 한번 응시해볼까?',
+                'time_trigger': {
+                    'week': 20,
+                    'day': 1,
+                    'hour': 9
+                },
+                'choices': [
+                    {
+                        'text': '응시한다.',
+                        'effect': lambda: {'normalSubjectPoint': 20, 'fatigue': 15}
+                    },
+                    {
+                        'text': '응시하지 않는다.',
+                        'effect': lambda: {'fatigue': -10}
+                    }
+                ]
+            },
+            'ncs_lecture': {
+                'title': 'NCS 필기 특강',
+                'text': '디스코드 2학년 게시판에 2학년을 대상으로 하는 NCS 필기 특강이 떴다! 한번 신청해 볼까?',
+                'time_trigger': {
+                    'week': 40,
+                    'day': 1,
+                    'hour': 13
+                },
+                'choices': [
+                    {
+                        'text': '신청한다.',
+                        'effect': lambda: {'normalSubjectPoint': 10, 'fatigue': 10}
+                    },
+                    {
+                        'text': '신청하지 않는다.',
+                        'effect': lambda: {'fatigue': -5}
+                    }
+                ]
+            },
+            'public_company_lecture': {
+                'title': '공기업 특강',
+                'text': '디스코드 1학년 게시판에 1학년을 대상으로 하는 공기업 특강이 떴다! 한번 신청해 볼까?',
+                'time_trigger': {
+                    'week': 20,
+                    'day': 1,
+                    'hour': 13
+                },
+                'choices': [
+                    {
+                        'text': '신청한다.',
+                        'effect': lambda: {'normalSubjectPoint': 5, 'fatigue': 5}
+                    },
+                    {
+                        'text': '신청하지 않는다.',
+                        'effect': lambda: {'fatigue': -5}
+                    }
+                ]
+            },
+            'idea_festival_role': {
+                'title': '아이디어 페스티벌 - 역할 선택',
+                'text': '아이디어 페스티벌 기간이 다가왔다. 어떤 역할을 맡을까?',
+                'time_trigger': {
+                    'week': 28,
+                    'day': 1,
+                    'hour': 9
+                },
+                'choices': [
+                    {
+                        'text': '이번 기회에 팀장으로서 열심히 해보자!',
+                        'effect': lambda: {'majorSubjectPoint': 5, 'fame': 10, 'responsibility': 20, 'fatigue': 10}
+                    },
+                    {
+                        'text': '난 이끄는 것보다 열심히 참여만 할래',
+                        'effect': lambda: {'majorSubjectPoint': 10, 'interpretPoint': 5}
+                    },
+                    {
+                        'text': '내 실력을 믿을 수 없으니 기획/발표 같은 잡일에만 참여하자',
+                        'effect': lambda: {'intuitivePoint': 5}
+                    }
+                ]
+            },
+            'self_directed_learning': {
+                'title': '자기주도 체험학습',
+                'text': '친구들과 함께하는 자기주도 체험학습이다! 나는 어떤 역할을 맡게될까?',
+                'time_trigger': {
+                    'week': 21,
+                    'day': 1,
+                    'hour': 9
+                },
+                'choices': [
+                    {
+                        'text': '팀장으로서 친구들을 이끌어주자',
+                        'effect': lambda: {'responsibility': 10, 'fatigue': 10}
+                    },
+                    {
+                        'text': '총무로서 팀의 기둥이 되어주자',
+                        'effect': lambda: {'responsibility': 5}
+                    },
+                    {
+                        'text': '팀원을 하자',
+                        'effect': lambda: None
+                    }
+                ]
+            },
+            'major_camp': {
+                'title': '전공 캠프',
+                'text': '전공 캠프에 참여하게 되었다. 어떤 활동을 할까?',
+                'time_trigger': {
+                    'week': 29,
+                    'day': 1,
+                    'hour': 9
+                },
+                'choices': [
+                    {
+                        'text': '내가 하고 싶은 주제가 있다! 열심히 해볼까?',
+                        'effect': lambda: {'majorSubjectPoint': 10, 'fame': 10}
+                    },
+                    {
+                        'text': '적당히 시간만 때워보자…',
+                        'effect': lambda: None
+                    }
+                ]
             }
         },
         
@@ -249,12 +443,16 @@ def get_events_data():
             'project_experience': {
                 'title': '프로젝트 경험',
                 'text': '이제 곧 취업을 해야하는데 어떤 프로젝트를 하는게 좋을까?',
-                'probability': 0.5,
-                'time_range': {'week_start': 60, 'week_end': 90},
-                'repeatable': False,
+                'probability': 0.4,
+                'repeatable': True,
+                'requirements': {'major': 'developer'},
                 'time_trigger': {
-                    'hour_start': 9,   # 오전 9시
-                    'hour_end': 20     # 오후 8시 20분
+                    'week_start': 60,
+                    'week_end': 100,
+                    'day_start': 1,
+                    'day_end': 5,
+                    'hour_start': 9,
+                    'hour_end': 21
                 },
                 'choices': [
                     {
@@ -288,6 +486,270 @@ def get_events_data():
                     {
                         'text': '다른 공부를 한다.',
                         'effect': lambda: {'majorSubjectPoint': 3, 'fatigue': 10}
+                    }
+                ]
+            },
+            'stay_after_school': {
+                'title': '잔류',
+                'text': '금요일 오후 4시, 학교에 남아서 공부할까요?',
+                'probability': 0.8,
+                'repeatable': True,
+                'requirements': {'major': 'functional'},
+                'time_trigger': {
+                    'day': 5,
+                    'hour_start': 16,
+                    'hour_end': 16
+                },
+                'choices': [
+                    {
+                        'text': '한다',
+                        'effect': lambda: {'functionalCompetition': 30, 'fatigue': 30}
+                    },
+                    {
+                        'text': '안 한다',
+                        'effect': lambda: {'fame': -5}
+                    }
+                ]
+            },
+            'principal_recommendation': {
+                'title': '학교장 추천서',
+                'text': '"00아 너 성적이 좋더라, ~~기업 추천서 넣어줄테니까 한번 해볼래?" 선생님께서 나에게 ~~기업 추천서를 써주시겠다고 여쭤보셨다..! ~~기업은 복지가 좋기로 유명하다 한번 해볼까?',
+                'probability': 0.3,
+                'repeatable': True,
+                'requirements': {'normalSubjectPoint': 70},
+                'time_trigger': {
+                    'week_start': 60,
+                    'week_end': 80
+                },
+                'choices': [
+                    {
+                        'text': '추천서를 받는다.',
+                        'effect': lambda: {'fame': 10, 'responsibility': 5, 'fatigue': 5}
+                    },
+                    {
+                        'text': '신청하지 않는다.',
+                        'effect': lambda: {'fatigue': -5}
+                    }
+                ]
+            },
+            'idea_festival_team': {
+                'title': '아이디어 페스티벌 - 팀원 관리',
+                'text': '아이디어 페스티벌 기간, 팀원이 할 일을 미룬다. 어떻게 할까?',
+                'probability': 0.4,
+                'repeatable': True,
+                'time_trigger': {
+                    'week': 28,
+                    'day_start': 1,
+                    'day_end': 7,
+                    'hour_start': 9,
+                    'hour_end': 21
+                },
+                'choices': [
+                    {
+                        'text': '내 일이 아니니 신경을 끈다.',
+                        'effect': lambda: {'evil': 5}
+                    },
+                    {
+                        'text': '옆에서 하라고 독촉한다.',
+                        'effect': lambda: {'good': 5}
+                    },
+                    {
+                        'text': '하 어쩔수 없지.. 그냥 내가 한다.',
+                        'effect': lambda: {'majorSubjectPoint': 5, 'evil': 5, 'fatigue': 10, 'responsibility': 5}
+                    }
+                ]
+            },
+            'certification_exam': {
+                'title': '자격증 시험',
+                'text': '자격증 시험을 볼 수 있는 기회가 왔다. 도전해볼까?',
+                'probability': 0.3,
+                'repeatable': True,
+                'time_trigger': {
+                    'week_start': 1,
+                    'week_end': 100,
+                    'day_start': 1,
+                    'day_end': 5,
+                    'hour_start': 9,
+                    'hour_end': 18
+                },
+                'choices': [
+                    {
+                        'text': '시험 보기',
+                        'effect': lambda: {'majorSubjectPoint': 10, 'fatigue': 10}
+                    },
+                    {
+                        'text': '시험 안 보기',
+                        'effect': lambda: None
+                    },
+                    {
+                        'text': '더 준비하기',
+                        'effect': lambda: {'majorSubjectPoint': 30, 'fatigue': 15}
+                    }
+                ]
+            },
+            'study_time': {
+                'title': '학교 - 자습',
+                'text': '2학년이 되면서 자습 시간이 늘어났다. 무엇을 하면 좋을까?',
+                'probability': 0.6,
+                'repeatable': True,
+                'time_trigger': {
+                    'week_start': 20,
+                    'week_end': 80,
+                    'day_start': 1,
+                    'day_end': 5,
+                    'hour_start': 16,
+                    'hour_end': 21
+                },
+                'choices': {
+                    'developer': [
+                        {
+                            'text': '프론트엔드 공부를 한다.',
+                            'effect': lambda: {'intuitivePoint': 8, 'majorSubjectPoint': 5, 'fatigue': 15}
+                        },
+                        {
+                            'text': '백엔드 공부를 한다.',
+                            'effect': lambda: {'interpretPoint': 8, 'majorSubjectPoint': 5, 'fatigue': 15}
+                        },
+                        {
+                            'text': '개인 프로젝트를 한다.',
+                            'effect': lambda: {'majorSubjectPoint': 10, 'responsibility': 5, 'fatigue': 20}
+                        }
+                    ],
+                    'functional': [
+                        {
+                            'text': '기능 대회 준비를 한다.',
+                            'effect': lambda: {'functionalCompetition': 10, 'fatigue': 20}
+                        },
+                        {
+                            'text': '일반 전공도 공부한다.',
+                            'effect': lambda: {'majorSubjectPoint': 8, 'fatigue': 18}
+                        }
+                    ],
+                    'public': [
+                        {
+                            'text': '공기업 시험 공부를 한다.',
+                            'effect': lambda: {'normalSubjectPoint': 10, 'fatigue': 15}
+                        },
+                        {
+                            'text': '개발 공부도 병행한다.',
+                            'effect': lambda: {'normalSubjectPoint': 5, 'majorSubjectPoint': 5, 'fatigue': 20}
+                        }
+                    ]
+                }
+            },
+            'devfestival_conference': {
+                'title': 'DevFestival 컨퍼런스 참여',
+                'text': 'DevFestival 컨퍼런스 발표자를 모집한다. 참여해볼까?',
+                'probability': 0.3,
+                'repeatable': False,
+                'requirements': {'major': 'developer'},
+                'time_trigger': {
+                    'week': 28,
+                    'day_start': 1,
+                    'day_end': 7,
+                    'hour_start': 9,
+                    'hour_end': 21
+                },
+                'choices': [
+                    {
+                        'text': '도전해본다',
+                        'effect': lambda: {'fame': 1, 'responsibility': 1, 'fatigue': 1}
+                    },
+                    {
+                        'text': '좀 부담스럽다',
+                        'effect': lambda: None
+                    }
+                ]
+            },
+            'lecture': {
+                'title': '강의',
+                'text': '학교에서 강의 공지가 올라왔다! 참여해볼까?',
+                'probability': 0.4,
+                'repeatable': True,
+                'time_trigger': {
+                    'week_start': 20,
+                    'week_end': 100,
+                    'day_start': 1,
+                    'day_end': 5,
+                    'hour_start': 9,
+                    'hour_end': 21
+                },
+                'choices': {
+                    'developer': [
+                        {
+                            'text': '전공 공부 특강이 재밌어 보인다!',
+                            'effect': lambda: {'majorSubjectPoint': 10}
+                        }
+                    ],
+                    'functional': [
+                        {
+                            'text': '기능 대회 준비 특강이 재밌어 보인다!',
+                            'effect': lambda: {'functionalCompetition': 10}
+                        }
+                    ],
+                    'public': [
+                        {
+                            'text': '공기업 특강이 재밌어 보인다!',
+                            'effect': lambda: {'normalSubjectPoint': 10}
+                        }
+                    ],
+                    'common': [
+                        {
+                            'text': '굳이 들어야 할까?',
+                            'effect': lambda: None
+                        }
+                    ]
+                }
+            },
+            'dormitory_ramen': {
+                'title': '기숙사 - 라면',
+                'text': '기숙사에서 친구가 같이 기숙사 금지 항목인 라면을 먹자고 꼬신다! 어떻게 대처해야 할까?',
+                'probability': 0.3,
+                'repeatable': True,
+                'time_trigger': {
+                    'week_start': 1,
+                    'week_end': 100,
+                    'day_start': 1,
+                    'day_end': 5,
+                    'hour_start': 21,
+                    'hour_end': 1
+                },
+                'choices': [
+                    {
+                        'text': '같이 먹는다.',
+                        'effect': lambda: {'evil': 2, 'fame': -30}
+                    },
+                    {
+                        'text': '못 본 척 해준다.',
+                        'effect': lambda: {'fame': 5}
+                    },
+                    {
+                        'text': '기자위한테 알린다.',
+                        'effect': lambda: {'fame': -5}
+                    }
+                ]
+            },
+            'dormitory_study_room': {
+                'title': '기숙사 - 자습실',
+                'text': '기숙사에 도착했다! 피곤하긴 하지만 자습실을 사용할까 고민이 된다.',
+                'probability': 0.5,
+                'repeatable': True,
+                'time_trigger': {
+                    'hour_start': 21,
+                    'hour_end': 23
+                },
+                'choices': [
+                    {
+                        'text': '자습실을 사용한다.',
+                        'effect': lambda: {'majorSubjectPoint': 5, 'fatigue': 10, 'fame': 5}
+                    },
+                    {
+                        'text': '자습실을 사용하지 않는다.',
+                        'effect': lambda: None
+                    },
+                    {
+                        'text': '호실에서 공부한다.',
+                        'effect': lambda: {'majorSubjectPoint': 5}
                     }
                 ]
             }
