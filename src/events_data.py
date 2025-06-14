@@ -175,6 +175,7 @@ def get_events_data():
                     'hour': 12,
                     'grade_range': [1, 3]  # 1-3학년 모두 발생
                 },
+                'requirements': {'major': 'functional'},  # 기능반 전공일 때만 발생
                 'choices': [
                     {
                         'text': '과연 결과는?!?!?!?!?!?!',
@@ -191,6 +192,7 @@ def get_events_data():
                     'hour': 8,
                     'grade_range': [1, 3]  # 1-3학년 모두 발생
                 },
+                'requirements': {'major': 'functional'},  # 기능반 전공일 때만 발생
                 'choices': [
                     {
                         'text': '기능 대회 문제를 풀며 공부한다.',
@@ -212,8 +214,10 @@ def get_events_data():
                 'time_trigger': {
                     'week': 20,
                     'day': 5,
-                    'hour': 16
+                    'hour': 16,
+                    'grade_range': [1, 2]  # 1-2학년에 발생
                 },
+                'requirements': {'major': 'functional'},  # 기능반 전공일 때만 발생
                 'choices': [
                     {
                         'text': '한다',
@@ -234,6 +238,7 @@ def get_events_data():
                     'hour': 9,
                     'grade_range': [2, 3]  # 2-3학년에만 발생
                 },
+                'requirements': {'major': 'developer'},  # 개발자 전공일 때만 발생
                 'choices': [
                     {
                         'text': '참여한다.',
@@ -247,12 +252,14 @@ def get_events_data():
             },
             'korean_history_exam': {
                 'title': '한국사 검정 능력 시험',
-                'text': '"00아 너 공기업 준비하지? 나랑 여름방학에 같이 한국사 볼래?" 공기업을 준비하는 친구가 나에게 같이 한국사를 응시하자고 제안했다. 한번 응시해볼까?',
+                'text': '"00아 너 공기업 준비하지? 나랑 여름방학에 같이 한국사를 볼래?" 공기업을 준비하는 친구가 나에게 같이 한국사를 응시하자고 제안했다. 한번 응시해볼까?',
                 'time_trigger': {
                     'week': 7,
                     'day': 1,
-                    'hour': 9
+                    'hour': 9,
+                    'grade_range': [1, 2]  # 1-2학년에 발생
                 },
+                'requirements': {'major': 'public'},  # 공기업 전공일 때만 발생
                 'choices': [
                     {
                         'text': '응시한다.',
@@ -270,8 +277,10 @@ def get_events_data():
                 'time_trigger': {
                     'week': 15,
                     'day': 1,
-                    'hour': 13
+                    'hour': 13,
+                    'grade_range': [2, 2]  # 2학년에만 발생
                 },
+                'requirements': {'major': 'public'},  # 공기업 전공일 때만 발생
                 'choices': [
                     {
                         'text': '신청한다.',
@@ -289,8 +298,10 @@ def get_events_data():
                 'time_trigger': {
                     'week': 7,
                     'day': 1,
-                    'hour': 13
+                    'hour': 13,
+                    'grade_range': [1, 1]  # 1학년에만 발생
                 },
+                'requirements': {'major': 'public'},  # 공기업 전공일 때만 발생
                 'choices': [
                     {
                         'text': '신청한다.',

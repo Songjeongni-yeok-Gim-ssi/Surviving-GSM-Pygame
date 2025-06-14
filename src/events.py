@@ -105,6 +105,12 @@ class EventManager:
                     grade_range = trigger.get('grade_range', [1, 3])  # 기본값은 1-3학년
                     if not (grade_range[0] <= current_grade <= grade_range[1]):
                         continue
+                    
+                    # 전공 요구사항 체크
+                    if 'requirements' in event:
+                        if 'major' in event['requirements']:
+                            if Stat.major != event['requirements']['major']:
+                                continue
                         
                     if (trigger['week'] == current_week and 
                         trigger['day'] == current_day and 
@@ -129,6 +135,12 @@ class EventManager:
                 grade_range = time_trigger.get('grade_range', [1, 3])  # 기본값은 1-3학년
                 if not (grade_range[0] <= current_grade <= grade_range[1]):
                     continue
+                
+                # 전공 요구사항 체크
+                if 'requirements' in event:
+                    if 'major' in event['requirements']:
+                        if Stat.major != event['requirements']['major']:
+                            continue
                 
                 # 주차 조건 체크
                 if 'week' in time_trigger:
