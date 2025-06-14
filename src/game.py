@@ -551,7 +551,7 @@ class Game:
             print(f"\n[이벤트 처리] {event_name} 이벤트를 처리합니다.")
             if not hasattr(self, 'current_select_paper'):  # 현재 선택지가 없을 때만 새 이벤트 트리거
                 if event_name in self.event_manager.events['fixed_events']:
-                    self._trigger_fixed_event(event_name)
+                    self._trigger_event(event_name, 'fixed')
                 elif event_name in self.event_manager.events['random_events']:
                     event = self.event_manager.events['random_events'][event_name]
                     self.time_manager.pause_time()
@@ -702,79 +702,22 @@ class Game:
             self.draw()
             self.clock.tick(FPS)
 
-    def _trigger_major_selection(self):
-        """전공 선택 이벤트 발생"""
-        self.time_manager.pause_time()
-        event = self.event_manager.get_fixed_event('major_selection')
-        if event:
-            self.current_select_paper = SelectPaper(
-                'assets/imgs/exit.png',
-                event['title'],
-                event['text'],
-                self.manager,
-                *[choice['text'] for choice in event['choices']]
-            )
-
-    def _handle_major_selection(self, choice):
-        """전공 선택 처리"""
-        event = self.event_manager.get_fixed_event('major_selection')
-        if event:
-            for i, choice_data in enumerate(event['choices']):
-                if choice_data['text'] == choice:
-                    choice_data['effect']()
-                    break
-
-    def _trigger_random_event(self, location):
-        """랜덤 이벤트 발생"""
-        event = self.event_manager.get_random_event(location)
-        if event:
-            self.time_manager.pause_time()
-            
-            try:
-                # SelectPaper 생성
-                self.current_select_paper = SelectPaper(
-                'assets/imgs/exit.png',
-                event['title'],
-                event['text'],
-                self.manager,
-                *[choice['text'] for choice in event['choices']]
-            )
-                print("[SelectPaper] 생성 완료")
-            except Exception as e:
-                print(f"[에러] SelectPaper 생성 실패: {str(e)}")
-
-    def _handle_event_choice(self, event_name, choice_index):
-        """이벤트 선택 처리"""
-        print(f"\n[이벤트 선택] {event_name} 이벤트의 {choice_index}번 선택지를 처리합니다.")
-        event = self.event_manager.get_fixed_event(event_name)
-        if event and 'choices' in event:
-            if isinstance(event['choices'], dict):
-                # 전공에 따른 선택지 처리
-                major_type = Stat.major
-                if major_type == 'developer':
-                    major_type = 'developer'
-                elif major_type == 'functional':
-                    major_type = 'functional'
-                elif major_type == 'public':
-                    major_type = 'public'
-                choices = event['choices'][major_type]
-            else:
-                choices = event['choices']
-            
-            if 0 <= choice_index < len(choices):
-                print(f"[선택지 효과] {choices[choice_index]['text']} 선택지의 효과를 적용합니다.")
-                choices[choice_index]['effect']()
-
-    def _trigger_fixed_event(self, event_name):
-        """고정 이벤트 발생"""
+    def _trigger_event(self, event_name, event_type='fixed'):
+        """이벤트 발생 (고정/랜덤 이벤트 통합)"""
         print(f"\n[이벤트 트리거] {event_name} 이벤트를 트리거합니다.")
-        event = self.event_manager.get_fixed_event(event_name)
+        
+        # 이벤트 가져오기
+        if event_type == 'fixed':
+            event = self.event_manager.get_fixed_event(event_name)
+        else:
+            event = self.event_manager.get_random_event(event_name)
+            
         if event:
             print(f"[이벤트 상세] {event_name} 이벤트의 선택지를 생성합니다.")
             self.time_manager.pause_time()
             self._current_event = event_name
             
-            # 선택지 텍스트 추출 로직 수정
+            # 선택지 텍스트 추출
             if isinstance(event['choices'], dict):
                 # 전공에 따른 선택지 처리
                 major_type = Stat.major
@@ -807,3 +750,38 @@ class Game:
             # 전공 선택 이벤트인 경우 플래그 설정
             if event_name == 'major_selection':
                 self._is_major_selection = True
+
+    def _trigger_major_selection(self):
+        """전공 선택 이벤트 발생"""
+        self._trigger_event('major_selection', 'fixed')
+
+    def _handle_major_selection(self, choice):
+        """전공 선택 처리"""
+        event = self.event_manager.get_fixed_event('major_selection')
+        if event:
+            for i, choice_data in enumerate(event['choices']):
+                if choice_data['text'] == choice:
+                    choice_data['effect']()
+                    break
+
+    def _handle_event_choice(self, event_name, choice_index):
+        """이벤트 선택 처리"""
+        print(f"\n[이벤트 선택] {event_name} 이벤트의 {choice_index}번 선택지를 처리합니다.")
+        event = self.event_manager.get_fixed_event(event_name)
+        if event and 'choices' in event:
+            if isinstance(event['choices'], dict):
+                # 전공에 따른 선택지 처리
+                major_type = Stat.major
+                if major_type == 'developer':
+                    major_type = 'developer'
+                elif major_type == 'functional':
+                    major_type = 'functional'
+                elif major_type == 'public':
+                    major_type = 'public'
+                choices = event['choices'][major_type]
+            else:
+                choices = event['choices']
+            
+            if 0 <= choice_index < len(choices):
+                print(f"[선택지 효과] {choices[choice_index]['text']} 선택지의 효과를 적용합니다.")
+                choices[choice_index]['effect']()
