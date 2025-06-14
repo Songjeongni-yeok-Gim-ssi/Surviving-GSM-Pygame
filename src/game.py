@@ -39,6 +39,14 @@ class Game:
             # 이벤트 매니저 초기화
             self.event_manager = EventManager()
             
+            # exit 이미지 로드
+            self.exit_image = pygame.image.load('assets/imgs/exit.png')
+            # 원본 이미지의 비율 유지하면서 높이를 50으로 조정
+            original_width, original_height = self.exit_image.get_size()
+            scale_factor = 50 / original_height
+            new_width = int(original_width * scale_factor)
+            self.exit_image = pygame.transform.scale(self.exit_image, (new_width, 50))
+            
             # UI 요소들 초기화
             self.init_ui_elements()
             cls._init = True
@@ -181,8 +189,9 @@ class Game:
         # 메인 메뉴로 돌아가기 버튼
         self.back_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect(10, SCREEN_HEIGHT - 60, 100, 50),
-            text='나가기',
-            manager=self.manager
+            text='',
+            manager=self.manager,
+            object_id='#exit_button'  # 테마에서 정의한 ID
         )
         
         # 도움말 패널 추가 (마지막에 생성하여 최상위에 표시)
@@ -210,6 +219,138 @@ class Game:
             container=self.help_panel
         )
         
+        # 스탯 패널 추가 (오른쪽)
+        self.stat_panel = pygame_gui.elements.UIPanel(
+            relative_rect=pygame.Rect(SCREEN_WIDTH - 320, 20, 300, 500),
+            manager=self.manager,
+            object_id='#stat_panel'
+        )
+        
+        # 스탯 제목
+        self.stat_title = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 10, 280, 30),
+            text='현재 스탯',
+            manager=self.manager,
+            container=self.stat_panel,
+            object_id='#stat_title'
+        )
+        
+        # 기본 스탯 라벨들
+        self.major_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 50, 280, 25),
+            text='전공: 미선택',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.gender_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 75, 280, 25),
+            text='성별: 미선택',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        # 기본 스탯 섹션
+        self.basic_stats_title = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 110, 280, 25),
+            text='[기본 스탯]',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.good_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 135, 280, 25),
+            text='선함: 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.evil_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 160, 280, 25),
+            text='악함: 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.responsibility_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 185, 280, 25),
+            text='책임감: 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.fame_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 210, 280, 25),
+            text='평판: 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.fatigue_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 235, 280, 25),
+            text='피로도: 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        # 전공 관련 스탯 섹션
+        self.major_stats_title = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 270, 280, 25),
+            text='[전공 관련 스탯]',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.intuitive_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 295, 280, 25),
+            text='직관성 (프론트엔드): 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.interpret_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 320, 280, 25),
+            text='해석력 (백엔드): 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.major_subject_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 345, 280, 25),
+            text='전공 과목: 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.normal_subject_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 370, 280, 25),
+            text='일반 과목: 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.functional_competition_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 395, 280, 25),
+            text='기능 대회: 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        # 게임 상태 섹션
+        self.game_status_title = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 430, 280, 25),
+            text='[게임 상태]',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
+        self.stat_points_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 455, 280, 25),
+            text='스탯 포인트: 0',
+            manager=self.manager,
+            container=self.stat_panel
+        )
+        
         # 처음에는 메인 메뉴만 보이게
         self.show_main_menu_ui()
         self.help_panel.hide()  # 도움말 패널은 처음에 숨김
@@ -231,6 +372,7 @@ class Game:
         self.game_ui_panel.hide()
         self.back_button.hide()
         self.control_panel.hide()  # 컨트롤 패널도 숨기기
+        self.stat_panel.hide()  # 스탯 패널도 숨기기
 
     def show_main_menu_ui(self):
         '''
@@ -251,6 +393,7 @@ class Game:
         self.game_ui_panel.show()
         self.back_button.show()
         self.control_panel.show()  # 게임 진행 중에만 컨트롤 패널 보이기
+        self.stat_panel.show()  # 스탯 패널도 보이기
 
     def process_events(self):
         '''
@@ -474,7 +617,27 @@ class Game:
             self.graduation_label.show()
         else:
             self.graduation_label.hide()
+            
+        # 스탯 업데이트
+        self.major_label.set_text(f'전공: {Stat.major if Stat.major else "미선택"}')
+        self.gender_label.set_text(f'성별: {Stat.gender if Stat.gender else "미선택"}')
         
+        # 기본 스탯 업데이트
+        self.good_label.set_text(f'선함: {Stat.good}')
+        self.evil_label.set_text(f'악함: {Stat.evil}')
+        self.responsibility_label.set_text(f'책임감: {Stat.responsibility}')
+        self.fame_label.set_text(f'평판: {Stat.fame}')
+        self.fatigue_label.set_text(f'피로도: {Stat.fatigue}')
+        
+        # 전공 관련 스탯 업데이트
+        self.intuitive_label.set_text(f'직관성 (프론트엔드): {Stat.intuitivePoint}')
+        self.interpret_label.set_text(f'해석력 (백엔드): {Stat.interpretPoint}')
+        self.major_subject_label.set_text(f'전공 과목: {Stat.majorSubjectPoint}')
+        self.normal_subject_label.set_text(f'일반 과목: {Stat.normalSubjectPoint}')
+        self.functional_competition_label.set_text(f'기능 대회: {Stat.functionalCompetition}')
+        
+        # 게임 상태 업데이트
+        self.stat_points_label.set_text(f'스탯 포인트: {Stat.stat_points}')
 
     def draw(self):
         '''
@@ -506,6 +669,9 @@ class Game:
             
             # 게임 스프라이트들 그리기
             self.all_sprites.draw(self.screen)
+            
+            # exit 이미지 그리기
+            self.screen.blit(self.exit_image, (10, SCREEN_HEIGHT - 60))
             
             # 졸업 축하 효과
             if self.time_manager.graduation_completed:

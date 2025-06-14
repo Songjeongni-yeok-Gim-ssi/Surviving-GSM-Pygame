@@ -193,5 +193,20 @@
     "misc": {
       "text_shadow": "1"
     }
+  },
+
+  "#exit_button": {
+    "colours": {
+      "normal_bg": "#00000000",
+      "hovered_bg": "#00000000",
+      "selected_bg": "#00000000",
+      "normal_border": "#00000000",
+      "hovered_border": "#00000000",
+      "selected_border": "#00000000"
+    },
+    "misc": {
+      "shape_corner_radius": "0",
+      "border_width": "0"
+    }
   }
 }
