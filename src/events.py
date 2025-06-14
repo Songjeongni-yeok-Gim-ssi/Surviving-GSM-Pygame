@@ -257,6 +257,7 @@ class EventManager:
                     'text': '친구가 같이 기숙사 금지 항목인 라면을 먹자고 꼬신다!',
                     'probability': 0.3,
                     'location': 'dormitory',
+                    'repeatable': True,
                     'choices': [
                         {
                             'text': '같이 먹는다.',
@@ -327,6 +328,7 @@ class EventManager:
                     'text': '2학년이 되면서 자습 시간이 늘어났다. 무엇을 하면 좋을까?',
                     'probability': 0.6,
                     'time_range': {'week_start': 20, 'week_end': 80},
+                    'repeatable': True,
                     'choices': {
                         'developer': [
                             {
@@ -433,6 +435,7 @@ class EventManager:
                     'text': '이제 곧 취업을 해야하는데 어떤 프로젝트를 하는게 좋을까?',
                     'probability': 0.5,
                     'time_range': {'week_start': 60, 'week_end': 90},
+                    'repeatable': False,
                     'choices': [
                         {
                             'text': '개인 프로젝트에 집중한다.',
@@ -467,6 +470,7 @@ class EventManager:
                     'title': '특별 강의',
                     'text': '학교에서 특별 강의 공지가 올라왔다! 참여해볼까?',
                     'probability': 0.4,
+                    'repeatable': True,
                     'choices': [
                         {
                             'text': '적극적으로 참여한다.',
@@ -639,7 +643,8 @@ class EventManager:
             # 현재 시간에 발생 가능한 랜덤 이벤트들을 수집
             possible_random_events = []
             for event_name, event in self.events['random_events'].items():
-                if event_name not in self.triggered_events:
+                # repeatable이 True이거나 아직 발생하지 않은 이벤트만 추가
+                if event.get('repeatable', False) or event_name not in self.triggered_events:
                     if 'time_range' in event:
                         if (event['time_range']['week_start'] <= current_week <= event['time_range']['week_end']):
                             possible_random_events.append((event_name, event))
@@ -661,7 +666,7 @@ class EventManager:
                             self.triggered_events.add(event_name)
                             self.last_random_event_day = current_day
                             break
-                
+        
         return triggered_events
     
     def _determine_job_outcome(self, job_type):
