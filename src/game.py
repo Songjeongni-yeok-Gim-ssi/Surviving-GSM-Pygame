@@ -417,7 +417,13 @@ class Game:
                     # 선택지 텍스트 추출
                     if isinstance(event['choices'], dict):
                         # 전공에 따른 선택지 처리
-                        major_type = 'normal' if Stat.major in ['개발', '공기업'] else Stat.major
+                        major_type = Stat.major
+                        if major_type == 'developer':
+                            major_type = 'developer'
+                        elif major_type == 'functional':
+                            major_type = 'functional'
+                        elif major_type == 'public':
+                            major_type = 'public'
                         choices = event['choices'][major_type]
                         choice_texts = [choice['text'] for choice in choices]
                     else:
@@ -578,7 +584,13 @@ class Game:
         if event and 'choices' in event:
             if isinstance(event['choices'], dict):
                 # 전공에 따른 선택지 처리
-                major_type = 'normal' if Stat.major in ['개발', '공기업'] else Stat.major
+                major_type = Stat.major
+                if major_type == 'developer':
+                    major_type = 'developer'
+                elif major_type == 'functional':
+                    major_type = 'functional'
+                elif major_type == 'public':
+                    major_type = 'public'
                 choices = event['choices'][major_type]
             else:
                 choices = event['choices']
@@ -599,7 +611,13 @@ class Game:
             # 선택지 텍스트 추출 로직 수정
             if isinstance(event['choices'], dict):
                 # 전공에 따른 선택지 처리
-                major_type = 'normal' if Stat.major in ['개발', '공기업'] else Stat.major
+                major_type = Stat.major
+                if major_type == 'developer':
+                    major_type = 'developer'
+                elif major_type == 'functional':
+                    major_type = 'functional'
+                elif major_type == 'public':
+                    major_type = 'public'
                 choices = event['choices'][major_type]
                 choice_texts = [choice['text'] for choice in choices]
             else:
