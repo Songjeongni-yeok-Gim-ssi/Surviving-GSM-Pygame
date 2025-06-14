@@ -78,91 +78,95 @@ class Game:
             manager=self.manager
         )
         
-        # 게임 화면용 UI 패널 (더 큰 크기로 조정)
+        # 게임 화면용 UI 패널 (상단 중앙)
         self.game_ui_panel = pygame_gui.elements.UIPanel(
-            relative_rect=pygame.Rect(50, 50, 400, 280),
+            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 200, 20, 400, 100),
             manager=self.manager,
             object_id='#game_ui_panel'
         )
         
-        # 게임 상태 라벨들
+        # 시간 표시 라벨 (상단 중앙)
         self.time_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect(10, 10, 380, 30),
-            text='1학년 1주차 월요일 오전 09:00',
+            text='AM 09:00',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.game_ui_panel,
+            object_id='#time_label'
         )
         
-        self.total_progress_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 45, 380, 25),
-            text='전체 진행도: 0.0%',
+        # 날짜 표시 라벨 (시간 라벨 아래)
+        self.date_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 45, 380, 30),
+            text='1학년 1주차 월요일',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.game_ui_panel,
+            object_id='#date_label'
         )
         
-        self.year_progress_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 70, 380, 25),
-            text='학년 진행도: 0.0%',
+        # 좌상단 게임 컨트롤 패널
+        self.control_panel = pygame_gui.elements.UIPanel(
+            relative_rect=pygame.Rect(20, 20, 300, 150),
             manager=self.manager,
-            container=self.game_ui_panel
+            object_id='#control_panel'
         )
         
-        # 시간 속도 조절 섹션
-        self.time_speed_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 100, 100, 25),
-            text='시간 속도:',
+        # 게임 속도 조절 섹션
+        self.speed_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 10, 280, 25),
+            text='게임 속도',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.control_panel
         )
         
+        # 속도 조절 버튼들
         self.speed_1x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(110, 100, 40, 25),
+            relative_rect=pygame.Rect(10, 35, 60, 25),
             text='1x',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.control_panel
         )
         
         self.speed_2x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(155, 100, 40, 25),
+            relative_rect=pygame.Rect(80, 35, 60, 25),
             text='2x',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.control_panel
         )
         
         self.speed_5x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(200, 100, 40, 25),
+            relative_rect=pygame.Rect(150, 35, 60, 25),
             text='5x',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.control_panel
         )
         
         self.speed_50x_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(355, 100, 40, 25),
+            relative_rect=pygame.Rect(220, 35, 60, 25),
             text='50x',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.control_panel
         )
         
         # 개발자 도구 섹션
-        self.dev_tools_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, 135, 100, 25),
-            text='개발자 도구:',
+        self.dev_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, 70, 280, 25),
+            text='개발자 도구',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.control_panel
         )
         
         self.skip_year_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(10, 165, 80, 25),
+            relative_rect=pygame.Rect(10, 95, 135, 25),
             text='학년 스킵',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.control_panel
         )
         
         self.reset_time_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(95, 165, 80, 25),
+            relative_rect=pygame.Rect(155, 95, 135, 25),
             text='시간 리셋',
             manager=self.manager,
-            container=self.game_ui_panel
+            container=self.control_panel
         )
         
         # 졸업 상태 라벨
@@ -442,14 +446,18 @@ class Game:
         '''
         time_info = self.time_manager.get_current_time_info()
         
-        # 시간 라벨 업데이트
-        speed_info = f" ({self.time_manager.time_speed}x)"
-        self.time_label.set_text(time_info['time_string'] + speed_info)
+        # 시간 라벨 업데이트 (AM/PM 형식)
+        current_hour = time_info['hour']
+        am_pm = "AM" if current_hour < 12 else "PM"
+        hour = current_hour if current_hour <= 12 else current_hour - 12
+        if hour == 0:  # 0시는 12시로 표시
+            hour = 12
+        time_str = f"{am_pm} {hour:02d}:{time_info['minute']:02d}"
+        self.time_label.set_text(time_str)
         
-        # 진행도 라벨 업데이트
-        progress = time_info['progress']
-        self.total_progress_label.set_text(f"전체 진행도: {progress['total_progress']:.1f}%")
-        self.year_progress_label.set_text(f"학년 진행도: {progress['year_progress']:.1f}%")
+        # 날짜 라벨 업데이트
+        date_str = f"{time_info['year']}학년 {time_info['week']}주차 {time_info['day']}"
+        self.date_label.set_text(date_str)
         
         # 졸업 상태 표시
         if time_info['is_graduated']:
@@ -458,9 +466,6 @@ class Game:
         else:
             self.graduation_label.hide()
         
-        # 다른 UI 요소들도 필요에 따라 업데이트
-        # self.health_label.set_text(f'체력: {current_health}/100')
-        # self.money_label.set_text(f'돈: {current_money:,}원')
 
     def draw(self):
         '''
