@@ -532,85 +532,56 @@ class Game:
             self.handle_time_events()
     
     def handle_time_events(self):
-        '''시간에 따른 게임 이벤트 처리'''
+        """시간 관련 이벤트 처리"""
+        # 시간 업데이트
+        delta_time = self.clock.get_time() / 1000.0  # 밀리초를 초로 변환
+        self.time_manager.update(delta_time)
+        
+        # 시간 정보 가져오기
         time_info = self.time_manager.get_current_time_info()
         
-        # 학년 변경 이벤트
-        if hasattr(self, '_last_year'):
-            if self._last_year != time_info['year'] and not time_info['is_graduated']:
-                print(f"\n[학년 변경] {time_info['year']}학년이 되었습니다!")
-                # 학년 변경 시 고정 이벤트 발생
-                if time_info['year'] == 1:
-                    print("[전공 선택] 1학년 전공 선택 이벤트를 트리거합니다.")
-                    self._trigger_event('major_selection', 'fixed')
-        self._last_year = time_info['year']
-        
-        # 시간에 따른 이벤트 체크
+        # 이벤트 체크
         triggered_events = self.event_manager.check_time_triggered_events(time_info)
         for event_name in triggered_events:
-            print(f"\n[이벤트 처리] {event_name} 이벤트를 처리합니다.")
-            if not hasattr(self, 'current_select_paper'):  # 현재 선택지가 없을 때만 새 이벤트 트리거
-                if event_name in self.event_manager.events['fixed_events']:
-                    self._trigger_event(event_name, 'fixed')
-                elif event_name in self.event_manager.events['random_events']:
-                    event = self.event_manager.events['random_events'][event_name]
-                    self.time_manager.pause_time()
-                    self._current_event = event_name
-                    
-                    # 선택지 텍스트 추출
-                    if isinstance(event['choices'], dict):
-                        # 전공에 따른 선택지 처리
-                        major_type = Stat.major
-                        choices = event['choices'][major_type]
-                        choice_texts = [choice['text'] for choice in choices]
-                    else:
-                        choice_texts = [choice['text'] for choice in event['choices']]
-                    
-                    try:
-                        # SelectPaper 생성
-                        self.current_select_paper = SelectPaper(
-                            'assets/imgs/exit.png',
-                            event['title'],
-                            event['text'],
-                            self.manager,
-                            *choice_texts
-                        )
-                        print("[SelectPaper] 생성 완료")
-                    except Exception as e:
-                        print(f"[에러] SelectPaper 생성 실패: {str(e)}")
-            else:
-                print(f"[이벤트 대기] {event_name} 이벤트는 현재 선택지가 닫힐 때까지 대기합니다.")
+            self._trigger_event(event_name)
+            
+        # UI 업데이트
+        self.update_game_ui()
         
-        # 졸업 이벤트
-        if time_info['is_graduated'] and not hasattr(self, '_graduation_announced'):
-            print("\n[졸업] 🎓 축하합니다! GSM을 졸업하셨습니다! 🎓")
-            self._graduation_announced = True
+        # 졸업 체크
+        if time_info['is_graduated']:
+            self.state = GameState.GRADUATION
+            self.time_manager.pause_time()
 
     def update_game_ui(self):
-        '''
-            게임 UI를 현재 상태에 맞게 업데이트
-        '''
+        """게임 UI 업데이트"""
+        # 시간 정보 가져오기
         time_info = self.time_manager.get_current_time_info()
         
-        # 시간 라벨 업데이트 (AM/PM 형식)
+        # 시간 표시 업데이트
         current_hour = time_info['hour']
-        am_pm = "AM" if current_hour < 12 else "PM"
+        am_pm = "오전" if current_hour < 12 else "오후"
         hour = current_hour if current_hour <= 12 else current_hour - 12
         if hour == 0:  # 0시는 12시로 표시
             hour = 12
         time_str = f"{am_pm} {hour:02d}:{time_info['minute']:02d}"
         self.time_label.set_text(time_str)
         
-        # 날짜 라벨 업데이트
-        date_str = f"{time_info['year']}학년 {time_info['week']}주차 {time_info['day']}"
+        # 날짜 라벨 업데이트 (학년 주차 요일)
+        date_str = f"{time_info['year']}학년 {time_info['week']}주차 {time_info['day']}일"
         self.date_label.set_text(date_str)
         
-        # 졸업 상태 표시
+        # 졸업 상태 업데이트
         if time_info['is_graduated']:
-            self.graduation_label.set_text("🎓 졸업 완료! 축하합니다! 🎓")
+            self.graduation_label.set_text("축하합니다! 졸업하셨습니다!")
             self.graduation_label.show()
         else:
             self.graduation_label.hide()
+            
+        # 이벤트 체크
+        triggered_events = self.event_manager.check_time_triggered_events(time_info)
+        for event_name in triggered_events:
+            self._trigger_event(event_name)
             
         # 스탯 업데이트
         self.major_label.set_text(f'전공: {Stat.major if Stat.major else "미선택"}')

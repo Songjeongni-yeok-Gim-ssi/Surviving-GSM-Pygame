@@ -1,9 +1,9 @@
 class GameTimeManager:
-    """게임 내 시간을 관리하는 클래스 (3년 * 50주 시스템)"""
+    """게임 내 시간을 관리하는 클래스 (3년 * 30주 시스템)"""
     def __init__(self):
         self.reset()
         self.time_speed = 1.0  # 시간 흐름 속도 (1.0 = 12초당 1일)
-        self.WEEKS_PER_YEAR = 50
+        self.WEEKS_PER_YEAR = 30  # 30주로 수정
         self.TOTAL_YEARS = 3
         self.SECONDS_PER_DAY = 12  # 1일 = 12초 (실시간)
         self.is_paused = False  # 시간 멈춤 상태
@@ -12,8 +12,8 @@ class GameTimeManager:
         """시간을 초기화"""
         self.total_seconds = 0  # 게임 내 총 초
         self.current_year = 1  # 현재 학년 (1-3년)
-        self.current_week = 1  # 현재 주차 (1-50주)
-        self.current_day = 1   # 현재 요일 (1-7일)
+        self.current_week = 1  # 현재 주차 (1-30주)
+        self.current_day = 1   # 현재 요일 (1-5일)
         self.current_hour = 9  # 현재 시간 (기본 오전 9시 시작)
         self.current_minute = 0
         self.graduation_completed = False
@@ -41,7 +41,7 @@ class GameTimeManager:
         total_minutes = int(self.total_seconds // 60)
         total_hours = total_minutes // 60 + 9
         total_days = total_hours // 24
-        total_weeks = total_days // 7
+        total_weeks = total_days // 5  # 5일제로 수정
         
         # 학년 계산
         self.current_year = min((total_weeks // self.WEEKS_PER_YEAR) + 1, self.TOTAL_YEARS + 1)
@@ -50,8 +50,8 @@ class GameTimeManager:
         weeks_in_current_year = total_weeks % self.WEEKS_PER_YEAR
         self.current_week = weeks_in_current_year + 1
         
-        # 현재 주의 요일 계산
-        days_in_current_week = total_days % 7
+        # 현재 주의 요일 계산 (5일제)
+        days_in_current_week = total_days % 5
         self.current_day = days_in_current_week + 1
         
         # 현재 시간 계산 (9시부터 시작)
@@ -67,7 +67,7 @@ class GameTimeManager:
         if self.current_year <= self.TOTAL_YEARS:
             # 현재 학년의 남은 주를 모두 건너뛰기
             weeks_to_skip = self.WEEKS_PER_YEAR - (self.current_week - 1)
-            seconds_to_add = weeks_to_skip * 7 * 24 * 60 * 60  # 주 -> 초 변환
+            seconds_to_add = weeks_to_skip * 5 * 24 * 60 * 60  # 주 -> 초 변환 (5일제)
             self.total_seconds += seconds_to_add
             self._calculate_time_units()
             
@@ -80,9 +80,9 @@ class GameTimeManager:
         if self.graduation_completed:
             return "졸업 완료!"
             
-        # 요일 변환
-        day_names = ["", "월", "화", "수", "목", "금", "토", "일"]
-        day_name = day_names[min(self.current_day, 7)]
+        # 요일 변환 (5일제)
+        day_names = ["", "월", "화", "수", "목", "금"]
+        day_name = day_names[min(self.current_day, 5)]
         
         # 오전/오후 변환
         if self.current_hour < 12:
@@ -107,7 +107,8 @@ class GameTimeManager:
             'hour': self.current_hour,
             'minute': self.current_minute,
             'time_string': self.get_time_string(),
-            'is_graduated': self.graduation_completed
+            'is_graduated': self.graduation_completed,
+            'grade': self.current_year  # 학년 정보 추가
         }
     
     def pause_time(self):

@@ -94,12 +94,18 @@ class EventManager:
         current_week = time_info['week']
         current_day = time_info['day']
         current_hour = time_info['hour']
+        current_grade = time_info.get('grade', 1)  # 현재 학년 정보 가져오기
         
         # 고정 이벤트 체크
         for event_name, event in self.events['fixed_events'].items():
             if event_name not in self.triggered_events:
                 if 'time_trigger' in event:
                     trigger = event['time_trigger']
+                    # 학년 범위 체크
+                    grade_range = trigger.get('grade_range', [1, 3])  # 기본값은 1-3학년
+                    if not (grade_range[0] <= current_grade <= grade_range[1]):
+                        continue
+                        
                     if (trigger['week'] == current_week and 
                         trigger['day'] == current_day and 
                         trigger['hour'] == current_hour):
@@ -112,13 +118,48 @@ class EventManager:
             # 현재 시간에 발생 가능한 랜덤 이벤트들을 수집
             possible_random_events = []
             for event_name, event in self.events['random_events'].items():
-                # repeatable이 True이거나 아직 발생하지 않은 이벤트만 추가
-                if event.get('repeatable', False) or event_name not in self.triggered_events:
-                    if 'time_range' in event:
-                        if (event['time_range']['week_start'] <= current_week <= event['time_range']['week_end']):
-                            possible_random_events.append((event_name, event))
-                    else:
-                        possible_random_events.append((event_name, event))
+                # 이미 발생한 이벤트는 건너뛰기
+                if event_name in self.triggered_events and not event.get('repeatable', False):
+                    continue
+
+                # time_trigger 조건 체크
+                time_trigger = event.get('time_trigger', {})
+                
+                # 학년 범위 체크
+                grade_range = time_trigger.get('grade_range', [1, 3])  # 기본값은 1-3학년
+                if not (grade_range[0] <= current_grade <= grade_range[1]):
+                    continue
+                
+                # 주차 조건 체크
+                if 'week' in time_trigger:
+                    if time_trigger['week'] != current_week:
+                        continue
+                else:
+                    week_start = time_trigger.get('week_start', 1)
+                    week_end = time_trigger.get('week_end', 30)  # 30주로 수정
+                    if not (week_start <= current_week <= week_end):
+                        continue
+                
+                # 요일 조건 체크 (5일제로 수정)
+                day_start = time_trigger.get('day_start', 1)
+                day_end = time_trigger.get('day_end', 5)  # 5일로 수정
+                if not (day_start <= current_day <= day_end):
+                    continue
+                
+                # 시간 조건 체크
+                hour_start = time_trigger.get('hour_start', 0)
+                hour_end = time_trigger.get('hour_end', 23)
+                
+                if hour_start <= hour_end:
+                    if not (hour_start <= current_hour <= hour_end):
+                        continue
+                else:  # 자정을 걸치는 경우
+                    if not (current_hour >= hour_start or current_hour <= hour_end):
+                        continue
+
+                # 모든 조건을 만족하는 경우에만 이벤트 추가
+                print(f"[이벤트 추가] {event_name} 이벤트가 모든 조건을 만족")
+                possible_random_events.append((event_name, event))
             
             # 가능한 랜덤 이벤트가 있다면 하나만 선택
             if possible_random_events:
@@ -138,6 +179,17 @@ class EventManager:
         
         return triggered_events
     
+    def _handle_employment_success(self):
+        """취업 성공 처리"""
+        print("축하합니다! 취업에 성공했습니다!")
+        # 여기에 취업 성공 관련 추가 로직 구현
+    
+    def _handle_employment_failure(self):
+        """취업 실패 처리"""
+        print("아쉽게도 취업에 실패했습니다...")
+        # 여기에 취업 실패 관련 추가 로직 구현
+    
+    def check_employment_result(self, job_type):
         """
         취업 결과 결정
         """

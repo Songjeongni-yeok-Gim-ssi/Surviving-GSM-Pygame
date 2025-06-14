@@ -10,7 +10,8 @@ def get_events_data():
                 'time_trigger': {
                     'week': 1,
                     'day': 1,
-                    'hour': 9
+                    'hour': 9,
+                    'grade_range': [1, 1]  # 1학년에만 발생
                 },
                 'choices': [
                     {
@@ -31,9 +32,10 @@ def get_events_data():
                 'title': '아이디어 페스티벌',
                 'text': '아이디어 페스티벌 기간이 다가왔다. 어떤 역할을 맡을까?',
                 'time_trigger': {
-                    'week': 30,
+                    'week': 10,
                     'day': 1,
-                    'hour': 10
+                    'hour': 10,
+                    'grade_range': [1, 2]  # 1-2학년에 발생
                 },
                 'choices': {
                     'developer': [
@@ -76,9 +78,10 @@ def get_events_data():
                 'title': '자기주도 체험학습',
                 'text': '친구들과 함께하는 자기주도 체험학습이다! 나는 어떤 역할을 맡게될까?',
                 'time_trigger': {
-                    'week': 40,
+                    'week': 15,
                     'day': 3,
-                    'hour': 10
+                    'hour': 10,
+                    'grade_range': [1, 2]  # 1-2학년에 발생
                 },
                 'choices': [
                     {
@@ -99,9 +102,10 @@ def get_events_data():
                 'title': '싱가포르 연수',
                 'text': '아기다리고 고기다리던 싱가포르 연수 기회가 왔다!',
                 'time_trigger': {
-                    'week': 19,
+                    'week': 5,
                     'day': 1,
-                    'hour': 9
+                    'hour': 9,
+                    'grade_range': [1, 1]  # 1학년에만 발생
                 },
                 'choices': [
                     {
@@ -118,9 +122,10 @@ def get_events_data():
                 'title': '취업의 선택',
                 'text': '결전의 순간이 왔다. 어떤 길을 선택할 것인가?',
                 'time_trigger': {
-                    'week': 100,
+                    'week': 30,
                     'day': 1,
-                    'hour': 9
+                    'hour': 9,
+                    'grade_range': [3, 3]  # 3학년에만 발생
                 },
                 'choices': {
                     'developer': [
@@ -165,9 +170,10 @@ def get_events_data():
                 'title': '기능 대회',
                 'text': '기능 대회가 시작됩니다. 과연 결과는?!?!?!?!?!?!',
                 'time_trigger': {
-                    'week': 6,
+                    'week': 2,
                     'day': 3,
-                    'hour': 12
+                    'hour': 12,
+                    'grade_range': [1, 3]  # 1-3학년 모두 발생
                 },
                 'choices': [
                     {
@@ -180,9 +186,10 @@ def get_events_data():
                 'title': '기능 대회 대비 출결',
                 'text': '기능 대회를 위한 준비 시간입니다. 어떻게 공부할까요?',
                 'time_trigger': {
-                    'week': 2,
+                    'week': 1,
                     'day': 1,
-                    'hour': 8
+                    'hour': 8,
+                    'grade_range': [1, 3]  # 1-3학년 모두 발생
                 },
                 'choices': [
                     {
@@ -203,7 +210,7 @@ def get_events_data():
                 'title': '방학 기능 대회 대비 잔류',
                 'text': '방학 동안 학교에 남아서 기능 대회를 준비할까요?',
                 'time_trigger': {
-                    'week': 50,
+                    'week': 20,
                     'day': 5,
                     'hour': 16
                 },
@@ -222,9 +229,10 @@ def get_events_data():
                 'title': '연합 해커톤',
                 'text': '연합 해커톤이 열린다. 참여해볼까?',
                 'time_trigger': {
-                    'week': 28,
+                    'week': 8,
                     'day': 1,
-                    'hour': 9
+                    'hour': 9,
+                    'grade_range': [2, 3]  # 2-3학년에만 발생
                 },
                 'choices': [
                     {
@@ -241,7 +249,7 @@ def get_events_data():
                 'title': '한국사 검정 능력 시험',
                 'text': '"00아 너 공기업 준비하지? 나랑 여름방학에 같이 한국사 볼래?" 공기업을 준비하는 친구가 나에게 같이 한국사를 응시하자고 제안했다. 한번 응시해볼까?',
                 'time_trigger': {
-                    'week': 20,
+                    'week': 7,
                     'day': 1,
                     'hour': 9
                 },
@@ -260,7 +268,7 @@ def get_events_data():
                 'title': 'NCS 필기 특강',
                 'text': '디스코드 2학년 게시판에 2학년을 대상으로 하는 NCS 필기 특강이 떴다! 한번 신청해 볼까?',
                 'time_trigger': {
-                    'week': 40,
+                    'week': 15,
                     'day': 1,
                     'hour': 13
                 },
@@ -279,7 +287,7 @@ def get_events_data():
                 'title': '공기업 특강',
                 'text': '디스코드 1학년 게시판에 1학년을 대상으로 하는 공기업 특강이 떴다! 한번 신청해 볼까?',
                 'time_trigger': {
-                    'week': 20,
+                    'week': 7,
                     'day': 1,
                     'hour': 13
                 },
@@ -363,35 +371,11 @@ def get_events_data():
         
         # 랜덤 이벤트
         'random_events': {
-            'dormitory_ramen': {
-                'title': '기숙사 라면 사건',
-                'text': '친구가 같이 기숙사 금지 항목인 라면을 먹자고 꼬신다!',
-                'probability': 0.3,
-                'repeatable': True,
-                'time_trigger': {
-                    'hour_start': 22,  # 오후 10시
-                    'hour_end': 6      # 오전 6시
-                },
-                'choices': [
-                    {
-                        'text': '같이 먹는다.',
-                        'effect': lambda: {'evil': 5, 'fame': -3, 'fatigue': -15}
-                    },
-                    {
-                        'text': '안 먹고 못 본 채 한다.',
-                        'effect': lambda: None
-                    },
-                    {
-                        'text': '기자위한테 알린다.',
-                        'effect': lambda: {'good': 5, 'responsibility': 3, 'fame': -8, 'fatigue': 10}
-                    }
-                ]
-            },
             'study_time_choice': {
                 'title': '학교 자습 시간',
                 'text': '2학년이 되면서 자습 시간이 늘어났다. 무엇을 하면 좋을까?',
                 'probability': 0.6,
-                'time_range': {'week_start': 20, 'week_end': 80},
+                'time_range': {'week_start': 5, 'week_end': 25},
                 'repeatable': True,
                 'time_trigger': {
                     'hour_start': 9,   # 오전 9시
@@ -447,8 +431,8 @@ def get_events_data():
                 'repeatable': True,
                 'requirements': {'major': 'developer'},
                 'time_trigger': {
-                    'week_start': 60,
-                    'week_end': 100,
+                    'week_start': 20,
+                    'week_end': 30,
                     'day_start': 1,
                     'day_end': 5,
                     'hour_start': 9,
@@ -518,8 +502,8 @@ def get_events_data():
                 'repeatable': True,
                 'requirements': {'normalSubjectPoint': 70},
                 'time_trigger': {
-                    'week_start': 60,
-                    'week_end': 80
+                    'week_start': 20,
+                    'week_end': 30
                 },
                 'choices': [
                     {
@@ -538,9 +522,9 @@ def get_events_data():
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
-                    'week': 28,
+                    'week': 10,
                     'day_start': 1,
-                    'day_end': 7,
+                    'day_end': 5,
                     'hour_start': 9,
                     'hour_end': 21
                 },
@@ -566,7 +550,7 @@ def get_events_data():
                 'repeatable': True,
                 'time_trigger': {
                     'week_start': 1,
-                    'week_end': 100,
+                    'week_end': 30,
                     'day_start': 1,
                     'day_end': 5,
                     'hour_start': 9,
@@ -593,8 +577,8 @@ def get_events_data():
                 'probability': 0.6,
                 'repeatable': True,
                 'time_trigger': {
-                    'week_start': 20,
-                    'week_end': 80,
+                    'week_start': 5,
+                    'week_end': 25,
                     'day_start': 1,
                     'day_end': 5,
                     'hour_start': 16,
@@ -644,9 +628,9 @@ def get_events_data():
                 'repeatable': False,
                 'requirements': {'major': 'developer'},
                 'time_trigger': {
-                    'week': 28,
+                    'week': 8,
                     'day_start': 1,
-                    'day_end': 7,
+                    'day_end': 5,
                     'hour_start': 9,
                     'hour_end': 21
                 },
@@ -667,8 +651,8 @@ def get_events_data():
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
-                    'week_start': 20,
-                    'week_end': 100,
+                    'week_start': 5,
+                    'week_end': 30,
                     'day_start': 1,
                     'day_end': 5,
                     'hour_start': 9,
@@ -708,7 +692,7 @@ def get_events_data():
                 'repeatable': True,
                 'time_trigger': {
                     'week_start': 1,
-                    'week_end': 100,
+                    'week_end': 30,
                     'day_start': 1,
                     'day_end': 5,
                     'hour_start': 21,
