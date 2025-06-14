@@ -230,6 +230,7 @@ class Game:
         # 게임 UI 숨기기
         self.game_ui_panel.hide()
         self.back_button.hide()
+        self.control_panel.hide()  # 컨트롤 패널도 숨기기
 
     def show_main_menu_ui(self):
         '''
@@ -240,6 +241,7 @@ class Game:
         self.start_button.show()
         self.help_button.show()
         self.exit_button.show()
+        self.control_panel.hide()  # 메인 메뉴에서는 컨트롤 패널 숨기기
 
     def show_game_ui(self):
         '''
@@ -248,6 +250,7 @@ class Game:
         self.hide_all_ui()
         self.game_ui_panel.show()
         self.back_button.show()
+        self.control_panel.show()  # 게임 진행 중에만 컨트롤 패널 보이기
 
     def process_events(self):
         '''
