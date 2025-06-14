@@ -24,6 +24,7 @@ class EventManager:
         '''
             이벤트에 명시된 스탯 수치 적용
         '''
+        print("_apply_effects")
         for stat_name, value in effects.items():
             if hasattr(Stat, stat_name):
                 current_value = getattr(Stat, stat_name)
@@ -137,7 +138,6 @@ class EventManager:
         
         return triggered_events
     
-    def _determine_job_outcome(self, job_type):
         """
         취업 결과 결정
         """

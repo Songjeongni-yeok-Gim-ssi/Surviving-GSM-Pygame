@@ -714,18 +714,26 @@ class Game:
     def _handle_event_choice(self, event_name, choice_index):
         """이벤트 선택 처리"""
         print(f"\n[이벤트 선택] {event_name} 이벤트의 {choice_index}번 선택지를 처리합니다.")
+        
+        # 고정 이벤트와 랜덤 이벤트 모두 확인
         event = self.event_manager.get_fixed_event(event_name)
+        if not event:
+            event = self.event_manager.events['random_events'].get(event_name)
+            
         if event and 'choices' in event:
             if isinstance(event['choices'], dict):
                 # 전공에 따른 선택지 처리
                 major_type = Stat.major
-                choices = event['choices'][major_type]
+                choices = event['choices'].get(major_type, event['choices'].get('common', []))
             else:
                 choices = event['choices']
             
             if 0 <= choice_index < len(choices):
                 print(f"[선택지 효과] {choices[choice_index]['text']} 선택지의 효과를 적용합니다.")
-                choices[choice_index]['effect']()
+                effect_result = choices[choice_index]['effect']()
+                print(effect_result)
+                if effect_result is not None:  # effect가 None이 아닌 경우에만 적용
+                    self.event_manager._apply_effects(effect_result)
 
     def run(self):
         '''
