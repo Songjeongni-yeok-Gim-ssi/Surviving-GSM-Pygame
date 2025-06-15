@@ -123,7 +123,7 @@ class EventManager:
         current_hour = time_info['hour']
         current_grade = time_info.get('grade', 1)
         
-        # 1. 먼저 고정 이벤트 체크
+        # 고정 이벤트 체크
         for event_name, event in self.events['fixed_events'].items():
             if event_name not in self.triggered_events:
                 if 'time_trigger' in event:
@@ -143,10 +143,9 @@ class EventManager:
                         print(f"\n[고정 이벤트 발생] {event['title']} - {current_week}주차 {current_day}일 {current_hour}시")
                         triggered_events.append(event_name)
                         self.triggered_events.add(event_name)
-                        # 고정 이벤트가 발생하면 바로 반환
                         return triggered_events
         
-        # 2. 고정 이벤트가 없는 경우에만 랜덤 이벤트 체크
+        # 랜덤 이벤트 체크 (고정 이벤트가 없는 경우에만)
         if current_day > self.last_random_event_day:
             possible_random_events = []
             for event_name, event in self.events['random_events'].items():
@@ -157,34 +156,52 @@ class EventManager:
                 # 요구사항 체크
                 if not self.check_requirements(event):
                     continue
+
+                time_trigger = event.get('time_trigger', {})
+                
+                # 학년 범위 체크
+                if 'grade_range' in time_trigger:
+                    grade_range = time_trigger['grade_range']
+                    if not (grade_range[0] <= current_grade <= grade_range[1]):
+                        continue
                 
                 # 주차 조건 체크
-                if 'week' in event.get('time_trigger', {}):
-                    if event['time_trigger']['week'] != current_week:
+                if 'week' in time_trigger:
+                    if time_trigger['week'] != current_week:
                         continue
-                else:
-                    week_start = event['time_trigger'].get('week_start', 1)
-                    week_end = event['time_trigger'].get('week_end', 30)
+                elif 'week_start' in time_trigger or 'week_end' in time_trigger:
+                    week_start = time_trigger.get('week_start', 1)
+                    week_end = time_trigger.get('week_end', 30)
                     if not (week_start <= current_week <= week_end):
                         continue
                 
                 # 요일 조건 체크
-                day_start = event['time_trigger'].get('day_start', 1)
-                day_end = event['time_trigger'].get('day_end', 5)
-                if not (day_start <= current_day <= day_end):
-                    continue
+                if 'day' in time_trigger:
+                    if time_trigger['day'] != current_day:
+                        continue
+                elif 'day_start' in time_trigger or 'day_end' in time_trigger:
+                    day_start = time_trigger.get('day_start', 1)
+                    day_end = time_trigger.get('day_end', 5)
+                    if not (day_start <= current_day <= day_end):
+                        continue
                 
                 # 시간 조건 체크
-                hour_start = event['time_trigger'].get('hour_start', 0)
-                hour_end = event['time_trigger'].get('hour_end', 23)
-                
-                if hour_start <= hour_end:
-                    if not (hour_start <= current_hour <= hour_end):
+                if 'hour' in time_trigger:
+                    if time_trigger['hour'] != current_hour:
                         continue
-                else:  # 자정을 걸치는 경우
-                    if not (current_hour >= hour_start or current_hour <= hour_end):
-                        continue
+                elif 'hour_start' in time_trigger or 'hour_end' in time_trigger:
+                    hour_start = time_trigger.get('hour_start', 0)
+                    hour_end = time_trigger.get('hour_end', 23)
+                    
+                    # 자정을 걸치는 경우 (예: 22시 ~ 6시)
+                    if hour_start > hour_end:
+                        if not (current_hour >= hour_start or current_hour <= hour_end):
+                            continue
+                    else:
+                        if not (hour_start <= current_hour <= hour_end):
+                            continue
 
+                print(f"[이벤트 추가] {event_name} 이벤트가 모든 조건을 만족")
                 possible_random_events.append((event_name, event))
             
             # 랜덤 이벤트 선택
