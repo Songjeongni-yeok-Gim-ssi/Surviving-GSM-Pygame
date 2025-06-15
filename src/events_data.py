@@ -165,7 +165,7 @@ def get_events_data():
                 'title': '기능 대회 대비 출결',
                 'text': '기능 대회를 위한 준비 시간입니다. 어떻게 공부할까요?',
                 'time_trigger': {
-                    'week': 1,
+                    'week': 15,
                     'day': 1,
                     'hour': 8,
                     'grade_range': [1, 3]
