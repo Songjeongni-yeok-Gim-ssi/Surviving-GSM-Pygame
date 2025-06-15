@@ -74,30 +74,6 @@ def get_events_data():
                     ]
                 }
             },
-            'self_directed_learning': {
-                'title': '자기주도 체험학습',
-                'text': '친구들과 함께하는 자기주도 체험학습이다! 나는 어떤 역할을 맡게될까?',
-                'time_trigger': {
-                    'week': 15,
-                    'day': 3,
-                    'hour': 10,
-                    'grade_range': [1, 2]  # 1-2학년에 발생
-                },
-                'choices': [
-                    {
-                        'text': '리더 역할을 맡는다.',
-                        'effect': lambda: {'responsibility': 10, 'fame': 5, 'fatigue': 20}
-                    },
-                    {
-                        'text': '팀원으로 성실히 참여한다.',
-                        'effect': lambda: {'responsibility': 5, 'fame': 3, 'fatigue': 15}
-                    },
-                    {
-                        'text': '적당히 참여한다.',
-                        'effect': lambda: {'responsibility': -3, 'fame': -2, 'fatigue': 5}
-                    }
-                ]
-            },
             'singapore_training': {
                 'title': '싱가포르 연수',
                 'text': '아기다리고 고기다리던 싱가포르 연수 기회가 왔다!',
