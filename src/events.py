@@ -280,14 +280,24 @@ class EventManager:
         취업 성공 처리 -> check_employment_result
         """
         print("축하합니다! 취업에 성공했습니다!")
-        # 여기에 취업 성공 관련 추가 로직 구현
+        from game import Game
+        game = Game()
+        game.endingText.text = "취업에 성공했습니다!!!"
+        game.endingText.show()
+        game.toMainButton.show()
+        game.time_manager.pause_time()
     
     def _handle_employment_failure(self):
         """
         취업 실패 처리 -> check_employment_result
         """
         print("아쉽게도 취업에 실패했습니다...")
-        # 여기에 취업 실패 관련 추가 로직 구현
+        from game import Game
+        game = Game()
+        game.endingText.text = "취업에 실패했습니다..."
+        game.endingText.show()
+        game.toMainButton.show()
+        game.time_manager.pause_time()
     
     def check_employment_result(self, job_type):
         """

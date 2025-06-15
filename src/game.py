@@ -365,6 +365,19 @@ class Game:
             manager=self.manager
         )
         
+        self.endingText = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 200, 150, 400, 80),
+            text='취업에 성공하였습니다!!!',
+            manager=self.manager,
+            object_id='#main_menu_title'  # 테마에서 정의한 ID
+        )
+        
+        self.toMainButton = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 200, 400, 300, 150),
+            text="메인으로 돌아가기",
+            manager=self.manager
+        )
+        
         # 처음에는 메인 메뉴만 보이게
         self.show_main_menu_ui()
         self.help_panel.hide()  # 도움말 패널은 처음에 숨김
@@ -389,6 +402,8 @@ class Game:
         self.stat_panel.hide()  # 스탯 패널도 숨기기
         
         self.studyButton.hide()
+        self.endingText.hide()
+        self.toMainButton.hide()
 
     def show_main_menu_ui(self):
         '''
@@ -473,7 +488,7 @@ class Game:
                     delattr(self, 'current_select_paper')
                     self.time_manager.resume_time()  # 시간 다시 흐르게
                 
-                elif event.ui_element == self.back_button:
+                elif event.ui_element == self.back_button or event.ui_element == self.toMainButton:
                     print("메인 메뉴로 돌아가기!")
                     self.state = GameState.MAIN_MENU
                     self.time_manager.reset()  # 메인 메뉴로 돌아갈 때 시간 초기화

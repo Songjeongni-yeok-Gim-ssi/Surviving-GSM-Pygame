@@ -37,7 +37,7 @@ class Study:
                 Stat.majorSubjectPoint += Stat.intuitivePoint
                 Stat.intuitivePoint = 0
             
-            Study.studyList[subject][level] = True
+            Study.studyList[subject.value][level] = True
             
         else:
             self.fail()
@@ -51,7 +51,7 @@ class Study:
                 Stat.majorSubjectPoint += Stat.interpretPoint
                 Stat.interpretPoint = 0
             
-            Study.studyList[subject][level] = True
+            Study.studyList[subject.value][level] = True
         else:
             self.fail()
     
@@ -61,7 +61,7 @@ class Study:
         if price <= Stat.normalSubjectPoint:
             Stat.normalSubjectPoint = Stat.normalSubjectPoint - price
             
-            Study.studyList[subject][level] = True
+            Study.studyList[subject.value][level] = True
         else:
             self.fail()
     
@@ -71,7 +71,7 @@ class Study:
         if price <= Stat.normalSubjectPoint:
             Stat.normalSubjectPoint = Stat.normalSubjectPoint - price
             
-            Study.studyList[subject][level] = True
+            Study.studyList[subject.value][level] = True
         else:
             self.fail()
     

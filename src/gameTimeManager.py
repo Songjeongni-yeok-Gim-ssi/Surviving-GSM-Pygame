@@ -31,6 +31,9 @@ class GameTimeManager:
         # 시간 계산
         self._calculate_time_units()
         
+        if self.current_year == 3 and self.current_week == 15:
+            self.total_seconds += 16 * 5 * 24 * 60 * 60
+        
         # 졸업 체크
         if self.current_year > self.TOTAL_YEARS:
             self.graduation_completed = True
