@@ -533,13 +533,13 @@ class Game:
         # 이벤트 체크
         triggered_events = self.event_manager.check_time_triggered_events(time_info)
         
-        # 트리거 이벤트에서 고정 이벤트 추출
+        # 고정 이벤트 우선 처리
         fixed_events = [event for event in triggered_events if event in self.event_manager.events['fixed_events']]
         if fixed_events:
             self._trigger_event(fixed_events[0], 'fixed')
             return
         
-        # 고정 이벤트가 없는 경우 -> 트리거 이벤트에서 랜덤 이벤트 처리
+        # 고정 이벤트가 없는 경우에만 랜덤 이벤트 처리
         random_events = [event for event in triggered_events if event in self.event_manager.events['random_events']]
         if random_events:
             self._trigger_event(random_events[0], 'random')
@@ -639,8 +639,7 @@ class Game:
         if event_type == 'fixed':
             event = self.event_manager.get_fixed_event(event_name)
         elif event_type == 'random':
-            time_info = self.time_manager.get_current_time_info()
-            event = self.event_manager.get_random_event(time_info['hour'])
+            event = self.event_manager.get_random_event(event_name)
         
         if event:
             print(f"[{event_type} 선택지] {event_name} 이벤트의 선택지를 생성합니다.")

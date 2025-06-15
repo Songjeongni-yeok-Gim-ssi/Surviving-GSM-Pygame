@@ -9,8 +9,14 @@ class EventManager:
         # 이미 발생한 이벤트를 추적
         self.triggered_events = set()
         
-        # 마지막 랜덤 이벤트 발생 날짜 추적
-        self.last_random_event_day = 0
+        # 마지막 이벤트 발생 날짜 추적 (이벤트별로)
+        self.last_event_days = {}
+        
+        # 오늘 발생한 이벤트 추적
+        self.today_triggered = False
+        
+        # 고정 이벤트 큐
+        self.fixed_event_queue = []
         
         # 취업 조건 체크를 위한 임계값
         self.employment_thresholds = {
@@ -49,45 +55,21 @@ class EventManager:
             return event
         return None
     
-    def get_random_event(self, current_hour):
+    def get_random_event(self, event_name):
         """
         랜덤 이벤트 가져오기
         """
-        possible_events = []
-        for event_name, event in self.events['random_events'].items():
-            # repeatable이 True이거나 아직 발생하지 않은 이벤트만 추가
-            if event.get('repeatable', False) or event_name not in self.triggered_events:
-                # 시간 체크
-                time_trigger = event.get('time_trigger', {})
-                hour_start = time_trigger.get('hour_start', 0)
-                hour_end = time_trigger.get('hour_end', 23)
-                
-                # 시간이 범위 내에 있는지 체크 (자정을 걸치는 경우 처리)
-                if hour_start <= hour_end:
-                    if hour_start <= current_hour <= hour_end:
-                        possible_events.append((event_name, event))
-                else:  # 자정을 걸치는 경우 (예: 22시 ~ 6시)
-                    if current_hour >= hour_start or current_hour <= hour_end:
-                        possible_events.append((event_name, event))
-        
-        if possible_events:
-            # 확률에 따라 이벤트 선택
-            total_probability = sum(event['probability'] for _, event in possible_events)
-            if total_probability > 0:
-                random_value = random.random() * total_probability
-                current_sum = 0
-                for event_name, event in possible_events:
-                    current_sum += event['probability']
-                    if random_value <= current_sum:
-                        # 전공별 선택지가 있는 경우
-                        if isinstance(event['choices'], dict):
-                            return {
-                                'title': event['title'],
-                                'text': event['text'],
-                                'choices': event['choices'].get(Stat.major, event['choices'])
-                            }
-                        # 공통 선택지인 경우
-                        return event
+        event = self.events['random_events'].get(event_name)
+        if event:
+            # 전공별 선택지가 있는 경우
+            if isinstance(event['choices'], dict):
+                return {
+                    'title': event['title'],
+                    'text': event['text'],
+                    'choices': event['choices'].get(Stat.major, event['choices'])
+                }
+            # 공통 선택지인 경우
+            return event
         return None
     
     def check_requirements(self, event, choice=None):
@@ -169,54 +151,106 @@ class EventManager:
             else:
                 if hour_range != current_hour:
                     return False
-        
+            
         return True
 
     def check_time_triggered_events(self, time_info):
-        """시간에 따른 이벤트를 검사 후 트리거된 이벤트들을 반환하는 메서드"""
+        """
+        시간에 따른 이벤트를 검사 후 트리거된 이벤트들을 반환하는 메서드
+        """
         triggered_events = []   
+        current_day = time_info['day']
+        current_week = time_info['week']
+        current_hour = time_info['hour']
         
-        # 고정 이벤트 체크
+        # 날짜가 바뀌면 today_triggered 초기화
+        if not hasattr(self, '_last_checked_day') or self._last_checked_day != current_day:
+            self.today_triggered = False
+            self._last_checked_day = current_day
+        
+        # 이미 오늘 이벤트가 발생했다면 더 이상 체크하지 않음
+        if self.today_triggered:
+            return triggered_events
+        
+        # 고정 이벤트 처리
+        # 1. 큐에 있는 고정 이벤트 처리
+        if self.fixed_event_queue:
+            event_name = self.fixed_event_queue[0]
+            event = self.events['fixed_events'][event_name]
+            if self.check_requirements(event):
+                print(f"\n[큐에서 고정 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
+                triggered_events.append(event_name)
+                if not event.get('repeatable', False):
+                    self.triggered_events.add(event_name)
+                self.today_triggered = True
+                self.fixed_event_queue.pop(0)  # 처리된 이벤트 제거
+                return triggered_events
+        
+        # 2. 현재 시간에 발생해야 하는 고정 이벤트 체크
         for event_name, event in self.events['fixed_events'].items():
-            if event_name not in self.triggered_events:
-                if 'time_trigger' in event:
-                    if self.check_time_trigger(event['time_trigger'], time_info):
+            # 반복 가능한 이벤트는 triggered_events 체크를 건너뜀
+            if event_name in self.triggered_events and not event.get('repeatable', False):
+                continue
+                
+            if 'time_trigger' in event:
+                trigger = event['time_trigger']
+                # 현재 주차와 요일이 일치하는지 확인
+                if (trigger.get('week') == current_week and 
+                    trigger.get('day') == current_day):
+                    
+                    # 정확한 시간에 발생하는 경우
+                    if trigger.get('hour') == current_hour:
                         if self.check_requirements(event):
                             print(f"\n[고정 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
                             triggered_events.append(event_name)
-                            self.triggered_events.add(event_name)
+                            if not event.get('repeatable', False):
+                                self.triggered_events.add(event_name)
+                            self.today_triggered = True
+                            return triggered_events
+                    # 시간이 지났고 아직 큐에 없는 경우
+                    elif trigger.get('hour') < current_hour and event_name not in self.fixed_event_queue:
+                        print(f"\n[고정 이벤트 큐 추가] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
+                        self.fixed_event_queue.append(event_name)
         
-        # 랜덤 이벤트 체크 (고정 이벤트가 없는 경우에만)
-        if not triggered_events and time_info['day'] > self.last_random_event_day:
-            possible_random_events = []
-            for event_name, event in self.events['random_events'].items():
-                # 이미 발생한 이벤트 중 반복이 불가능한 이벤트 건너뛰기
-                if event_name in self.triggered_events and not event.get('repeatable', False):
-                    continue
+        # 고정 이벤트가 발생하지 않은 경우에만 랜덤 이벤트 체크
+        if not triggered_events:
+            # 랜덤 이벤트 체크 (20% 확률로만 체크)
+            if random.random() < 0.2:  # 80% 확률로 체크 건너뛰기
+                possible_random_events = []
+                for event_name, event in self.events['random_events'].items():
+                    # 이벤트 쿨다운 체크 (5일)
+                    last_day = self.last_event_days.get(event_name, 0)
+                    days_since_last = (current_week - 1) * 5 + current_day - last_day
+                    if days_since_last < 5 and event_name in self.last_event_days:
+                        continue
 
-                # 요구사항 검사
-                if not self.check_requirements(event):
-                    continue
+                    # 요구사항 검사
+                    if not self.check_requirements(event):
+                        continue
 
-                if 'time_trigger' in event:
-                    if self.check_time_trigger(event['time_trigger'], time_info):
-                        print(f"[이벤트 추가] {event_name} 이벤트가 모든 조건을 만족")
-                        possible_random_events.append((event_name, event))
-            
-            # 랜덤 이벤트 선택
-            if possible_random_events:
-                total_probability = sum(event['probability'] for _, event in possible_random_events)
-                if total_probability > 0:
-                    random_value = random.random() * total_probability
-                    current_sum = 0
-                    for event_name, event in possible_random_events:
-                        current_sum += event['probability']
-                        if random_value <= current_sum:
-                            print(f"\n[랜덤 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
-                            triggered_events.append(event_name)
-                            self.triggered_events.add(event_name)
-                            self.last_random_event_day = time_info['day']
-                            break
+                    if 'time_trigger' in event:
+                        if self.check_time_trigger(event['time_trigger'], time_info):
+                            print(f"[이벤트 추가] {event_name} 이벤트가 모든 조건을 만족")
+                            possible_random_events.append((event_name, event))
+                
+                # 랜덤 이벤트 선택
+                if possible_random_events:
+                    total_probability = sum(event['probability'] for _, event in possible_random_events)
+                    if total_probability > 0:
+                        random_value = random.random() * total_probability
+                        current_sum = 0
+                        for event_name, event in possible_random_events:
+                            current_sum += event['probability']
+                            if random_value <= current_sum:
+                                print(f"\n[랜덤 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
+                                triggered_events.append(event_name)
+                                # 이벤트 발생 날짜 기록
+                                self.last_event_days[event_name] = (current_week - 1) * 5 + current_day
+                                # 반복 불가능한 이벤트는 triggered_events에 추가
+                                if not event.get('repeatable', False):
+                                    self.triggered_events.add(event_name)
+                                self.today_triggered = True
+                                break
         
         return triggered_events
     
