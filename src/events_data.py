@@ -359,59 +359,6 @@ def get_events_data():
         
         # 랜덤 이벤트
         'random_events': {
-            'study_time_choice': {
-                'title': '학교 자습 시간',
-                'text': '2학년이 되면서 자습 시간이 늘어났다. 무엇을 하면 좋을까?',
-                'probability': 0.6,
-                'time_range': {'week_start': 5, 'week_end': 25},
-                'repeatable': True,
-                'time_trigger': {
-                    'hour_start': 9,   # 오전 9시
-                    'hour_end': 20     # 오후 8시 20분
-                },
-                'choices': {
-                    'developer': [
-                        {
-                            'text': '프론트엔드 공부를 한다.',
-                            'effect': lambda: {'intuitivePoint': 8, 'majorSubjectPoint': 5, 'fatigue': 15}
-                        },
-                        {
-                            'text': '백엔드 공부를 한다.',
-                            'effect': lambda: {'interpretPoint': 8, 'majorSubjectPoint': 5, 'fatigue': 15}
-                        },
-                        {
-                            'text': '개인 프로젝트를 한다.',
-                            'effect': lambda: {'majorSubjectPoint': 10, 'responsibility': 5, 'fatigue': 20}
-                        }
-                    ],
-                    'functional': [
-                        {
-                            'text': '기능 대회 준비를 한다.',
-                            'effect': lambda: {'functionalCompetition': 10, 'fatigue': 20}
-                        },
-                        {
-                            'text': '일반 전공도 공부한다.',
-                            'effect': lambda: {'majorSubjectPoint': 8, 'fatigue': 18}
-                        }
-                    ],
-                    'public': [
-                        {
-                            'text': '공기업 시험 공부를 한다.',
-                            'effect': lambda: {'normalSubjectPoint': 10, 'fatigue': 15}
-                        },
-                        {
-                            'text': '개발 공부도 병행한다.',
-                            'effect': lambda: {'normalSubjectPoint': 5, 'majorSubjectPoint': 5, 'fatigue': 20}
-                        }
-                    ],
-                    'common': [
-                        {
-                            'text': '그냥 놀면서 쉰다.',
-                            'effect': lambda: {'evil': 2, 'fatigue': -10}
-                        }
-                    ]
-                }
-            },
             'project_experience': {
                 'title': '프로젝트 경험',
                 'text': '이제 곧 취업을 해야하는데 어떤 프로젝트를 하는게 좋을까?',
