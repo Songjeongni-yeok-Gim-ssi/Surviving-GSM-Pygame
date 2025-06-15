@@ -404,7 +404,7 @@ class Game:
             if event.type == QUIT:
                 self.running = False
             
-            # pygame-gui 이벤트 처리
+            # pygame-gui 버튼 이벤트 처리
             elif event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == self.start_button:
                     print("게임 시작!")
@@ -484,23 +484,6 @@ class Game:
                 elif event.ui_element == self.reset_time_button:
                     print("시간 리셋!")
                     self.time_manager.reset()
-            
-            # 기존 키보드 이벤트도 유지 (백업용)
-            elif event.type == KEYDOWN:
-                if event.key == K_ESCAPE:  # ESC로 메인 메뉴로 돌아가기
-                    if self.state == GameState.PLAYING:
-                        self.state = GameState.MAIN_MENU
-                        self.time_manager.reset()  # ESC로 나갈 때도 시간 초기화
-                        self.show_main_menu_ui()
-                
-                # 개발자 단축키
-                elif event.key == K_F1:  # F1로 학년 스킵
-                    if self.state == GameState.PLAYING:
-                        self.time_manager.skip_to_next_year()
-                        
-                elif event.key == K_F2:  # F2로 시간 리셋
-                    if self.state == GameState.PLAYING:
-                        self.time_manager.reset()
             
             # UI 매니저에 이벤트 전달 (중요!)
             self.manager.process_events(event)
