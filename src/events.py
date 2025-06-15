@@ -90,7 +90,7 @@ class EventManager:
                         return event
         return None
     
-    def check_requirements(self, event, choice):
+    def check_requirements(self, event, choice=None):
         """
         이벤트와 선택지의 요구사항을 검사하는 메서드(검사 후 불리언 반환)
         """
@@ -123,7 +123,7 @@ class EventManager:
     
     def check_time_triggered_events(self, time_info):
         """
-        시간에 따른 이벤트를 검사하는 메서드 -> handle_time_events
+        시간에 따른 이벤트를 검사 후 트리거된 이벤트들을 반환하는 메서드 -> handle_time_events
         """
         triggered_events = []   
         current_week = time_info['week']
@@ -226,9 +226,7 @@ class EventManager:
                             self.triggered_events.add(event_name)
                             self.last_random_event_day = current_day
                             break
-        
-        print(f"[이벤트 트리거] {triggered_events}")
-        
+                
         return triggered_events
     
     def _handle_employment_success(self):

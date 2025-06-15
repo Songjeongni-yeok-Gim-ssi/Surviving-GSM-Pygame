@@ -514,7 +514,7 @@ class Game:
             
             # 시간에 따른 게임 로직
             self.handle_time_events()
-    
+
     def handle_time_events(self):
         """
         시간 관련 이벤트 처리
@@ -533,13 +533,13 @@ class Game:
         # 이벤트 체크
         triggered_events = self.event_manager.check_time_triggered_events(time_info)
         
-        # 고정 이벤트를 먼저 처리
+        # 트리거 이벤트에서 고정 이벤트 추출
         fixed_events = [event for event in triggered_events if event in self.event_manager.events['fixed_events']]
         if fixed_events:
             self._trigger_event(fixed_events[0], 'fixed')
             return
         
-        # 고정 이벤트가 없는 경우에만 랜덤 이벤트 처리
+        # 고정 이벤트가 없는 경우 -> 트리거 이벤트에서 랜덤 이벤트 처리
         random_events = [event for event in triggered_events if event in self.event_manager.events['random_events']]
         if random_events:
             self._trigger_event(random_events[0], 'random')
@@ -626,7 +626,7 @@ class Game:
 
     def _trigger_event(self, event_name, event_type):
         """
-        이벤트 이름과 타입을 바탕으로 이벤트 발생을 관리하는 메서드 (고정/랜덤 이벤트 통합)
+        고정/랜덤 이벤트로 SelectPaper 생성하는 메서드
         """
         print(f"\n[{event_type} 이벤트 트리거] {event_name} 이벤트를 트리거합니다.")
         
@@ -640,7 +640,7 @@ class Game:
             event = self.event_manager.get_fixed_event(event_name)
         elif event_type == 'random':
             time_info = self.time_manager.get_current_time_info()
-            event = self.event_manager.get_random_event(time_info['hour'])
+            event = self.event_manager.get_random_event(time_info)
         
         if event:
             print(f"[{event_type} 선택지] {event_name} 이벤트의 선택지를 생성합니다.")
@@ -662,7 +662,7 @@ class Game:
             try:
                 # SelectPaper 생성
                 self.current_select_paper = SelectPaper(
-                    'assets/imgs/exit.png',
+                    'assets/imgs/exit.png', # 이벤트에 이미지 추가 예정
                     event['title'],
                     event['text'],
                     self.manager,
@@ -679,7 +679,7 @@ class Game:
 
     def _handle_event_choice(self, event_name, choice_index):
         """
-        이벤트 선택 처리
+        이벤트 선택지 처리 -> 이벤트에서 선택한 선택지를 반영합니다.
         """
         print(f"\n[이벤트 선택] {event_name} 이벤트의 {choice_index}번 선택지를 처리합니다.")
         
