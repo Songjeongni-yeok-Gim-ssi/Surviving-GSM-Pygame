@@ -372,7 +372,7 @@ def get_events_data():
                     'day_end': 5,
                     'hour_start': 9,
                     'hour_end': 21,
-                    'grade_range': [2, 1]  # 2학년에만 발생
+                    'grade_range': [2, 2]  # 2학년에만 발생
                 },
                 'choices': [
                     {
