@@ -162,15 +162,13 @@ class EventManager:
         current_day = time_info['day']
         current_week = time_info['week']
         current_hour = time_info['hour']
+        current_grade = time_info.get('grade', 1)  # 현재 학년 정보 가져오기
         
         # 날짜가 바뀌면 today_triggered 초기화
         if not hasattr(self, '_last_checked_day') or self._last_checked_day != current_day:
             self.today_triggered = False
             self._last_checked_day = current_day
-        
-        # 이미 오늘 이벤트가 발생했다면 더 이상 체크하지 않음
-        if self.today_triggered:
-            return triggered_events
+            self._random_event_triggered_today = False  # 랜덤 이벤트 발생 여부 초기화
         
         # 고정 이벤트 처리
         # 1. 큐에 있는 고정 이벤트 처리
@@ -178,6 +176,13 @@ class EventManager:
             event_name = self.fixed_event_queue[0]
             event = self.events['fixed_events'][event_name]
             if self.check_requirements(event):
+                # 학년 범위 체크
+                if 'time_trigger' in event and 'grade_range' in event['time_trigger']:
+                    grade_range = event['time_trigger']['grade_range']
+                    if not (grade_range[0] <= current_grade <= grade_range[1]):
+                        self.fixed_event_queue.pop(0)  # 학년 범위를 벗어나면 큐에서 제거
+                        return triggered_events
+                
                 print(f"\n[큐에서 고정 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
                 triggered_events.append(event_name)
                 if not event.get('repeatable', False):
@@ -194,6 +199,12 @@ class EventManager:
                 
             if 'time_trigger' in event:
                 trigger = event['time_trigger']
+                
+                # 학년 범위 체크
+                if 'grade_range' in trigger:
+                    if not (trigger['grade_range'][0] <= current_grade <= trigger['grade_range'][1]):
+                        continue
+                
                 # 현재 주차와 요일이 일치하는지 확인
                 if (trigger.get('week') == current_week and 
                     trigger.get('day') == current_day):
@@ -211,9 +222,10 @@ class EventManager:
                     elif trigger.get('hour') < current_hour and event_name not in self.fixed_event_queue:
                         print(f"\n[고정 이벤트 큐 추가] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
                         self.fixed_event_queue.append(event_name)
+                        return triggered_events  # 큐에 추가했으면 즉시 반환
         
-        # 고정 이벤트가 발생하지 않은 경우에만 랜덤 이벤트 체크
-        if not triggered_events:
+        # 고정 이벤트가 발생하지 않고, 오늘 랜덤 이벤트가 아직 발생하지 않은 경우에만 랜덤 이벤트 체크
+        if not triggered_events and not self.today_triggered and not getattr(self, '_random_event_triggered_today', False):
             # 랜덤 이벤트 체크 (20% 확률로만 체크)
             if random.random() < 0.2:  # 80% 확률로 체크 건너뛰기
                 possible_random_events = []
@@ -227,8 +239,14 @@ class EventManager:
                     # 요구사항 검사
                     if not self.check_requirements(event):
                         continue
-
+                        
                     if 'time_trigger' in event:
+                        # 학년 범위 체크
+                        if 'grade_range' in event['time_trigger']:
+                            grade_range = event['time_trigger']['grade_range']
+                            if not (grade_range[0] <= current_grade <= grade_range[1]):
+                                continue
+                        
                         if self.check_time_trigger(event['time_trigger'], time_info):
                             print(f"[이벤트 추가] {event_name} 이벤트가 모든 조건을 만족")
                             possible_random_events.append((event_name, event))
@@ -250,6 +268,7 @@ class EventManager:
                                 if not event.get('repeatable', False):
                                     self.triggered_events.add(event_name)
                                 self.today_triggered = True
+                                self._random_event_triggered_today = True  # 오늘 랜덤 이벤트 발생 표시
                                 break
         
         return triggered_events
