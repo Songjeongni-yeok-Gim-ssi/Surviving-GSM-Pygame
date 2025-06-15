@@ -77,5 +77,5 @@ class Study:
     
     @classmethod
     def fail(self):
-        # 스탯 포인트가 부족합니다.
+        print("스탯 포인트가 부족합니다.")
         pass

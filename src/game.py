@@ -8,6 +8,7 @@ from events import EventManager
 from statAndStatPoint import Stat
 import math
 from techTree import TechTree
+from study import Study
 
 class Game:
     '''
@@ -500,11 +501,18 @@ class Game:
                 
                 elif event.ui_element == self.studyButton:
                     print("테크 트리 창 열기!")
+                    self.time_manager.pause_time()
                     self.techTree.show()
                     
                 elif event.ui_element == self.techTree.exitButton:
                     print("테크 트리 창 닫기")
+                    self.time_manager.resume_time()
                     self.techTree.hide()
+                
+                for i in range(4):
+                    for j in range(5):
+                        if event.ui_element == self.techTree.buttons[i][j].button:
+                            Study.study(self.techTree.buttons[i][j].subject, self.techTree.buttons[i][j].level, self.techTree.buttons[i][j].price)
             
             # UI 매니저에 이벤트 전달 (중요!)
             self.manager.process_events(event)
