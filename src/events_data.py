@@ -37,6 +37,7 @@ def get_events_data():
                     'hour': 10,
                     'grade_range': [1, 2]  # 1-2학년에 발생
                 },
+                'repeatable': True,
                 'choices': {
                     'developer': [
                         {
@@ -149,9 +150,10 @@ def get_events_data():
                     'week': 2,
                     'day': 3,
                     'hour': 12,
-                    'grade_range': [2, 3]  # 1-3학년 모두 발생
+                    'grade_range': [2, 3]
                 },
-                'requirements': {'major': 'functional'},  # 기능반 전공일 때만 발생
+                'requirements': {'major': 'functional'},
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '과연 결과는?!?!?!?!?!?!',
@@ -166,9 +168,10 @@ def get_events_data():
                     'week': 1,
                     'day': 1,
                     'hour': 8,
-                    'grade_range': [1, 3]  # 1-3학년 모두 발생
+                    'grade_range': [1, 3]
                 },
-                'requirements': {'major': 'functional'},  # 기능반 전공일 때만 발생
+                'requirements': {'major': 'functional'},
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '기능 대회 문제를 풀며 공부한다.',
@@ -191,9 +194,10 @@ def get_events_data():
                     'week': 20,
                     'day': 5,
                     'hour': 16,
-                    'grade_range': [1, 2]  # 1-2학년에 발생
+                    'grade_range': [1, 2]
                 },
-                'requirements': {'major': 'functional'},  # 기능반 전공일 때만 발생
+                'requirements': {'major': 'functional'},
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '한다',
@@ -212,9 +216,10 @@ def get_events_data():
                     'week': 8,
                     'day': 1,
                     'hour': 9,
-                    'grade_range': [2, 3]  # 2-3학년에만 발생
+                    'grade_range': [2, 3]
                 },
-                'requirements': {'major': 'developer'},  # 개발자 전공일 때만 발생
+                'requirements': {'major': 'developer'},
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '참여한다.',
@@ -233,9 +238,10 @@ def get_events_data():
                     'week': 7,
                     'day': 1,
                     'hour': 9,
-                    'grade_range': [1, 2]  # 1-2학년에 발생
+                    'grade_range': [1, 2]
                 },
-                'requirements': {'major': 'public'},  # 공기업 전공일 때만 발생
+                'requirements': {'major': 'public'},
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '응시한다.',
@@ -254,9 +260,10 @@ def get_events_data():
                     'week': 15,
                     'day': 1,
                     'hour': 13,
-                    'grade_range': [2, 2]  # 2학년에만 발생
+                    'grade_range': [2, 2]
                 },
-                'requirements': {'major': 'public'},  # 공기업 전공일 때만 발생
+                'requirements': {'major': 'public'},
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '신청한다.',
@@ -275,9 +282,10 @@ def get_events_data():
                     'week': 7,
                     'day': 1,
                     'hour': 13,
-                    'grade_range': [1, 1]  # 1학년에만 발생
+                    'grade_range': [1, 1]
                 },
-                'requirements': {'major': 'public'},  # 공기업 전공일 때만 발생
+                'requirements': {'major': 'public'},
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '신청한다.',
@@ -296,8 +304,9 @@ def get_events_data():
                     'week': 15,
                     'day': 1,
                     'hour': 9,
-                    'grade_range': [1, 2]  # 1-2학년에 발생
+                    'grade_range': [1, 2]
                 },
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '이번 기회에 팀장으로서 열심히 해보자!',
@@ -319,8 +328,10 @@ def get_events_data():
                 'time_trigger': {
                     'week': 21,
                     'day': 1,
-                    'hour': 9
+                    'hour': 9,
+                    'grade_range': [2, 2]
                 },
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '팀장으로서 친구들을 이끌어주자',
@@ -344,6 +355,7 @@ def get_events_data():
                     'day': 1,
                     'hour': 9
                 },
+                'repeatable': True,
                 'choices': [
                     {
                         'text': '내가 하고 싶은 주제가 있다! 열심히 해볼까?',
@@ -434,7 +446,7 @@ def get_events_data():
                 'title': '학교장 추천서',
                 'text': '"00아 너 성적이 좋더라, ~~기업 추천서 넣어줄테니까 한번 해볼래?" 선생님께서 나에게 ~~기업 추천서를 써주시겠다고 여쭤보셨다..! ~~기업은 복지가 좋기로 유명하다 한번 해볼까?',
                 'probability': 0.3,
-                'repeatable': True,
+                'repeatable': False,
                 'requirements': {'normalSubjectPoint': 70},
                 'time_trigger': {
                     'week_start': 20,
@@ -561,14 +573,14 @@ def get_events_data():
                 'title': 'DevFestival 컨퍼런스 참여',
                 'text': 'DevFestival 컨퍼런스 발표자를 모집한다. 참여해볼까?',
                 'probability': 0.3,
-                'repeatable': False,
+                'repeatable': True,
                 'time_trigger': {
                     'week': 8,
                     'day_start': 1,
                     'day_end': 5,
                     'hour_start': 9,
                     'hour_end': 21,
-                    'grade_range': [2, 3]  # 1학년에만 발생
+                    'grade_range': [2, 3]
                 },
                 'choices': [
                     {
