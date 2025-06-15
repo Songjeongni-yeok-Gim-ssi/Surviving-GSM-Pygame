@@ -520,7 +520,7 @@ def get_events_data():
                 'title': '자격증 시험',
                 'text': '자격증 시험을 볼 기회가 생겼습니다.',
                 'image': 'assets/imgs/events/certification_exam.png',
-                'probability': 0.1,
+                'probability': 0.02,
                 'repeatable': True,
                 'time_trigger': {
                     'week': [1, 30],
