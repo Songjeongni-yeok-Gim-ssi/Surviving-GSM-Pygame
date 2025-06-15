@@ -149,7 +149,7 @@ def get_events_data():
                     'week': 2,
                     'day': 3,
                     'hour': 12,
-                    'grade_range': [1, 3]  # 1-3학년 모두 발생
+                    'grade_range': [2, 3]  # 1-3학년 모두 발생
                 },
                 'requirements': {'major': 'functional'},  # 기능반 전공일 때만 발생
                 'choices': [
@@ -466,7 +466,6 @@ def get_events_data():
                 'text': '금요일 오후 4시 20분, 학교에 남아서 공부할까요?',
                 'probability': 0.8,
                 'repeatable': True,
-                'requirements': {'major': 'functional'},
                 'time_trigger': {
                     'day': 5,
                     'hour_start': 16,
@@ -615,7 +614,6 @@ def get_events_data():
                 'text': 'DevFestival 컨퍼런스 발표자를 모집한다. 참여해볼까?',
                 'probability': 0.3,
                 'repeatable': False,
-                'requirements': {'major': 'developer'},
                 'time_trigger': {
                     'week': 8,
                     'day_start': 1,
