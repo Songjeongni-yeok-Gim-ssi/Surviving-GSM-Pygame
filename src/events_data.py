@@ -451,7 +451,7 @@ def get_events_data():
                 ]
             },
             'stay_after_school': {
-                'title': '잔류',
+                'title': '학교 - 잔류',
                 'text': '금요일 오후 4시 20분, 학교에 남아서 공부할까요?',
                 'image': 'assets/imgs/events/stay_after_school.png',
                 'probability': 0.8,
