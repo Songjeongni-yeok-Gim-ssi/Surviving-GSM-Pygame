@@ -5,10 +5,10 @@ from enum import Enum
 import pygame
 
 class Subject(Enum):
-    FrontEnd = 0
-    BackEnd = 1
-    PublicCor = 2
-    FunctionClass = 3
+    FE = 0
+    BE = 1
+    PC = 2
+    FC = 3
 
 class Study:
     '''공부 테크 트리를 관리하는 클래스 입니다.'''
@@ -18,14 +18,15 @@ class Study:
     @classmethod
     def study(self, subject : Subject, level, price):
         '''subject는 과목, level은 해당 과목 테크 트리의 레벨 price는 해당 테크를 해제하는데 드는 비용'''
-        if subject == Subject.FrontEnd:
-            self.Front(subject, level, price)
-        elif subject == Subject.BackEnd:
-            self.Back(subject, level, price)
-        elif subject == Subject.PublicCor:
-            self.PublicCor(subject, level, price)
-        elif subject == Subject.FunctionClass:
-            self.Function(subject, level, price)
+        if not Study.studyList[subject.value][level]:
+            if subject == Subject.FE:
+                self.Front(subject, level, price)
+            elif subject == Subject.BE:
+                self.Back(subject, level, price)
+            elif subject == Subject.PC:
+                self.PublicCor(subject, level, price)
+            elif subject == Subject.FC:
+                self.Function(subject, level, price)
     
     @classmethod
     def Front(self, subject : Subject, level, price):
