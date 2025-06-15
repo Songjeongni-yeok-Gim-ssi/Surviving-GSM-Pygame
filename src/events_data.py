@@ -293,9 +293,10 @@ def get_events_data():
                 'title': '아이디어 페스티벌 - 역할 선택',
                 'text': '아이디어 페스티벌 기간이 다가왔다. 어떤 역할을 맡을까?',
                 'time_trigger': {
-                    'week': 28,
+                    'week': 15,
                     'day': 1,
-                    'hour': 9
+                    'hour': 9,
+                    'grade_range': [1, 2]  # 1-2학년에 발생
                 },
                 'choices': [
                     {
@@ -462,7 +463,7 @@ def get_events_data():
             },
             'stay_after_school': {
                 'title': '잔류',
-                'text': '금요일 오후 4시, 학교에 남아서 공부할까요?',
+                'text': '금요일 오후 4시 20분, 학교에 남아서 공부할까요?',
                 'probability': 0.8,
                 'repeatable': True,
                 'requirements': {'major': 'functional'},
@@ -509,7 +510,8 @@ def get_events_data():
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
-                    'week': 10,
+                    'week_start': 10,
+                    'week_end': 28,
                     'day_start': 1,
                     'day_end': 5,
                     'hour_start': 9,
