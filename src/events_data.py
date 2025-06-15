@@ -99,7 +99,7 @@ def get_events_data():
                 'title': '취업의 선택',
                 'text': '결전의 순간이 왔다. 어떤 길을 선택할 것인가?',
                 'time_trigger': {
-                    'week': 30,
+                    'week': 1,
                     'day': 1,
                     'hour': 9,
                     'grade_range': [3, 3]  # 3학년에만 발생

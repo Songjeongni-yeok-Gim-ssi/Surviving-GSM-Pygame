@@ -33,7 +33,7 @@ class Game:
             self.font = pygame.font.Font(FONT_NAME, FONT_SIZE)
             self.all_sprites = pygame.sprite.Group()
             
-            # 시간 관리자 초기화
+            # 시간 매니저 초기화
             self.time_manager = GameTimeManager()
             
             # 이벤트 매니저 초기화
@@ -41,7 +41,6 @@ class Game:
             
             # exit 이미지 로드
             self.exit_image = pygame.image.load('assets/imgs/exit.png')
-            # 원본 이미지의 비율 유지하면서 높이를 50으로 조정
             original_width, original_height = self.exit_image.get_size()
             scale_factor = 50 / original_height
             new_width = int(original_width * scale_factor)
