@@ -94,15 +94,15 @@ class EventManager:
         current_week = time_info['week']
         current_day = time_info['day']
         current_hour = time_info['hour']
-        current_grade = time_info.get('grade', 1)  # 현재 학년 정보 가져오기
+        current_grade = time_info.get('grade', 1)
         
-        # 고정 이벤트 체크
+        # 1. 먼저 고정 이벤트 체크
         for event_name, event in self.events['fixed_events'].items():
             if event_name not in self.triggered_events:
                 if 'time_trigger' in event:
                     trigger = event['time_trigger']
                     # 학년 범위 체크
-                    grade_range = trigger.get('grade_range', [1, 3])  # 기본값은 1-3학년
+                    grade_range = trigger.get('grade_range', [1, 3])
                     if not (grade_range[0] <= current_grade <= grade_range[1]):
                         continue
                     
@@ -118,10 +118,11 @@ class EventManager:
                         print(f"\n[고정 이벤트 발생] {event['title']} - {current_week}주차 {current_day}일 {current_hour}시")
                         triggered_events.append(event_name)
                         self.triggered_events.add(event_name)
+                        # 고정 이벤트가 발생하면 바로 반환
+                        return triggered_events
         
-        # 고정 이벤트가 발생하지 않은 경우에만 랜덤 이벤트 체크
-        if not triggered_events and current_day > self.last_random_event_day:
-            # 현재 시간에 발생 가능한 랜덤 이벤트들을 수집
+        # 2. 고정 이벤트가 없는 경우에만 랜덤 이벤트 체크
+        if current_day > self.last_random_event_day:
             possible_random_events = []
             for event_name, event in self.events['random_events'].items():
                 # 이미 발생한 이벤트는 건너뛰기
@@ -132,7 +133,7 @@ class EventManager:
                 time_trigger = event.get('time_trigger', {})
                 
                 # 학년 범위 체크
-                grade_range = time_trigger.get('grade_range', [1, 3])  # 기본값은 1-3학년
+                grade_range = time_trigger.get('grade_range', [1, 3])
                 if not (grade_range[0] <= current_grade <= grade_range[1]):
                     continue
                 
@@ -148,13 +149,13 @@ class EventManager:
                         continue
                 else:
                     week_start = time_trigger.get('week_start', 1)
-                    week_end = time_trigger.get('week_end', 30)  # 30주로 수정
+                    week_end = time_trigger.get('week_end', 30)
                     if not (week_start <= current_week <= week_end):
                         continue
                 
-                # 요일 조건 체크 (5일제로 수정)
+                # 요일 조건 체크
                 day_start = time_trigger.get('day_start', 1)
-                day_end = time_trigger.get('day_end', 5)  # 5일로 수정
+                day_end = time_trigger.get('day_end', 5)
                 if not (day_start <= current_day <= day_end):
                     continue
                 
@@ -169,13 +170,10 @@ class EventManager:
                     if not (current_hour >= hour_start or current_hour <= hour_end):
                         continue
 
-                # 모든 조건을 만족하는 경우에만 이벤트 추가
-                print(f"[이벤트 추가] {event_name} 이벤트가 모든 조건을 만족")
                 possible_random_events.append((event_name, event))
             
-            # 가능한 랜덤 이벤트가 있다면 하나만 선택
+            # 랜덤 이벤트 선택
             if possible_random_events:
-                # 확률에 따라 이벤트 선택
                 total_probability = sum(event['probability'] for _, event in possible_random_events)
                 if total_probability > 0:
                     random_value = random.random() * total_probability

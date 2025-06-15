@@ -533,8 +533,12 @@ class Game:
     
     def handle_time_events(self):
         """시간 관련 이벤트 처리"""
+        # 이미 이벤트가 진행 중이면 새로운 이벤트를 체크하지 않음
+        if hasattr(self, 'current_select_paper'):
+            return
+        
         # 시간 업데이트
-        delta_time = self.clock.get_time() / 1000.0  # 밀리초를 초로 변환
+        delta_time = self.clock.get_time() / 1000.0
         self.time_manager.update(delta_time)
         
         # 시간 정보 가져오기
@@ -542,16 +546,17 @@ class Game:
         
         # 이벤트 체크
         triggered_events = self.event_manager.check_time_triggered_events(time_info)
-        for event_name in triggered_events:
-            self._trigger_event(event_name)
-            
-        # UI 업데이트
-        self.update_game_ui()
         
-        # 졸업 체크
-        if time_info['is_graduated']:
-            self.state = GameState.GRADUATION
-            self.time_manager.pause_time()
+        # 고정 이벤트를 먼저 처리
+        fixed_events = [event for event in triggered_events if event in self.event_manager.events['fixed_events']]
+        if fixed_events:
+            self._trigger_event(fixed_events[0], 'fixed')
+            return
+        
+        # 고정 이벤트가 없는 경우에만 랜덤 이벤트 처리
+        random_events = [event for event in triggered_events if event in self.event_manager.events['random_events']]
+        if random_events:
+            self._trigger_event(random_events[0], 'random')
 
     def update_game_ui(self):
         """게임 UI 업데이트"""
@@ -577,11 +582,6 @@ class Game:
             self.graduation_label.show()
         else:
             self.graduation_label.hide()
-            
-        # 이벤트 체크
-        triggered_events = self.event_manager.check_time_triggered_events(time_info)
-        for event_name in triggered_events:
-            self._trigger_event(event_name)
             
         # 스탯 업데이트
         self.major_label.set_text(f'전공: {Stat.major if Stat.major else "미선택"}')
@@ -642,12 +642,18 @@ class Game:
         """이벤트 발생 (고정/랜덤 이벤트 통합)"""
         print(f"\n[이벤트 트리거] {event_name} 이벤트를 트리거합니다.")
         
+        # 이미 이벤트가 진행 중이면 새로운 이벤트를 발생시키지 않음
+        if hasattr(self, 'current_select_paper'):
+            print("[이벤트 중복] 이미 진행 중인 이벤트가 있습니다.")
+            return
+        
         # 이벤트 가져오기
         if event_type == 'fixed':
             event = self.event_manager.get_fixed_event(event_name)
         else:
-            event = self.event_manager.get_random_event(event_name)
-            
+            time_info = self.time_manager.get_current_time_info()
+            event = self.event_manager.get_random_event(time_info['hour'])
+        
         if event:
             print(f"[이벤트 상세] {event_name} 이벤트의 선택지를 생성합니다.")
             self.time_manager.pause_time()
@@ -657,7 +663,7 @@ class Game:
             if isinstance(event['choices'], dict):
                 # 전공에 따른 선택지 처리
                 major_type = Stat.major
-                choices = event['choices'][major_type]
+                choices = event['choices'].get(major_type, event['choices'].get('common', []))
                 choice_texts = [choice['text'] for choice in choices]
             else:
                 choices = event['choices']
