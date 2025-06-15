@@ -378,12 +378,9 @@ def get_events_data():
                 'repeatable': True,
                 'requirements': {'major': 'developer'},
                 'time_trigger': {
-                    'week_start': 20,
-                    'week_end': 30,
-                    'day_start': 1,
-                    'day_end': 5,
-                    'hour_start': 9,
-                    'hour_end': 21,
+                    'week': [20, 30],
+                    'day': [1, 5],
+                    'hour': [9, 21],
                     'grade_range': [2, 2]  # 2학년에만 발생
                 },
                 'choices': [
@@ -407,8 +404,7 @@ def get_events_data():
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
-                    'hour_start': 9,   # 오전 9시
-                    'hour_end': 20     # 오후 8시 20분
+                    'hour': [9, 20]     # 오전 9시부터 오후 8시까지
                 },
                 'choices': [
                     {
@@ -427,9 +423,8 @@ def get_events_data():
                 'probability': 0.8,
                 'repeatable': True,
                 'time_trigger': {
-                    'day': 5,
-                    'hour_start': 16,
-                    'hour_end': 16
+                    'day': 5,           # 금요일
+                    'hour': [16, 16]    # 오후 4시
                 },
                 'choices': [
                     {
@@ -449,8 +444,7 @@ def get_events_data():
                 'repeatable': False,
                 'requirements': {'normalSubjectPoint': 70},
                 'time_trigger': {
-                    'week_start': 20,
-                    'week_end': 30
+                    'week': [20, 30]
                 },
                 'choices': [
                     {
@@ -469,12 +463,9 @@ def get_events_data():
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
-                    'week_start': 10,
-                    'week_end': 28,
-                    'day_start': 1,
-                    'day_end': 5,
-                    'hour_start': 9,
-                    'hour_end': 21
+                    'week': [10, 28],
+                    'day': [1, 5],
+                    'hour': [9, 21]
                 },
                 'choices': [
                     {
@@ -497,12 +488,9 @@ def get_events_data():
                 'probability': 0.3,
                 'repeatable': True,
                 'time_trigger': {
-                    'week_start': 1,
-                    'week_end': 30,
-                    'day_start': 1,
-                    'day_end': 5,
-                    'hour_start': 9,
-                    'hour_end': 18
+                    'week': [1, 30],
+                    'day': [1, 5],
+                    'hour': [9, 18]
                 },
                 'choices': [
                     {
@@ -525,12 +513,9 @@ def get_events_data():
                 'probability': 0.6,
                 'repeatable': True,
                 'time_trigger': {
-                    'week_start': 5,
-                    'week_end': 25,
-                    'day_start': 1,
-                    'day_end': 5,
-                    'hour_start': 16,
-                    'hour_end': 21
+                    'week': [5, 25],
+                    'day': [1, 5],
+                    'hour': [16, 21]
                 },
                 'choices': {
                     'developer': [
@@ -576,10 +561,8 @@ def get_events_data():
                 'repeatable': True,
                 'time_trigger': {
                     'week': 8,
-                    'day_start': 1,
-                    'day_end': 5,
-                    'hour_start': 9,
-                    'hour_end': 21,
+                    'day': [1, 5],
+                    'hour': [9, 21],
                     'grade_range': [2, 3]
                 },
                 'choices': [
@@ -599,12 +582,9 @@ def get_events_data():
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
-                    'week_start': 5,
-                    'week_end': 30,
-                    'day_start': 1,
-                    'day_end': 5,
-                    'hour_start': 9,
-                    'hour_end': 21
+                    'week': [5, 30],
+                    'day': [1, 5],
+                    'hour': [9, 21]
                 },
                 'choices': {
                     'developer': [
@@ -633,12 +613,9 @@ def get_events_data():
                 'probability': 0.3,
                 'repeatable': True,
                 'time_trigger': {
-                    'week_start': 1,
-                    'week_end': 30,
-                    'day_start': 1,
-                    'day_end': 5,
-                    'hour_start': 21,
-                    'hour_end': 1
+                    'week': [1, 30],
+                    'day': [1, 5],
+                    'hour': [21, 1]  # 자정을 걸치는 경우
                 },
                 'choices': [
                     {
@@ -661,8 +638,7 @@ def get_events_data():
                 'probability': 0.5,
                 'repeatable': True,
                 'time_trigger': {
-                    'hour_start': 21,
-                    'hour_end': 23
+                    'hour': [21, 23]
                 },
                 'choices': [
                     {

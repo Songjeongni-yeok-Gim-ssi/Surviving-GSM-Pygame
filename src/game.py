@@ -640,7 +640,7 @@ class Game:
             event = self.event_manager.get_fixed_event(event_name)
         elif event_type == 'random':
             time_info = self.time_manager.get_current_time_info()
-            event = self.event_manager.get_random_event(time_info)
+            event = self.event_manager.get_random_event(time_info['hour'])
         
         if event:
             print(f"[{event_type} 선택지] {event_name} 이벤트의 선택지를 생성합니다.")

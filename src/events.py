@@ -121,40 +121,73 @@ class EventManager:
         
         return True
     
+    def check_time_trigger(self, trigger, current_time):
+        """
+        이벤트의 시간 조건을 검사하는 통합 함수
+        """
+        current_week = current_time['week']
+        current_day = current_time['day']
+        current_hour = current_time['hour']
+        current_grade = current_time.get('grade', 1)
+        
+        # 학년 범위 체크
+        grade_range = trigger.get('grade_range', [1, 3])
+        if not (grade_range[0] <= current_grade <= grade_range[1]):
+            return False
+        
+        # 주차 조건 체크
+        if 'week' in trigger:
+            week_range = trigger['week']
+            if isinstance(week_range, list):
+                if not (week_range[0] <= current_week <= week_range[1]):
+                    return False
+            else:
+                if week_range != current_week:
+                    return False
+        
+        # 요일 조건 체크
+        if 'day' in trigger:
+            day_range = trigger['day']
+            if isinstance(day_range, list):
+                if not (day_range[0] <= current_day <= day_range[1]):
+                    return False
+            else:
+                if day_range != current_day:
+                    return False
+        
+        # 시간 조건 체크
+        if 'hour' in trigger:
+            hour_range = trigger['hour']
+            if isinstance(hour_range, list):
+                # 자정을 걸치는 경우 (예: [22, 6])
+                if hour_range[0] > hour_range[1]:
+                    if not (current_hour >= hour_range[0] or current_hour <= hour_range[1]):
+                        return False
+                else:
+                    if not (hour_range[0] <= current_hour <= hour_range[1]):
+                        return False
+            else:
+                if hour_range != current_hour:
+                    return False
+        
+        return True
+
     def check_time_triggered_events(self, time_info):
-        """
-        시간에 따른 이벤트를 검사 후 트리거된 이벤트들을 반환하는 메서드 -> handle_time_events
-        """
+        """시간에 따른 이벤트를 검사 후 트리거된 이벤트들을 반환하는 메서드"""
         triggered_events = []   
-        current_week = time_info['week']
-        current_day = time_info['day']
-        current_hour = time_info['hour']
-        current_grade = time_info.get('grade', 1)
         
         # 고정 이벤트 체크
         for event_name, event in self.events['fixed_events'].items():
             if event_name not in self.triggered_events:
                 if 'time_trigger' in event:
-                    trigger = event['time_trigger']
-                    # 학년 범위 체크
-                    grade_range = trigger.get('grade_range', [1, 3])
-                    if not (grade_range[0] <= current_grade <= grade_range[1]):
-                        continue
-                    
-                    # 요구사항 체크
-                    if not self.check_requirements(event):
-                        continue
-                    
-                    if (trigger['week'] == current_week and 
-                        trigger['day'] == current_day and 
-                        trigger['hour'] == current_hour):
-                        print(f"\n[고정 이벤트 발생] {event['title']} - {current_week}주차 {current_day}일 {current_hour}시")
-                        triggered_events.append(event_name)
-                        self.triggered_events.add(event_name)
-                        return triggered_events
+                    if self.check_time_trigger(event['time_trigger'], time_info):
+                        if self.check_requirements(event):
+                            print(f"\n[고정 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
+                            triggered_events.append(event_name)
+                            self.triggered_events.add(event_name)
         
         # 랜덤 이벤트 체크 (고정 이벤트가 없는 경우에만)
-        if current_day > self.last_random_event_day:
+        if not triggered_events and time_info['day'] > self.last_random_event_day:
             possible_random_events = []
             for event_name, event in self.events['random_events'].items():
                 # 이미 발생한 이벤트 중 반복이 불가능한 이벤트 건너뛰기
@@ -165,52 +198,10 @@ class EventManager:
                 if not self.check_requirements(event):
                     continue
 
-                time_trigger = event.get('time_trigger', {})
-                
-                # 학년 범위 검사
-                if 'grade_range' in time_trigger:
-                    grade_range = time_trigger['grade_range']
-                    if not (grade_range[0] <= current_grade <= grade_range[1]):
-                        continue
-                
-                # 주차 조건 검사
-                if 'week' in time_trigger:
-                    if time_trigger['week'] != current_week:
-                        continue
-                elif 'week_start' in time_trigger or 'week_end' in time_trigger:
-                    week_start = time_trigger.get('week_start', 1)
-                    week_end = time_trigger.get('week_end', 30)
-                    if not (week_start <= current_week <= week_end):
-                        continue
-                
-                # 요일 조건 체크
-                if 'day' in time_trigger:
-                    if time_trigger['day'] != current_day:
-                        continue
-                elif 'day_start' in time_trigger or 'day_end' in time_trigger:
-                    day_start = time_trigger.get('day_start', 1)
-                    day_end = time_trigger.get('day_end', 5)
-                    if not (day_start <= current_day <= day_end):
-                        continue
-                
-                # 시간 조건 체크
-                if 'hour' in time_trigger:
-                    if time_trigger['hour'] != current_hour:
-                        continue
-                elif 'hour_start' in time_trigger or 'hour_end' in time_trigger:
-                    hour_start = time_trigger.get('hour_start', 0)
-                    hour_end = time_trigger.get('hour_end', 23)
-                    
-                    # 자정을 걸치는 경우 (예: 22시 ~ 6시)
-                    if hour_start > hour_end:
-                        if not (current_hour >= hour_start or current_hour <= hour_end):
-                            continue
-                    else:
-                        if not (hour_start <= current_hour <= hour_end):
-                            continue
-
-                print(f"[이벤트 추가] {event_name} 이벤트가 모든 조건을 만족")
-                possible_random_events.append((event_name, event))
+                if 'time_trigger' in event:
+                    if self.check_time_trigger(event['time_trigger'], time_info):
+                        print(f"[이벤트 추가] {event_name} 이벤트가 모든 조건을 만족")
+                        possible_random_events.append((event_name, event))
             
             # 랜덤 이벤트 선택
             if possible_random_events:
@@ -221,12 +212,12 @@ class EventManager:
                     for event_name, event in possible_random_events:
                         current_sum += event['probability']
                         if random_value <= current_sum:
-                            print(f"\n[랜덤 이벤트 발생] {event['title']} - {current_week}주차 {current_day}일 {current_hour}시")
+                            print(f"\n[랜덤 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
                             triggered_events.append(event_name)
                             self.triggered_events.add(event_name)
-                            self.last_random_event_day = current_day
+                            self.last_random_event_day = time_info['day']
                             break
-                
+        
         return triggered_events
     
     def _handle_employment_success(self):
