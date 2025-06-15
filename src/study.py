@@ -12,7 +12,7 @@ class Subject(Enum):
 
 class Study:
     '''공부 테크 트리를 관리하는 클래스 입니다.'''
-    studyList = {{False, False, False, False, False}, {False, False, False, False, False}, {False, False, False, False, False}, {False, False, False, False, False}}
+    studyList = [[False, False, False, False, False], [False, False, False, False, False], [False, False, False, False, False], [False, False, False, False, False]]
     '''이미 찍은 테크 트리인지 아직 찍지 않은 테크 트리인지 알려주는 역할을 합니다. 이미 배운 공부한 내용(True)은 밝게 표시, 아직 공부하지 않은 내용(False)은 어둡게 표시 (바깥 리스트는 과목, 내부 리스트는 레벨)'''
     
     @classmethod
