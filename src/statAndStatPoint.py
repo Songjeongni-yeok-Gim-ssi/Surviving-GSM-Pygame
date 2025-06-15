@@ -31,25 +31,28 @@ class Stat:
     ''' 스탯 포인트 (게임 재시작 시 사용) '''
 
     @classmethod
-    def reset_stats(cls):
-        """
-        스탯 초기화
-        """
+    def reset(cls):
+        """모든 스탯을 초기화하는 메서드"""
+        # 기본 스탯 초기화
         cls.good = 0
         cls.evil = 0
         cls.responsibility = 0
+        cls.fame = 0
+        cls.fatigue = 0
+        
+        # 전공 관련 스탯 초기화
         cls.intuitivePoint = 0
         cls.interpretPoint = 0
         cls.majorSubjectPoint = 0
         cls.normalSubjectPoint = 0
         cls.functionalCompetition = 0
-        cls.fame = 0
-        cls.fatigue = 0
+        
+        # 게임 상태 초기화
+        cls.stat_points = 0
         cls.major = None
         cls.gender = None
         cls.game_completed = False
         cls.employment_success = False
-        cls.stat_points = 0
 
     @classmethod
     def show_stats(cls):

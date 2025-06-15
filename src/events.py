@@ -25,6 +25,8 @@ class EventManager:
             'public': 80,    # 공기업 준비 레벨
             'competition': 90  # 기능 대회 레벨
         }
+        
+        self._random_event_triggered_today = False
     
     def _apply_effects(self, effects):
         '''
@@ -321,3 +323,8 @@ class EventManager:
                 self._handle_employment_success()
             else:
                 self._handle_employment_failure()
+
+    def reset(self):
+        """이벤트 매니저의 상태를 초기화하는 메서드"""
+        self.fixed_event_queue = []
+        self._random_event_triggered_today = False
