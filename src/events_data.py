@@ -28,6 +28,26 @@ def get_events_data():
                     }
                 ]
             },
+            'gender_selection': {
+                'title': '성별 선택',
+                'text': '당신의 성별을 선택해주세요.',
+                'time_trigger': {
+                    'week': 1,
+                    'day': 1,
+                    'hour': 10,
+                    'grade_range': [1, 1]  # 1학년에만 발생
+                },
+                'choices': [
+                    {
+                        'text': '남성',
+                        'effect': lambda: setattr(Stat, 'gender', 'man')
+                    },
+                    {
+                        'text': '여성',
+                        'effect': lambda: setattr(Stat, 'gender', 'woman')
+                    }
+                ]
+            },
             'idea_festival': {
                 'title': '아이디어 페스티벌',
                 'text': '아이디어 페스티벌 기간이 다가왔다. 어떤 역할을 맡을까?',

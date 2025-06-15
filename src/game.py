@@ -42,6 +42,10 @@ class Game:
             # 이벤트 매니저 초기화
             self.event_manager = EventManager()
             
+            # 캐릭터 이미지 초기화
+            self.character_image = None
+            self.character_rect = None
+            
             # exit 이미지 로드
             self.exit_image = pygame.image.load('assets/imgs/exit.png')
             original_width, original_height = self.exit_image.get_size()
@@ -619,10 +623,11 @@ class Game:
         self.stat_points_label.set_text(f'스탯 포인트: {Stat.stat_points}')
 
     def draw(self):
-        '''
-            정적인 화면을 출력하는 메서드
-        '''
+        """
+        게임 화면을 그리는 메서드
+        """
         if self.state == GameState.MAIN_MENU or self.state == GameState.PLAYING:
+            # 배경 이미지 로드 및 표시
             bg = pygame.image.load('assets/imgs/gsm_meister_highschool_cover.jpeg')
             bg = pygame.transform.scale(bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
             self.screen.blit(bg, (0, 0))
@@ -632,6 +637,57 @@ class Game:
             
             # exit 이미지 그리기
             self.screen.blit(self.exit_image, (10, SCREEN_HEIGHT - 60))
+            
+            # 캐릭터 이미지 표시
+            if Stat.gender:
+                current_hour = self.time_manager.current_hour
+                
+                # 시간대별 이미지 선택
+                if 7 <= current_hour < 8:  # 기상
+                    image_name = 'sleeping'
+                elif 8 <= current_hour < 9:  # 아침시간
+                    image_name = 'happy'
+                elif 9 <= current_hour < 13:  # 오전 수업
+                    image_name = 'studying'
+                elif 13 <= current_hour < 14:  # 점심
+                    image_name = 'eating'
+                elif 14 <= current_hour < 15:  # 5교시
+                    image_name = 'running'
+                elif 15 <= current_hour < 17:  # 오후 수업
+                    image_name = 'studying'
+                elif 17 <= current_hour < 18:  # 8교시
+                    image_name = 'presenting'
+                elif 18 <= current_hour < 19:  # 9교시
+                    image_name = 'studying'
+                elif 19 <= current_hour < 20:  # 저녁
+                    image_name = 'eating'
+                elif 20 <= current_hour < 22:  # 야간 자습
+                    image_name = 'studying'
+                elif 22 <= current_hour < 24:  # 기숙사 점호 및 소등
+                    image_name = 'sleeping'
+                else:  # 그 외 시간 (0시~7시)
+                    image_name = ''  # 기본 이미지 사용
+                
+                # 이미지 로드 및 크기 조정
+                try:
+                    # 기본 이미지 또는 상황별 이미지 선택
+                    image_path = f'assets/imgs/{Stat.gender}/{Stat.gender}{"_" + image_name if image_name else ""}.png'
+                    self.character_image = pygame.image.load(image_path)
+                    # 이미지 크기를 화면 높이의 70%로 조정
+                    original_width, original_height = self.character_image.get_size()
+                    scale_factor = (SCREEN_HEIGHT * 0.7) / original_height
+                    new_width = int(original_width * scale_factor)
+                    new_height = int(original_height * scale_factor)
+                    self.character_image = pygame.transform.scale(self.character_image, (new_width, new_height))
+                    
+                    # 이미지를 화면 중앙에 배치
+                    self.character_rect = self.character_image.get_rect()
+                    self.character_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+                    
+                    # 이미지 그리기
+                    self.screen.blit(self.character_image, self.character_rect)
+                except Exception as e:
+                    print(f"이미지 로드 실패: {e}")
             
             # 졸업 축하 효과
             if self.time_manager.graduation_completed:
@@ -647,8 +703,11 @@ class Game:
                 congrat_surface.blit(text, text_rect)
                 self.screen.blit(congrat_surface, (0, SCREEN_HEIGHT//2 - 50))
         
-        # UI 요소들 그리기 (중요!)
+        # UI 매니저 업데이트
+        self.manager.update(1/60)
         self.manager.draw_ui(self.screen)
+        
+        # 화면 업데이트
         pygame.display.flip()
 
     def _trigger_event(self, event_name, event_type):

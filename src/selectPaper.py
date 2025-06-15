@@ -2,7 +2,6 @@ import pygame
 import pygame_gui
 from pygame.locals import QUIT
 from settings import *  # 설정 값 가져오기
-from entity import Entity
 
 class SelectPaper:
     def __init__(self, imagePath, title, text, manager : pygame_gui.UIManager, *buttonTexts : str):
