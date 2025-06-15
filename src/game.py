@@ -468,13 +468,17 @@ class Game:
                     Stat.reset()  # 스탯 초기화
                     self.event_manager.reset()  # 이벤트 매니저 초기화
                     
-                    # 현재 진행 중인 이벤트가 있다면 제거
+                    # 현재 진행 중인 이벤트가 있다면 강제 종료
                     if hasattr(self, 'current_select_paper'):
+                        self.current_select_paper.close()  # 이벤트 창 닫기
                         delattr(self, 'current_select_paper')
                     if hasattr(self, '_current_event'):
                         delattr(self, '_current_event')
                     if hasattr(self, '_is_major_selection'):
                         delattr(self, '_is_major_selection')
+                    
+                    # 시간 다시 흐르게
+                    self.time_manager.resume_time()
                     
                     self.show_main_menu_ui()
                 
@@ -720,15 +724,19 @@ class Game:
             self._current_event = event_name
             
             # 선택지 텍스트 추출
-            if isinstance(event['choices'], dict):
+            choices = event['choices']
+            if isinstance(choices, dict):
                 # 전공에 따른 선택지 처리
-                major_type = Stat.major
-                choices = event['choices'].get(major_type, event['choices'])
-                choice_texts = [choice['text'] for choice in choices]
-            else:
-                choices = event['choices']
-                choice_texts = [choice['text'] for choice in choices]
+                major_type = getattr(Stat, 'major', None)
+                if major_type in choices:
+                    choices = choices[major_type]
+                else:
+                    choices = []
             
+            print(f"[디버그] choices type: {type(choices)}")
+            print(f"[디버그] choices content: {choices}")
+
+            choice_texts = [choice['text'] for choice in choices]
             print(f"[선택지] {choice_texts}")
             
             try:
