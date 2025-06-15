@@ -32,7 +32,9 @@ class Stat:
 
     @classmethod
     def reset_stats(cls):
-        """스탯 초기화"""
+        """
+        스탯 초기화
+        """
         cls.good = 0
         cls.evil = 0
         cls.responsibility = 0
@@ -51,7 +53,9 @@ class Stat:
 
     @classmethod
     def show_stats(cls):
-        """현재 스탯 상태를 보여주는 함수"""
+        """
+        현재 스탯 상태를 보여주는 함수
+        """
         print("\n=== 현재 스탯 상태 ===")
         print(f"전공: {cls.major if cls.major else '미선택'}")
         print(f"성별: {cls.gender if cls.gender else '미선택'}")
@@ -74,5 +78,3 @@ class Stat:
         print(f"게임 종료: {'예' if cls.game_completed else '아니오'}")
         print(f"취업 성공: {'예' if cls.employment_success else '아니오'}")
         print("==================\n")
-    
-    

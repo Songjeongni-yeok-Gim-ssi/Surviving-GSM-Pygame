@@ -6,6 +6,8 @@ from gameTimeManager import GameTimeManager
 from selectPaper import SelectPaper
 from events import EventManager
 from statAndStatPoint import Stat
+import math
+
 
 class Game:
     '''
@@ -514,7 +516,9 @@ class Game:
             self.handle_time_events()
     
     def handle_time_events(self):
-        """시간 관련 이벤트 처리"""
+        """
+        시간 관련 이벤트 처리
+        """
         # 이미 이벤트가 진행 중이면 새로운 이벤트를 체크하지 않음
         if hasattr(self, 'current_select_paper'):
             return
@@ -539,6 +543,7 @@ class Game:
         random_events = [event for event in triggered_events if event in self.event_manager.events['random_events']]
         if random_events:
             self._trigger_event(random_events[0], 'random')
+            return
 
     def update_game_ui(self):
         """게임 UI 업데이트"""
@@ -604,13 +609,12 @@ class Game:
             # 졸업 축하 효과
             if self.time_manager.graduation_completed:
                 # 간단한 축하 효과 (점점 깜빡이는 텍스트)
-                import math
                 alpha = int(127 + 127 * math.sin(pygame.time.get_ticks() * 0.01))
                 congrat_surface = pygame.Surface((SCREEN_WIDTH, 100))
                 congrat_surface.set_alpha(alpha)
                 congrat_surface.fill((255, 255, 255))
                 
-                font = pygame.font.Font(None, 48)
+                font = pygame.font.Font(FONT_NAME, 48)
                 text = font.render("🎓 CONGRATULATIONS! 🎓", True, (255, 215, 0))
                 text_rect = text.get_rect(center=(SCREEN_WIDTH//2, 50))
                 congrat_surface.blit(text, text_rect)
@@ -620,32 +624,34 @@ class Game:
         self.manager.draw_ui(self.screen)
         pygame.display.flip()
 
-    def _trigger_event(self, event_name, event_type='fixed'):
-        """이벤트 발생 (고정/랜덤 이벤트 통합)"""
-        print(f"\n[이벤트 트리거] {event_name} 이벤트를 트리거합니다.")
+    def _trigger_event(self, event_name, event_type):
+        """
+        이벤트 이름과 타입을 바탕으로 이벤트 발생을 관리하는 메서드 (고정/랜덤 이벤트 통합)
+        """
+        print(f"\n[{event_type} 이벤트 트리거] {event_name} 이벤트를 트리거합니다.")
         
         # 이미 이벤트가 진행 중이면 새로운 이벤트를 발생시키지 않음
         if hasattr(self, 'current_select_paper'):
-            print("[이벤트 중복] 이미 진행 중인 이벤트가 있습니다.")
+            print(f"[이벤트 중복] 이미 진행 중인 {event_name} 이벤트가 있습니다.")
             return
         
         # 이벤트 가져오기
         if event_type == 'fixed':
             event = self.event_manager.get_fixed_event(event_name)
-        else:
+        elif event_type == 'random':
             time_info = self.time_manager.get_current_time_info()
             event = self.event_manager.get_random_event(time_info['hour'])
         
         if event:
-            print(f"[이벤트 상세] {event_name} 이벤트의 선택지를 생성합니다.")
-            self.time_manager.pause_time()
+            print(f"[{event_type} 선택지] {event_name} 이벤트의 선택지를 생성합니다.")
+            self.time_manager.pause_time() # 이벤트 선택지 선택 전까지 시간 정지
             self._current_event = event_name
             
             # 선택지 텍스트 추출
             if isinstance(event['choices'], dict):
                 # 전공에 따른 선택지 처리
                 major_type = Stat.major
-                choices = event['choices'].get(major_type, event['choices'].get('common', []))
+                choices = event['choices'].get(major_type, event['choices'])
                 choice_texts = [choice['text'] for choice in choices]
             else:
                 choices = event['choices']
@@ -663,6 +669,7 @@ class Game:
                     *choice_texts
                 )
                 print("[SelectPaper] 생성 완료")
+                print(f"{event}")
             except Exception as e:
                 print(f"[에러] SelectPaper 생성 실패: {str(e)}")
             
@@ -671,7 +678,9 @@ class Game:
                 self._is_major_selection = True
 
     def _handle_event_choice(self, event_name, choice_index):
-        """이벤트 선택 처리"""
+        """
+        이벤트 선택 처리
+        """
         print(f"\n[이벤트 선택] {event_name} 이벤트의 {choice_index}번 선택지를 처리합니다.")
         
         event = self.event_manager.get_fixed_event(event_name)
@@ -681,7 +690,7 @@ class Game:
         if event and 'choices' in event:
             if isinstance(event['choices'], dict):
                 major_type = Stat.major
-                choices = event['choices'].get(major_type, event['choices'].get('common', []))
+                choices = event['choices'].get(major_type, event['choices'])
             else:
                 choices = event['choices']
             
@@ -695,7 +704,7 @@ class Game:
                 
                 print(f"[선택지 효과] {choice['text']} 선택지의 효과를 적용합니다.")
                 effect_result = choice['effect']()
-                print(effect_result)
+                print(f"[선택지 효과 결과] {effect_result}")
                 if effect_result is not None:
                     self.event_manager._apply_effects(effect_result)
 

@@ -24,7 +24,7 @@ class EventManager:
         '''
             이벤트에 명시된 스탯 수치 적용
         '''
-        print("_apply_effects")
+        print("[스탯 변경] 선택지에 따른 효과를 적용합니다.")
         for stat_name, value in effects.items():
             if hasattr(Stat, stat_name):
                 current_value = getattr(Stat, stat_name)
@@ -33,7 +33,9 @@ class EventManager:
                 print(f"[스탯 변경] {stat_name}: {current_value} -> {new_value}")
     
     def get_fixed_event(self, event_name):
-        """고정 이벤트 가져오기"""
+        """
+        고정 이벤트 가져오기(고정 이벤트 딕셔너리를 반환합니다.)
+        """
         event = self.events['fixed_events'].get(event_name)
         if event:
             # 전공별 선택지가 있는 경우
@@ -48,7 +50,9 @@ class EventManager:
         return None
     
     def get_random_event(self, current_hour):
-        """랜덤 이벤트 가져오기"""
+        """
+        랜덤 이벤트 가져오기
+        """
         possible_events = []
         for event_name, event in self.events['random_events'].items():
             # repeatable이 True이거나 아직 발생하지 않은 이벤트만 추가
@@ -80,30 +84,34 @@ class EventManager:
                             return {
                                 'title': event['title'],
                                 'text': event['text'],
-                                'choices': event['choices'].get(Stat.major, event['choices'].get('common', []))
+                                'choices': event['choices'].get(Stat.major, event['choices'])
                             }
                         # 공통 선택지인 경우
                         return event
         return None
     
-    def check_requirements(self, event, choice=None):
-        """이벤트와 선택지의 요구사항을 체크"""
+    def check_requirements(self, event, choice):
+        """
+        이벤트와 선택지의 요구사항을 검사하는 메서드(검사 후 불리언 반환)
+        """
+        
+        # 이벤트 요구사항 검사
         if 'requirements' in event:
             requirements = event['requirements']
             
-            # 전공 요구사항 체크
+            # 전공 요구사항 검사
             if 'major' in requirements:
                 if Stat.major != requirements['major']:
                     return False
             
-            # 스탯 요구사항 체크
+            # 스탯 요구사항 검사
             for stat_name, required_value in requirements.items():
                 if stat_name != 'major' and hasattr(Stat, stat_name):
                     current_value = getattr(Stat, stat_name)
                     if current_value < required_value:
                         return False
         
-        # 선택지별 요구사항 체크
+        # 선택지별 요구사항 검사
         if choice and 'requirements' in choice:
             for stat_name, required_value in choice['requirements'].items():
                 if hasattr(Stat, stat_name):
@@ -115,7 +123,7 @@ class EventManager:
     
     def check_time_triggered_events(self, time_info):
         """
-        시간에 따른 이벤트 체크
+        시간에 따른 이벤트를 검사하는 메서드 -> handle_time_events
         """
         triggered_events = []   
         current_week = time_info['week']
@@ -149,23 +157,23 @@ class EventManager:
         if current_day > self.last_random_event_day:
             possible_random_events = []
             for event_name, event in self.events['random_events'].items():
-                # 이미 발생한 이벤트는 건너뛰기
+                # 이미 발생한 이벤트 중 반복이 불가능한 이벤트 건너뛰기
                 if event_name in self.triggered_events and not event.get('repeatable', False):
                     continue
 
-                # 요구사항 체크
+                # 요구사항 검사
                 if not self.check_requirements(event):
                     continue
 
                 time_trigger = event.get('time_trigger', {})
                 
-                # 학년 범위 체크
+                # 학년 범위 검사
                 if 'grade_range' in time_trigger:
                     grade_range = time_trigger['grade_range']
                     if not (grade_range[0] <= current_grade <= grade_range[1]):
                         continue
                 
-                # 주차 조건 체크
+                # 주차 조건 검사
                 if 'week' in time_trigger:
                     if time_trigger['week'] != current_week:
                         continue
@@ -219,15 +227,21 @@ class EventManager:
                             self.last_random_event_day = current_day
                             break
         
+        print(f"[이벤트 트리거] {triggered_events}")
+        
         return triggered_events
     
     def _handle_employment_success(self):
-        """취업 성공 처리"""
+        """
+        취업 성공 처리 -> check_employment_result
+        """
         print("축하합니다! 취업에 성공했습니다!")
         # 여기에 취업 성공 관련 추가 로직 구현
     
     def _handle_employment_failure(self):
-        """취업 실패 처리"""
+        """
+        취업 실패 처리 -> check_employment_result
+        """
         print("아쉽게도 취업에 실패했습니다...")
         # 여기에 취업 실패 관련 추가 로직 구현
     

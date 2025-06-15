@@ -2,7 +2,7 @@ from statAndStatPoint import Stat
 
 def get_events_data():
     return {
-        # 고정 이벤트 (타이밍 기반)
+        # 고정 이벤트
         'fixed_events': {
             'major_selection': {
                 'title': 'GSM 입학 / 전공 선택',
@@ -623,12 +623,6 @@ def get_events_data():
                         {
                             'text': '공기업 특강이 재밌어 보인다!',
                             'effect': lambda: {'normalSubjectPoint': 10}
-                        }
-                    ],
-                    'common': [
-                        {
-                            'text': '굳이 들어야 할까?',
-                            'effect': lambda: None
                         }
                     ]
                 }
