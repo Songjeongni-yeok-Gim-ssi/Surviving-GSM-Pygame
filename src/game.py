@@ -7,7 +7,8 @@ from selectPaper import SelectPaper
 from events import EventManager
 from statAndStatPoint import Stat
 import math
-
+from techTree import TechTree
+from study import Study
 
 class Game:
     '''
@@ -356,6 +357,14 @@ class Game:
             container=self.stat_panel
         )
         
+        self.techTree = TechTree(self.manager)
+        
+        self.studyButton = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((10, 600), (100, 100)),
+            text="공부",
+            manager=self.manager
+        )
+        
         # 처음에는 메인 메뉴만 보이게
         self.show_main_menu_ui()
         self.help_panel.hide()  # 도움말 패널은 처음에 숨김
@@ -378,6 +387,8 @@ class Game:
         self.back_button.hide()
         self.control_panel.hide()  # 컨트롤 패널도 숨기기
         self.stat_panel.hide()  # 스탯 패널도 숨기기
+        
+        self.studyButton.hide()
 
     def show_main_menu_ui(self):
         '''
@@ -402,6 +413,7 @@ class Game:
         self.back_button.show()
         self.control_panel.show()  # 게임 진행 중에만 컨트롤 패널 보이기
         self.stat_panel.show()  # 스탯 패널도 보이기
+        self.studyButton.show()
 
     def process_events(self):
         '''
@@ -508,6 +520,21 @@ class Game:
                 elif event.ui_element == self.reset_time_button:
                     print("시간 리셋!")
                     self.time_manager.reset()
+                
+                elif event.ui_element == self.studyButton:
+                    print("테크 트리 창 열기!")
+                    self.time_manager.pause_time()
+                    self.techTree.show()
+                    
+                elif event.ui_element == self.techTree.exitButton:
+                    print("테크 트리 창 닫기")
+                    self.time_manager.resume_time()
+                    self.techTree.hide()
+                
+                for i in range(4):
+                    for j in range(5):
+                        if event.ui_element == self.techTree.buttons[i][j].button:
+                            Study.study(self.techTree.buttons[i][j].subject, self.techTree.buttons[i][j].level, self.techTree.buttons[i][j].price)
             
             # UI 매니저에 이벤트 전달 (중요!)
             self.manager.process_events(event)
