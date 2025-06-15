@@ -7,6 +7,7 @@ def get_events_data():
             'major_selection': {
                 'title': 'GSM 입학 / 전공 선택',
                 'text': '앞으로의 3년간 학습할 전공을 고르게 됩니다. 신중하게 선택하세요!',
+                'image': 'assets/imgs/events/major_selection.png',
                 'time_trigger': {
                     'week': 1,
                     'day': 1,
@@ -31,6 +32,7 @@ def get_events_data():
             'gender_selection': {
                 'title': '성별 선택',
                 'text': '당신의 성별을 선택해주세요.',
+                'image': 'assets/imgs/events/gender_selection.png',
                 'time_trigger': {
                     'week': 1,
                     'day': 1,
@@ -51,6 +53,7 @@ def get_events_data():
             'idea_festival': {
                 'title': '아이디어 페스티벌',
                 'text': '아이디어 페스티벌 기간이 다가왔다. 어떤 역할을 맡을까?',
+                'image': 'assets/imgs/events/idea_festival.png',
                 'time_trigger': {
                     'week': 10,
                     'day': 1,
@@ -98,6 +101,7 @@ def get_events_data():
             'singapore_training': {
                 'title': '싱가포르 연수',
                 'text': '아기다리고 고기다리던 싱가포르 연수 기회가 왔다!',
+                'image': 'assets/imgs/events/singapore_training.png',
                 'time_trigger': {
                     'week': 5,
                     'day': 1,
@@ -116,8 +120,9 @@ def get_events_data():
                 ]
             },
             'final_job_selection': {
-                'title': '취업의 선택',
-                'text': '결전의 순간이 왔다. 어떤 길을 선택할 것인가?',
+                'title': '최종 취업 선택',
+                'text': '최종 취업을 선택할 시간입니다.',
+                'image': 'assets/imgs/events/final_job_selection.png',
                 'time_trigger': {
                     'week': 1,
                     'day': 1,
@@ -166,6 +171,7 @@ def get_events_data():
             'functional_competition': {
                 'title': '기능 대회',
                 'text': '기능 대회가 시작됩니다. 과연 결과는?!?!?!?!?!?!',
+                'image': 'assets/imgs/events/functional_competition.png',
                 'time_trigger': {
                     'week': 2,
                     'day': 3,
@@ -208,8 +214,9 @@ def get_events_data():
                 ]
             },
             'vacation_stay': {
-                'title': '방학 기능 대회 대비 잔류',
-                'text': '방학 동안 학교에 남아서 기능 대회를 준비할까요?',
+                'title': '방학 중 기숙사 잔류',
+                'text': '방학 중 기숙사에 남아서 공부할 수 있습니다.',
+                'image': 'assets/imgs/events/vacation_stay.png',
                 'time_trigger': {
                     'week': 20,
                     'day': 5,
@@ -230,8 +237,9 @@ def get_events_data():
                 ]
             },
             'hackathon': {
-                'title': '연합 해커톤',
-                'text': '연합 해커톤이 열린다. 참여해볼까?',
+                'title': '해커톤',
+                'text': '해커톤이 시작됩니다.',
+                'image': 'assets/imgs/events/hackathon.png',
                 'time_trigger': {
                     'week': 8,
                     'day': 1,
@@ -252,8 +260,9 @@ def get_events_data():
                 ]
             },
             'korean_history_exam': {
-                'title': '한국사 검정 능력 시험',
-                'text': '"00아 너 공기업 준비하지? 나랑 여름방학에 같이 한국사를 볼래?" 공기업을 준비하는 친구가 나에게 같이 한국사를 응시하자고 제안했다. 한번 응시해볼까?',
+                'title': '한국사 시험',
+                'text': '한국사 시험이 시작됩니다.',
+                'image': 'assets/imgs/events/korean_history_exam.png',
                 'time_trigger': {
                     'week': 7,
                     'day': 1,
@@ -274,8 +283,9 @@ def get_events_data():
                 ]
             },
             'ncs_lecture': {
-                'title': 'NCS 필기 특강',
-                'text': '디스코드 2학년 게시판에 2학년을 대상으로 하는 NCS 필기 특강이 떴다! 한번 신청해 볼까?',
+                'title': 'NCS 강의',
+                'text': 'NCS 강의가 시작됩니다.',
+                'image': 'assets/imgs/events/ncs_lecture.png',
                 'time_trigger': {
                     'week': 15,
                     'day': 1,
@@ -343,8 +353,9 @@ def get_events_data():
                 ]
             },
             'self_directed_learning': {
-                'title': '자기주도 체험학습',
-                'text': '친구들과 함께하는 자기주도 체험학습이다! 나는 어떤 역할을 맡게될까?',
+                'title': '자율학습',
+                'text': '자율학습 시간입니다.',
+                'image': 'assets/imgs/events/self_directed_learning.png',
                 'time_trigger': {
                     'week': 21,
                     'day': 1,
@@ -394,6 +405,7 @@ def get_events_data():
             'project_experience': {
                 'title': '프로젝트 경험',
                 'text': '이제 곧 취업을 해야하는데 어떤 프로젝트를 하는게 좋을까?',
+                'image': 'assets/imgs/events/project_experience.png',
                 'probability': 0.4,
                 'repeatable': True,
                 'requirements': {'major': 'developer'},
@@ -421,6 +433,7 @@ def get_events_data():
             'lecture_attendance': {
                 'title': '특별 강의',
                 'text': '학교에서 특별 강의 공지가 올라왔다! 참여해볼까?',
+                'image': 'assets/imgs/events/lecture.png',
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
@@ -440,6 +453,7 @@ def get_events_data():
             'stay_after_school': {
                 'title': '잔류',
                 'text': '금요일 오후 4시 20분, 학교에 남아서 공부할까요?',
+                'image': 'assets/imgs/events/stay_after_school.png',
                 'probability': 0.8,
                 'repeatable': True,
                 'time_trigger': {
@@ -505,6 +519,7 @@ def get_events_data():
             'certification_exam': {
                 'title': '자격증 시험',
                 'text': '자격증 시험을 볼 수 있는 기회가 왔다. 도전해볼까?',
+                'image': 'assets/imgs/events/certification_exam.png',
                 'probability': 0.3,
                 'repeatable': True,
                 'time_trigger': {
@@ -630,6 +645,7 @@ def get_events_data():
             'dormitory_ramen': {
                 'title': '기숙사 - 라면',
                 'text': '기숙사에서 친구가 같이 기숙사 금지 항목인 라면을 먹자고 꼬신다! 어떻게 대처해야 할까?',
+                'image': 'assets/imgs/events/dormitory_ramen.png',
                 'probability': 0.3,
                 'repeatable': True,
                 'time_trigger': {
@@ -655,6 +671,7 @@ def get_events_data():
             'dormitory_study_room': {
                 'title': '기숙사 - 자습실',
                 'text': '기숙사에 도착했다! 피곤하긴 하지만 자습실을 사용할까 고민이 된다.',
+                'image': 'assets/imgs/events/dormitory_study_room.png',
                 'probability': 0.5,
                 'repeatable': True,
                 'time_trigger': {

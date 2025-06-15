@@ -389,6 +389,9 @@ class Game:
         self.help_button.show()
         self.exit_button.show()
         self.control_panel.hide()  # 메인 메뉴에서는 컨트롤 패널 숨기기
+        # 캐릭터 이미지 숨기기
+        self.character_image = None
+        self.character_rect = None
 
     def show_game_ui(self):
         '''
@@ -462,6 +465,17 @@ class Game:
                     print("메인 메뉴로 돌아가기!")
                     self.state = GameState.MAIN_MENU
                     self.time_manager.reset()  # 메인 메뉴로 돌아갈 때 시간 초기화
+                    Stat.reset()  # 스탯 초기화
+                    self.event_manager.reset()  # 이벤트 매니저 초기화
+                    
+                    # 현재 진행 중인 이벤트가 있다면 제거
+                    if hasattr(self, 'current_select_paper'):
+                        delattr(self, 'current_select_paper')
+                    if hasattr(self, '_current_event'):
+                        delattr(self, '_current_event')
+                    if hasattr(self, '_is_major_selection'):
+                        delattr(self, '_is_major_selection')
+                    
                     self.show_main_menu_ui()
                 
                 # 시간 속도 조절 버튼들
@@ -718,9 +732,17 @@ class Game:
             print(f"[선택지] {choice_texts}")
             
             try:
-                # SelectPaper 생성
+                # SelectPaper 생성 (이벤트 이미지 적용)
+                event_img = event.get('image', 'assets/imgs/events/example.png')
+                # 이미지 파일이 존재하는지 확인
+                try:
+                    pygame.image.load(event_img)
+                except:
+                    print(f"[경고] 이미지 파일을 찾을 수 없습니다: {event_img}")
+                    event_img = 'assets/imgs/events/example.png'
+                
                 self.current_select_paper = SelectPaper(
-                    'assets/imgs/exit.png', # 이벤트에 이미지 추가 예정
+                    event_img,
                     event['title'],
                     event['text'],
                     self.manager,
