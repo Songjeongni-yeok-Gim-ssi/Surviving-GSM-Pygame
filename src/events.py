@@ -86,6 +86,33 @@ class EventManager:
                         return event
         return None
     
+    def check_requirements(self, event, choice=None):
+        """이벤트와 선택지의 요구사항을 체크"""
+        if 'requirements' in event:
+            requirements = event['requirements']
+            
+            # 전공 요구사항 체크
+            if 'major' in requirements:
+                if Stat.major != requirements['major']:
+                    return False
+            
+            # 스탯 요구사항 체크
+            for stat_name, required_value in requirements.items():
+                if stat_name != 'major' and hasattr(Stat, stat_name):
+                    current_value = getattr(Stat, stat_name)
+                    if current_value < required_value:
+                        return False
+        
+        # 선택지별 요구사항 체크
+        if choice and 'requirements' in choice:
+            for stat_name, required_value in choice['requirements'].items():
+                if hasattr(Stat, stat_name):
+                    current_value = getattr(Stat, stat_name)
+                    if current_value < required_value:
+                        return False
+        
+        return True
+    
     def check_time_triggered_events(self, time_info):
         """
         시간에 따른 이벤트 체크
@@ -106,12 +133,10 @@ class EventManager:
                     if not (grade_range[0] <= current_grade <= grade_range[1]):
                         continue
                     
-                    # 전공 요구사항 체크
-                    if 'requirements' in event:
-                        if 'major' in event['requirements']:
-                            if Stat.major != event['requirements']['major']:
-                                continue
-                        
+                    # 요구사항 체크
+                    if not self.check_requirements(event):
+                        continue
+                    
                     if (trigger['week'] == current_week and 
                         trigger['day'] == current_day and 
                         trigger['hour'] == current_hour):
@@ -129,39 +154,29 @@ class EventManager:
                 if event_name in self.triggered_events and not event.get('repeatable', False):
                     continue
 
-                # time_trigger 조건 체크
-                time_trigger = event.get('time_trigger', {})
-                
-                # 학년 범위 체크
-                grade_range = time_trigger.get('grade_range', [1, 3])
-                if not (grade_range[0] <= current_grade <= grade_range[1]):
+                # 요구사항 체크
+                if not self.check_requirements(event):
                     continue
                 
-                # 전공 요구사항 체크
-                if 'requirements' in event:
-                    if 'major' in event['requirements']:
-                        if Stat.major != event['requirements']['major']:
-                            continue
-                
                 # 주차 조건 체크
-                if 'week' in time_trigger:
-                    if time_trigger['week'] != current_week:
+                if 'week' in event.get('time_trigger', {}):
+                    if event['time_trigger']['week'] != current_week:
                         continue
                 else:
-                    week_start = time_trigger.get('week_start', 1)
-                    week_end = time_trigger.get('week_end', 30)
+                    week_start = event['time_trigger'].get('week_start', 1)
+                    week_end = event['time_trigger'].get('week_end', 30)
                     if not (week_start <= current_week <= week_end):
                         continue
                 
                 # 요일 조건 체크
-                day_start = time_trigger.get('day_start', 1)
-                day_end = time_trigger.get('day_end', 5)
+                day_start = event['time_trigger'].get('day_start', 1)
+                day_end = event['time_trigger'].get('day_end', 5)
                 if not (day_start <= current_day <= day_end):
                     continue
                 
                 # 시간 조건 체크
-                hour_start = time_trigger.get('hour_start', 0)
-                hour_end = time_trigger.get('hour_end', 23)
+                hour_start = event['time_trigger'].get('hour_start', 0)
+                hour_end = event['time_trigger'].get('hour_end', 23)
                 
                 if hour_start <= hour_end:
                     if not (hour_start <= current_hour <= hour_end):
