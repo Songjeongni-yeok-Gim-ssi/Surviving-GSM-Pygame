@@ -407,26 +407,6 @@ def get_events_data():
                     }
                 ]
             },
-            'lecture_attendance': {
-                'title': '특별 강의',
-                'text': '학교에서 특별 강의 공지가 올라왔다! 참여해볼까?',
-                'image': 'assets/imgs/events/lecture_attendance.png',
-                'probability': 0.4,
-                'repeatable': True,
-                'time_trigger': {
-                    'hour': [9, 20]     # 오전 9시부터 오후 8시까지
-                },
-                'choices': [
-                    {
-                        'text': '적극적으로 참여한다.',
-                        'effect': lambda: {'majorSubjectPoint': 5, 'normalSubjectPoint': 3, 'fatigue': 15}
-                    },
-                    {
-                        'text': '다른 공부를 한다.',
-                        'effect': lambda: {'majorSubjectPoint': 3, 'fatigue': 10}
-                    }
-                ]
-            },
             'stay_after_school': {
                 'title': '학교 - 잔류',
                 'text': '금요일 오후 4시 20분, 학교에 남아서 공부할까요?',
@@ -590,10 +570,10 @@ def get_events_data():
                     }
                 ]
             },
-            'lecture': {
+            'lecture_attendance': {
                 'title': '강의',
                 'text': '학교에서 강의 공지가 올라왔다! 참여해볼까?',
-                'image': 'assets/imgs/events/lecture.png',
+                'image': 'assets/imgs/events/lecture_attendance.png',
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
