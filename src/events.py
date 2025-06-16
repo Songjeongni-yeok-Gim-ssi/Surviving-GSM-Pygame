@@ -39,6 +39,8 @@ class EventManager:
                 new_value = current_value + value
                 setattr(Stat, stat_name, new_value)
                 print(f"[스탯 변경] {stat_name}: {current_value} -> {new_value}")
+            elif stat_name == 'job_type':  # 취업 유형인 경우
+                self.check_employment_result(value)  # 취업 결과 확인
     
     def get_fixed_event(self, event_name):
         """
