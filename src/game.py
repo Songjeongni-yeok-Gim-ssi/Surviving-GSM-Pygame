@@ -380,7 +380,7 @@ class Game:
         )
         
         self.toMainButton = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 200, 400, 300, 150),
+            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 150, 400, 300, 150),
             text="메인으로 돌아가기",
             manager=self.manager,
             container=self.endingPanel
@@ -543,7 +543,7 @@ class Game:
                     print("시간 리셋!")
                     self.time_manager.reset()
                 
-                elif event.ui_element == self.studyButton:
+                elif event.ui_element == self.studyButton and not hasattr(self, 'current_select_paper'):
                     print("테크 트리 창 열기!")
                     self.time_manager.pause_time()
                     self.techTree.show()

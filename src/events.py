@@ -303,33 +303,45 @@ class EventManager:
         """
         취업 결과 결정
         """
+        from study import Study
+        from study import Subject
+        
+        employmentPercentages = [ 0, 0, 0, 0 ]
+        
+        for i in range(4):
+            for j in range(5):
+                if Study.studyList[i][j]:
+                    employmentPercentages[i] += 20
+        
+        import random
+        
         if job_type == 'big_company':
-            if Stat.majorSubjectPoint >= 30 and Stat.responsibility >= 60:
+            if random.random() * 100 <= (employmentPercentages[Subject.FE.value] + employmentPercentages[Subject.BE.value] + Stat.responsibility) / 3:
                 self._handle_employment_success()
             else:
                 self._handle_employment_failure()
         elif job_type == 'startup':
-            if Stat.majorSubjectPoint >= 20 and Stat.intuitivePoint >= 15:
+            if random.random() * 50 <= (employmentPercentages[Subject.FE.value] + employmentPercentages[Subject.BE.value] + Stat.responsibility) / 3:
                 self._handle_employment_success()
             else:
                 self._handle_employment_failure()
         elif job_type == 'big_company_functional':
-            if Stat.functionalCompetition >= 50 and Stat.responsibility >= 50:
+            if random.random() * 100 <= (employmentPercentages[Subject.FC.value] + Stat.responsibility) / 2:
                 self._handle_employment_success()
             else:
                 self._handle_employment_failure()
         elif job_type == 'medium_company':
-            if Stat.functionalCompetition >= 25:
+            if random.random() * 50 <= (employmentPercentages[Subject.FC.value] + Stat.responsibility) / 2:
                 self._handle_employment_success()
             else:
                 self._handle_employment_failure()
         elif job_type == 'public_company':
-            if Stat.normalSubjectPoint >= 40 and Stat.responsibility >= 70:
+            if random.random() * 100 <= (employmentPercentages[Subject.PC.value] + Stat.responsibility) / 2:
                 self._handle_employment_success()
             else:
                 self._handle_employment_failure()
         elif job_type == 'bank':
-            if Stat.normalSubjectPoint >= 50 and Stat.responsibility >= 80:
+            if random.random() * 50 <= (employmentPercentages[Subject.PC.value] + Stat.responsibility) / 2:
                 self._handle_employment_success()
             else:
                 self._handle_employment_failure()
