@@ -329,8 +329,8 @@ def get_events_data():
                 ]
             },
             'self_directed_learning': {
-                'title': '자율학습',
-                'text': '자율학습 시간입니다.',
+                'title': '자기주도 체험학습!',
+                'text': '친구들과 함께 떠나는 자기주도 체험학습시간이다! 무슨 역할을 맡을까?',
                 'image': 'assets/imgs/events/self_directed_learning.png',
                 'time_trigger': {
                     'week': 21,
