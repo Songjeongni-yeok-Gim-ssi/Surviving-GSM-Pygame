@@ -646,11 +646,11 @@ class Game:
         self.gender_label.set_text(f'성별: {Stat.gender if Stat.gender else "미선택"}')
         
         # 기본 스탯 업데이트
-        self.good_label.set_text(f'선함: {Stat.good}')
-        self.evil_label.set_text(f'악함: {Stat.evil}')
-        self.responsibility_label.set_text(f'책임감: {Stat.responsibility}')
-        self.fame_label.set_text(f'평판: {Stat.fame}')
-        self.fatigue_label.set_text(f'피로도: {Stat.fatigue}')
+        self.good_label.set_text(f'선함: {Stat.Good()}')
+        self.evil_label.set_text(f'악함: {Stat.Evil()}')
+        self.responsibility_label.set_text(f'책임감: {Stat.Responsibility()}')
+        self.fame_label.set_text(f'평판: {Stat.Fame()}')
+        self.fatigue_label.set_text(f'피로도: {Stat.Fatigue()}')
         
         # 전공 관련 스탯 업데이트
         self.intuitive_label.set_text(f'직관성 (프론트엔드): {Stat.intuitivePoint}')

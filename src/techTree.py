@@ -59,7 +59,7 @@ class TechNode:
         )
         
         if Study.studyList[subject.value][level]:
-            self.button.text = "이미 공부함"
+            self.button.set_text("이미 공부함")
         
         self.text = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((150 * level, 300 * subject.value + 100), (100, 100)),

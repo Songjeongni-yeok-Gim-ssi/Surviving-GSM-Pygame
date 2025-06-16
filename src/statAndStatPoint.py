@@ -1,90 +1,27 @@
-# 방법 1: 커스텀 classproperty 데코레이터 구현
-class classproperty:
-    """클래스 프로퍼티를 구현하는 커스텀 데코레이터"""
-    def __init__(self, func):
-        self.func = func
-        self.setter_func = None
-        self.deleter_func = None
-    
-    def __get__(self, instance, owner):
-        return self.func(owner)
-    
-    def __set__(self, instance, value):
-        if self.setter_func is None:
-            raise AttributeError("can't set attribute")
-        self.setter_func(type(instance), value)
-    
-    def __delete__(self, instance):
-        if self.deleter_func is None:
-            raise AttributeError("can't delete attribute")
-        self.deleter_func(type(instance))
-    
-    def setter(self, func):
-        """setter 데코레이터"""
-        self.setter_func = func
-        return self
-    
-    def deleter(self, func):
-        """deleter 데코레이터"""
-        self.deleter_func = func
-        return self
-
-
-# 방법 2: 메타클래스를 사용한 구현
-class ClassPropertyMeta(type):
-    """클래스 프로퍼티를 지원하는 메타클래스"""
-    def __getattribute__(cls, name):
-        attr = super().__getattribute__(name)
-        if isinstance(attr, classproperty):
-            return attr.__get__(None, cls)
-        return attr
-    
-    def __setattr__(cls, name, value):
-        attr = getattr(cls, name, None)
-        if isinstance(attr, classproperty) and attr.setter_func:
-            attr.__set__(None, value)
-        else:
-            super().__setattr__(name, value)
-
 class Stat:
-    _good = 0
+    good = 0
     ''' 선 수치 (좋은 회사 취업 가능성에 영향) '''
-    @classproperty
-    def good(cls):
-        return cls._good
-    
-    @good.setter
-    def good(cls, value):
-        if value <= 100:
-            cls._good = value
-        else:
-            cls._good = 100
+    @classmethod
+    def Good(cls):
+        if cls.good > 100:
+            cls.good = 100
+        return cls.good
             
-    _evil = 0
+    evil = 0
     ''' 악 수치 (나쁜 회사 취업 가능성에 영향) '''
-    @classproperty
-    def evil(cls):
-        return cls._evil
-    
-    @evil.setter
-    def evil(cls, value):
-        if value <= 100:
-            cls._evil = value
-        else:
-            cls._evil = 100
+    @classmethod
+    def Evil(cls):
+        if cls.evil > 100:
+            cls.evil = 100
+        return cls.evil
             
-    _responsibility = 0
+    responsibility = 0
     ''' 책임감 (면접 성공률에 영향) '''
-    @classproperty
-    def responsibility(cls):
-        return cls._responsibility
-    
-    @responsibility.setter
-    def responsibility(cls, value):
-        if value <= 100:
-            cls._responsibility = value
-        else:
-            cls._responsibility = 100
+    @classmethod
+    def Responsibility(cls):
+        if cls.responsibility > 100:
+            cls.responsibility = 100
+        return cls.responsibility
             
     intuitivePoint = 0    
     ''' 직관성 포인트 (프론트엔드 개발 능력) '''    
@@ -96,31 +33,27 @@ class Stat:
     ''' 기타 과목 포인트 (공기업 취업에 영향) '''
     functionalCompetition = 0
     ''' 기능 대회 포인트 (기능반 취업의 핵심 요소) '''
-    _fame = 0
+    fame = 0
     ''' 평판 (팀 프로젝트 성공 확률에 영향) '''
-    @classproperty
-    def fame(cls):
-        return cls._fame
-    
-    @fame.setter
-    def fame(cls, value):
-        if value <= 100:
-            cls._fame = value
-        else:
-            cls._fame = 100
+    @classmethod
+    def Fame(cls):
+        if cls.fame > 100:
+            cls.fame = 100
+        return cls.fame
             
-    _fatigue = 0
+    fatigue = 0
     ''' 피로도 (100이 되면 사망) '''
-    @classproperty
-    def fatigue(cls):
-        return cls._fatigue
-    
-    @fatigue.setter
-    def fatigue(cls, value):
-        if value <= 100:
-            cls._fatigue = value
-        else:
-            cls._fatigue = 100
+    @classmethod
+    def Fatigue(cls):
+        print(cls.fatigue)
+        if cls.fatigue >= 100:
+            cls.fatigue = 100
+            from game import Game
+            game = Game()
+            game.endingText.set_text("과로사!")
+            game.endingPanel.show()
+            game.time_manager.pause_time()
+        return cls.fatigue
             
     major = None
     ''' 선택한 전공 '''
