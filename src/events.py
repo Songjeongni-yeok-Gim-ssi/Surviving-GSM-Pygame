@@ -1,6 +1,7 @@
 import random
 from statAndStatPoint import Stat
 from events_data import get_events_data
+import pygame
 
 class EventManager:
     def __init__(self):
@@ -285,6 +286,11 @@ class EventManager:
         from game import Game
         game = Game()
         game.endingText.set_text("취업에 성공했습니다!!!")
+        if Stat.gender == "man":
+            game.endingImage.set_image(pygame.image.load("assets/imgs/ending2.png"))
+        elif Stat.gender == "woman":
+            game.endingImage.set_image(pygame.image.load("assets/imgs/ending.png"))
+        game.hide_all_ui()
         game.endingPanel.show()
         game.time_manager.pause_time()
     
@@ -296,8 +302,13 @@ class EventManager:
         from game import Game
         game = Game()
         game.endingText.set_text("취업에 실패했습니다...")
-        game.time_manager.pause_time()
+        if Stat.gender == "man":
+            game.endingImage.set_image(pygame.image.load("assets/imgs/ending4.png"))
+        elif Stat.gender == "woman":
+            game.endingImage.set_image(pygame.image.load("assets/imgs/ending3.png"))
+        game.hide_all_ui()
         game.endingPanel.show()
+        game.time_manager.pause_time()
     
     def check_employment_result(self, job_type):
         """

@@ -368,6 +368,14 @@ class Game:
         self.endingPanel = pygame_gui.elements.UIPanel(
             relative_rect=pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
             starting_height=300,
+            visible=0,
+            manager=self.manager
+        )
+        
+        self.endingImage = pygame_gui.elements.UIImage(
+            relative_rect=pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+            image_surface=pygame.image.load("assets/imgs/ending.png"),
+            container=self.endingPanel,
             manager=self.manager
         )
         
