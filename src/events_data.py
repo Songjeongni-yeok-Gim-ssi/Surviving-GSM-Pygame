@@ -134,36 +134,36 @@ def get_events_data():
                         {
                             'text': '대기업 개발자로 지원한다.',
                             'requirements': {'majorSubjectPoint': 30, 'responsibility': 60},
-                            'effect': lambda: 'big_company'
+                            'effect': lambda: {'job_type': 'big_company'}
                         },
                         {
                             'text': '스타트업에 도전한다.',
                             'requirements': {'majorSubjectPoint': 20, 'intuitivePoint': 15},
-                            'effect': lambda: 'startup'
+                            'effect': lambda: {'job_type': 'startup'}
                         }
                     ],
                     'functional': [
                         {
                             'text': '기능 대회 실력으로 대기업에 도전한다.',
                             'requirements': {'functionalCompetition': 50, 'responsibility': 50},
-                            'effect': lambda: 'big_company_functional'
+                            'effect': lambda: {'job_type': 'big_company_functional'}
                         },
                         {
                             'text': '중견기업에 안정적으로 취업한다.',
                             'requirements': {'functionalCompetition': 25},
-                            'effect': lambda: 'medium_company'
+                            'effect': lambda: {'job_type': 'medium_company'}
                         }
                     ],
                     'public': [
                         {
                             'text': '공기업에 지원한다.',
                             'requirements': {'normalSubjectPoint': 40, 'responsibility': 70},
-                            'effect': lambda: 'public_company'
+                            'effect': lambda: {'job_type': 'public_company'}
                         },
                         {
                             'text': '은행권에 도전한다.',
                             'requirements': {'normalSubjectPoint': 50, 'responsibility': 80},
-                            'effect': lambda: 'bank'
+                            'effect': lambda: {'job_type': 'bank'}
                         }
                     ]
                 }
