@@ -65,6 +65,8 @@ class Stat:
     ''' 취업 성공 여부 '''
     stat_points = 0
     ''' 스탯 포인트 (게임 재시작 시 사용) '''
+    success = False
+    '''기능 대회 수상 성공 여부'''
 
     @classmethod
     def reset(cls):

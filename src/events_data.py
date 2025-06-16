@@ -65,35 +65,35 @@ def get_events_data():
                     'developer': [
                         {
                             'text': '누가 봐도 아름다운 디자인의 웹사이트를 만들자.',
-                            'effect': lambda: {'intuitivePoint': 10, 'majorSubjectPoint': 5, 'fatigue': 20}
+                            'effect': lambda: {'intuitivePoint': 30, 'majorSubjectPoint': 10, 'fatigue': 10}
                         },
                         {
                             'text': '알고 보면 다양한 기능이 들어있는 유용한 앱을 만들자.',
-                            'effect': lambda: {'interpretPoint': 10, 'majorSubjectPoint': 5, 'fatigue': 20}
+                            'effect': lambda: {'interpretPoint': 30, 'majorSubjectPoint': 10, 'fatigue': 10}
                         },
                         {
                             'text': '기획/발표 같은 보조 업무만 담당한다.',
-                            'effect': lambda: {'responsibility': -5, 'fame': -3, 'fatigue': 10}
+                            'effect': lambda: {'responsibility': -5, 'fame': -5, 'fatigue': 5}
                         }
                     ],
                     'functional': [
                         {
                             'text': '일반 전공은 할 줄 모르니 기획/발표 같은 잡일에만 참여한다.',
-                            'effect': lambda: {'functionalCompetition': 5, 'responsibility': -3}
+                            'effect': lambda: {'functionalCompetition': 20, 'responsibility': -3}
                         },
                         {
                             'text': '이번 기회에 일반 전공도 같이 배워서 해보자.',
-                            'effect': lambda: {'intuitivePoint': 5, 'interpretPoint': 5, 'majorSubjectPoint': 3, 'fatigue': 25}
+                            'effect': lambda: {'intuitivePoint': 20, 'interpretPoint': 20, 'majorSubjectPoint': 20, 'responsibility' : 10, 'fatigue': 15}
                         }
                     ],
                     'public': [
                         {
                             'text': '발표와 기획에 집중한다.',
-                            'effect': lambda: {'responsibility': 8, 'normalSubjectPoint': 5, 'fatigue': 15}
+                            'effect': lambda: {'responsibility': 8, 'normalSubjectPoint': 15, 'fatigue': 10}
                         },
                         {
                             'text': '개발도 배워보면서 참여한다.',
-                            'effect': lambda: {'majorSubjectPoint': 3, 'normalSubjectPoint': 3, 'fatigue': 20}
+                            'effect': lambda: {'majorSubjectPoint': 15, 'normalSubjectPoint': 13, 'fatigue': 15}
                         }
                     ]
                 }
@@ -115,7 +115,7 @@ def get_events_data():
                     },
                     {
                         'text': '난 친구들과 노는게 중요해!',
-                        'effect': lambda: {'evil': 5, 'fame': -15}
+                        'effect': lambda: {'evil': 5, 'fame': -15, 'fatigue' : -20}
                     }
                 ]
             },
@@ -177,7 +177,45 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '과연 결과는?!?!?!?!?!?!',
-                        'effect': lambda: {'functionalCompetition': 0, 'fatigue': 0}  # 실제 효과는 게임 로직에서 처리
+                        'effect': lambda: {'func_type' : 0}
+                    }
+                ]
+            },
+            'functional_competition_success': {
+                'title': '결과',
+                'text': '우승!',
+                'image': 'assets/imgs/events/functional_competition.png',
+                'time_trigger': {
+                    'week': 2,
+                    'day': 3,
+                    'hour': 13,
+                    'grade_range': [2, 3]
+                },
+                'requirements': {'major': 'functional', 'success' : True},
+                'repeatable': True,
+                'choices': [
+                    {
+                        'text': '와!!!!!!',
+                        'effect': lambda: {'functionalCompetition' : 300, 'fatigue' : -100}
+                    }
+                ]
+            },
+            'functional_competition_fail': {
+                'title': '결과',
+                'text': '실패...',
+                'image': 'assets/imgs/events/functional_competition.png',
+                'time_trigger': {
+                    'week': 2,
+                    'day': 3,
+                    'hour': 13,
+                    'grade_range': [2, 3]
+                },
+                'requirements': {'major': 'functional', 'success' : False},
+                'repeatable': True,
+                'choices': [
+                    {
+                        'text': '와....',
+                        'effect': lambda: {'functionalCompetition' : 100}
                     }
                 ]
             },
@@ -222,7 +260,7 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '한다',
-                        'effect': lambda: {'functionalCompetition': 150, 'fatigue': 90}
+                        'effect': lambda: {'functionalCompetition': 150, 'fatigue': 50}
                     },
                     {
                         'text': '안 한다',
@@ -245,7 +283,7 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '참여한다.',
-                        'effect': lambda: {'majorSubjectPoint': 15, 'fatigue': 5}
+                        'effect': lambda: {'majorSubjectPoint': 85, 'fatigue': 10}
                     },
                     {
                         'text': '참여하지 않는다.',
@@ -268,7 +306,7 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '응시한다.',
-                        'effect': lambda: {'normalSubjectPoint': 20, 'fatigue': 15}
+                        'effect': lambda: {'normalSubjectPoint': 50, 'fatigue': 10}
                     },
                     {
                         'text': '응시하지 않는다.',
@@ -291,11 +329,11 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '신청한다.',
-                        'effect': lambda: {'normalSubjectPoint': 10, 'fatigue': 10}
+                        'effect': lambda: {'normalSubjectPoint': 60, 'fatigue': 10}
                     },
                     {
                         'text': '신청하지 않는다.',
-                        'effect': lambda: {'fatigue': -5}
+                        'effect': lambda: {'fatigue': -10}
                     }
                 ]
             },
@@ -314,11 +352,11 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '신청한다.',
-                        'effect': lambda: {'normalSubjectPoint': 5, 'fatigue': 5}
+                        'effect': lambda: {'normalSubjectPoint': 100, 'fatigue': 10}
                     },
                     {
                         'text': '신청하지 않는다.',
-                        'effect': lambda: {'fatigue': -5}
+                        'effect': lambda: {'fatigue': -10}
                     }
                 ]
             },
@@ -344,7 +382,7 @@ def get_events_data():
                     },
                     {
                         'text': '팀원을 하자',
-                        'effect': lambda: None
+                        'effect': lambda: {'fatigue': -10}
                     }
                 ]
             },
@@ -361,11 +399,11 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '내가 하고 싶은 주제가 있다! 열심히 해볼까?',
-                        'effect': lambda: {'majorSubjectPoint': 10, 'fame': 10}
+                        'effect': lambda: {'majorSubjectPoint': 70, 'fame': 15, 'fatigue' : 10}
                     },
                     {
                         'text': '적당히 시간만 때워보자…',
-                        'effect': lambda: None
+                        'effect': lambda: {'fatigue' : -30}
                     }
                 ]
             }
@@ -389,15 +427,15 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '개인 프로젝트에 집중한다.',
-                        'effect': lambda: {'majorSubjectPoint': 12, 'responsibility': 8, 'fatigue': 30}
+                        'effect': lambda: {'majorSubjectPoint': 20, 'responsibility': 8, 'fatigue': 10}
                     },
                     {
                         'text': '팀 프로젝트를 진행한다.',
-                        'effect': lambda: {'majorSubjectPoint': 8, 'responsibility': 5, 'fame': 5, 'fatigue': 25}
+                        'effect': lambda: {'majorSubjectPoint': 15, 'responsibility': 5, 'fame': 5, 'fatigue': 15}
                     },
                     {
                         'text': '외부 공모전에 참여한다.',
-                        'effect': lambda: {'majorSubjectPoint': 10, 'responsibility': 10, 'fame': 8, 'fatigue': 35}
+                        'effect': lambda: {'majorSubjectPoint': 20, 'responsibility': 10, 'fame': 8, 'fatigue': 20}
                     }
                 ]
             },
@@ -407,6 +445,7 @@ def get_events_data():
                 'image': 'assets/imgs/events/stay_after_school.png',
                 'probability': 0.8,
                 'repeatable': True,
+                'requirements': {'major': 'functional'},
                 'time_trigger': {
                     'day': 5,           # 금요일
                     'hour': [16, 16]    # 오후 4시
@@ -414,11 +453,11 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '한다',
-                        'effect': lambda: {'functionalCompetition': 30, 'fatigue': 30}
+                        'effect': lambda: {'functionalCompetition': 40, 'fatigue': 10}
                     },
                     {
                         'text': '안 한다',
-                        'effect': lambda: {'fame': -5}
+                        'effect': lambda: {'fatigue': -10}
                     }
                 ]
             },
@@ -427,18 +466,18 @@ def get_events_data():
                 'text': '"00아 너 성적이 좋더라, ~~기업 추천서 넣어줄테니까 한번 해볼래?" 선생님께서 나에게 ~~기업 추천서를 써주시겠다고 여쭤보셨다..! ~~기업은 복지가 좋기로 유명하다 한번 해볼까?',
                 'probability': 0.3,
                 'repeatable': False,
-                'requirements': {'normalSubjectPoint': 70},
+                'requirements': {'fame': 70},
                 'time_trigger': {
                     'week': [20, 30]
                 },
                 'choices': [
                     {
                         'text': '추천서를 받는다.',
-                        'effect': lambda: {'fame': 10, 'responsibility': 5, 'fatigue': 5}
+                        'effect': lambda: {'fame': 20, 'responsibility': 10, 'fatigue': 5}
                     },
                     {
                         'text': '신청하지 않는다.',
-                        'effect': lambda: {'fatigue': -5}
+                        'effect': lambda: {'fatigue': -10}
                     }
                 ]
             },
@@ -456,15 +495,15 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '내 일이 아니니 신경을 끈다.',
-                        'effect': lambda: {'evil': 5}
+                        'effect': lambda: {'evil': 10}
                     },
                     {
                         'text': '옆에서 하라고 독촉한다.',
-                        'effect': lambda: {'good': 5}
+                        'effect': lambda: {'good': 10, 'responsibility' : 5, 'fatigue' : 5}
                     },
                     {
                         'text': '하 어쩔수 없지.. 그냥 내가 한다.',
-                        'effect': lambda: {'majorSubjectPoint': 5, 'evil': 5, 'fatigue': 10, 'responsibility': 5}
+                        'effect': lambda: {'majorSubjectPoint': 30, 'evil': 10, 'fatigue': 10, 'responsibility': 8}
                     }
                 ]
             },
@@ -482,15 +521,15 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '시험 보기',
-                        'effect': lambda: {'majorSubjectPoint': 10, 'fatigue': 10}
+                        'effect': lambda: {'majorSubjectPoint': 20, 'fatigue': 10}
                     },
                     {
                         'text': '시험 안 보기',
-                        'effect': lambda: None
+                        'effect': lambda: {'fatigue' : -20}
                     },
                     {
                         'text': '더 준비하기',
-                        'effect': lambda: {'majorSubjectPoint': 30, 'fatigue': 15}
+                        'effect': lambda: {'majorSubjectPoint': 30, 'fatigue': 20}
                     }
                 ]
             },
@@ -508,35 +547,35 @@ def get_events_data():
                     'developer': [
                         {
                             'text': '프론트엔드 공부를 한다.',
-                            'effect': lambda: {'intuitivePoint': 8, 'majorSubjectPoint': 5, 'fatigue': 15}
+                            'effect': lambda: {'intuitivePoint': 50, 'majorSubjectPoint': 5, 'fatigue': 10}
                         },
                         {
                             'text': '백엔드 공부를 한다.',
-                            'effect': lambda: {'interpretPoint': 8, 'majorSubjectPoint': 5, 'fatigue': 15}
+                            'effect': lambda: {'interpretPoint': 50, 'majorSubjectPoint': 5, 'fatigue': 10}
                         },
                         {
                             'text': '개인 프로젝트를 한다.',
-                            'effect': lambda: {'majorSubjectPoint': 10, 'responsibility': 5, 'fatigue': 20}
+                            'effect': lambda: {'majorSubjectPoint': 40, 'responsibility': 20, 'fatigue': 15}
                         }
                     ],
                     'functional': [
                         {
                             'text': '기능 대회 준비를 한다.',
-                            'effect': lambda: {'functionalCompetition': 10, 'fatigue': 20}
+                            'effect': lambda: {'functionalCompetition': 50, 'fatigue': 15}
                         },
                         {
                             'text': '일반 전공도 공부한다.',
-                            'effect': lambda: {'majorSubjectPoint': 8, 'fatigue': 18}
+                            'effect': lambda: {'majorSubjectPoint': 30, 'fatigue': 10}
                         }
                     ],
                     'public': [
                         {
                             'text': '공기업 시험 공부를 한다.',
-                            'effect': lambda: {'normalSubjectPoint': 10, 'fatigue': 15}
+                            'effect': lambda: {'normalSubjectPoint': 50, 'fatigue': 10}
                         },
                         {
                             'text': '개발 공부도 병행한다.',
-                            'effect': lambda: {'normalSubjectPoint': 5, 'majorSubjectPoint': 5, 'fatigue': 20}
+                            'effect': lambda: {'normalSubjectPoint': 30, 'majorSubjectPoint': 20, 'fatigue': 15}
                         }
                     ]
                 }
@@ -556,7 +595,7 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '도전해본다',
-                        'effect': lambda: {'fame': 1, 'responsibility': 1, 'fatigue': 1}
+                        'effect': lambda: {'fame': 10, 'responsibility': 10, 'fatigue': 15}
                     },
                     {
                         'text': '좀 부담스럽다',
@@ -579,19 +618,19 @@ def get_events_data():
                     'developer': [
                         {
                             'text': '전공 공부 특강이 재밌어 보인다!',
-                            'effect': lambda: {'majorSubjectPoint': 10}
+                            'effect': lambda: {'majorSubjectPoint': 20}
                         }
                     ],
                     'functional': [
                         {
                             'text': '기능 대회 준비 특강이 재밌어 보인다!',
-                            'effect': lambda: {'functionalCompetition': 10}
+                            'effect': lambda: {'functionalCompetition': 20}
                         }
                     ],
                     'public': [
                         {
                             'text': '공기업 특강이 재밌어 보인다!',
-                            'effect': lambda: {'normalSubjectPoint': 10}
+                            'effect': lambda: {'normalSubjectPoint': 20}
                         }
                     ]
                 }
@@ -610,15 +649,15 @@ def get_events_data():
                 'choices': [
                     {
                         'text': '같이 먹는다.',
-                        'effect': lambda: {'evil': 2, 'fame': -30}
+                        'effect': lambda: {'evil': 5, 'fame': -10, 'fatigue' : -100}
                     },
                     {
                         'text': '못 본 척 해준다.',
-                        'effect': lambda: {'fame': 5}
+                        'effect': lambda: {'fame': 10}
                     },
                     {
                         'text': '기자위한테 알린다.',
-                        'effect': lambda: {'fame': -5}
+                        'effect': lambda: {'fame': -5, 'responsibility' : 10}
                     }
                 ]
             },
@@ -631,20 +670,50 @@ def get_events_data():
                 'time_trigger': {
                     'hour': [21, 23]
                 },
-                'choices': [
-                    {
-                        'text': '자습실을 사용한다.',
-                        'effect': lambda: {'majorSubjectPoint': 5, 'fatigue': 10, 'fame': 5}
-                    },
-                    {
-                        'text': '자습실을 사용하지 않는다.',
-                        'effect': lambda: None
-                    },
-                    {
-                        'text': '호실에서 공부한다.',
-                        'effect': lambda: {'majorSubjectPoint': 5}
-                    }
-                ]
+                'choices': {
+                    'developer' : [
+                        {
+                            'text': '자습실을 사용한다.',
+                            'effect': lambda: {'majorSubjectPoint': 30, 'fatigue': 10, 'fame': 5}
+                        },
+                        {
+                            'text': '자습실을 사용하지 않는다.',
+                            'effect': lambda: None
+                        },
+                        {
+                            'text': '호실에서 공부한다.',
+                            'effect': lambda: {'majorSubjectPoint': 20}
+                        }
+                    ],
+                    'functional' : [
+                        {
+                            'text': '자습실을 사용한다.',
+                            'effect': lambda: {'functionalCompetition': 30, 'fatigue': 10, 'fame': 5}
+                        },
+                        {
+                            'text': '자습실을 사용하지 않는다.',
+                            'effect': lambda: None
+                        },
+                        {
+                            'text': '호실에서 공부한다.',
+                            'effect': lambda: {'functionalCompetition': 20}
+                        }
+                    ],
+                    'public' : [
+                        {
+                            'text': '자습실을 사용한다.',
+                            'effect': lambda: {'normalSubjectPoint': 30, 'fatigue': 10, 'fame': 5}
+                        },
+                        {
+                            'text': '자습실을 사용하지 않는다.',
+                            'effect': lambda: None
+                        },
+                        {
+                            'text': '호실에서 공부한다.',
+                            'effect': lambda: {'normalSubjectPoint': 20}
+                        }
+                    ]
+                }
             }
         }
     } 

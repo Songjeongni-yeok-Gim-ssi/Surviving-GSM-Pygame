@@ -42,6 +42,22 @@ class EventManager:
                 print(f"[스탯 변경] {stat_name}: {current_value} -> {new_value}")
             elif stat_name == 'job_type':  # 취업 유형인 경우
                 self.check_employment_result(value)  # 취업 결과 확인
+            elif stat_name == 'func_type':
+                self.func_com_result()
+    
+    def func_com_result(self):
+        from study import Study
+        from study import Subject
+        
+        employmentPercentages = 0
+        
+        for i in range(5):
+            if Study.studyList[Subject.FC.value][i]:
+                employmentPercentages += 20
+        
+        import random
+        
+        Stat.success = random.random() * 100 <= employmentPercentages
     
     def get_fixed_event(self, event_name):
         """
