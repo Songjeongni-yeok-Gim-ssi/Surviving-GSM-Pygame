@@ -284,9 +284,8 @@ class EventManager:
         print("축하합니다! 취업에 성공했습니다!")
         from game import Game
         game = Game()
-        game.endingText.text = "취업에 성공했습니다!!!"
-        game.endingText.show()
-        game.toMainButton.show()
+        game.endingText.set_text("취업에 성공했습니다!!!")
+        game.endingPanel.show()
         game.time_manager.pause_time()
     
     def _handle_employment_failure(self):
@@ -296,10 +295,9 @@ class EventManager:
         print("아쉽게도 취업에 실패했습니다...")
         from game import Game
         game = Game()
-        game.endingText.text = "취업에 실패했습니다..."
-        game.endingText.show()
-        game.toMainButton.show()
+        game.endingText.set_text("취업에 실패했습니다...")
         game.time_manager.pause_time()
+        game.endingPanel.show()
     
     def check_employment_result(self, job_type):
         """
@@ -340,3 +338,5 @@ class EventManager:
         """이벤트 매니저의 상태를 초기화하는 메서드"""
         self.fixed_event_queue = []
         self._random_event_triggered_today = False
+        self.triggered_events = set()
+        self.last_event_days = {}

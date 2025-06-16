@@ -365,17 +365,25 @@ class Game:
             manager=self.manager
         )
         
+        self.endingPanel = pygame_gui.elements.UIPanel(
+            relative_rect=pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+            starting_height=300,
+            manager=self.manager
+        )
+        
         self.endingText = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 200, 150, 400, 80),
+            relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 300, 150, 600, 80),
             text='취업에 성공하였습니다!!!',
             manager=self.manager,
+            container=self.endingPanel,
             object_id='#main_menu_title'  # 테마에서 정의한 ID
         )
         
         self.toMainButton = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect(SCREEN_WIDTH//2 - 200, 400, 300, 150),
             text="메인으로 돌아가기",
-            manager=self.manager
+            manager=self.manager,
+            container=self.endingPanel
         )
         
         # 처음에는 메인 메뉴만 보이게
@@ -402,8 +410,7 @@ class Game:
         self.stat_panel.hide()  # 스탯 패널도 숨기기
         
         self.studyButton.hide()
-        self.endingText.hide()
-        self.toMainButton.hide()
+        self.endingPanel.hide()
 
     def show_main_menu_ui(self):
         '''
