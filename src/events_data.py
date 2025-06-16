@@ -54,7 +54,7 @@ def get_events_data():
                 'title': '아이디어 페스티벌',
                 'text': '아이디어 페스티벌 기간이 다가왔다. 어떤 역할을 맡을까?',
                 'image': 'assets/imgs/events/idea_festival.png',
-                'time_trigger': {
+                'time_trigger': {   
                     'week': 10,
                     'day': 1,
                     'hour': 10,
@@ -308,6 +308,7 @@ def get_events_data():
             'public_company_lecture': {
                 'title': '공기업 특강',
                 'text': '디스코드 1학년 게시판에 1학년을 대상으로 하는 공기업 특강이 떴다! 한번 신청해 볼까?',
+                'image': 'assets/imgs/events/public_company_lecture.png',
                 'time_trigger': {
                     'week': 7,
                     'day': 1,
@@ -324,31 +325,6 @@ def get_events_data():
                     {
                         'text': '신청하지 않는다.',
                         'effect': lambda: {'fatigue': -5}
-                    }
-                ]
-            },
-            'idea_festival_role': {
-                'title': '아이디어 페스티벌 - 역할 선택',
-                'text': '아이디어 페스티벌 기간이 다가왔다. 어떤 역할을 맡을까?',
-                'time_trigger': {
-                    'week': 15,
-                    'day': 1,
-                    'hour': 9,
-                    'grade_range': [1, 2]
-                },
-                'repeatable': True,
-                'choices': [
-                    {
-                        'text': '이번 기회에 팀장으로서 열심히 해보자!',
-                        'effect': lambda: {'majorSubjectPoint': 5, 'fame': 10, 'responsibility': 20, 'fatigue': 10}
-                    },
-                    {
-                        'text': '난 이끄는 것보다 열심히 참여만 할래',
-                        'effect': lambda: {'majorSubjectPoint': 10, 'interpretPoint': 5}
-                    },
-                    {
-                        'text': '내 실력을 믿을 수 없으니 기획/발표 같은 잡일에만 참여하자',
-                        'effect': lambda: {'intuitivePoint': 5}
                     }
                 ]
             },
@@ -381,6 +357,7 @@ def get_events_data():
             'major_camp': {
                 'title': '전공 캠프',
                 'text': '전공 캠프에 참여하게 되었다. 어떤 활동을 할까?',
+                'image': 'assets/imgs/events/major_camp.png',
                 'time_trigger': {
                     'week': 29,
                     'day': 1,
@@ -433,7 +410,7 @@ def get_events_data():
             'lecture_attendance': {
                 'title': '특별 강의',
                 'text': '학교에서 특별 강의 공지가 올라왔다! 참여해볼까?',
-                'image': 'assets/imgs/events/lecture.png',
+                'image': 'assets/imgs/events/lecture_attendance.png',
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
@@ -494,6 +471,7 @@ def get_events_data():
             'idea_festival_team': {
                 'title': '아이디어 페스티벌 - 팀원 관리',
                 'text': '아이디어 페스티벌 기간, 팀원이 할 일을 미룬다. 어떻게 할까?',
+                'image': 'assets/imgs/events/idea_festival_team.png',
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
@@ -592,6 +570,7 @@ def get_events_data():
             'devfestival_conference': {
                 'title': 'DevFestival 컨퍼런스 참여',
                 'text': 'DevFestival 컨퍼런스 발표자를 모집한다. 참여해볼까?',
+                'image': 'assets/imgs/events/devfestival_conference.png',
                 'probability': 0.3,
                 'repeatable': True,
                 'time_trigger': {
@@ -614,6 +593,7 @@ def get_events_data():
             'lecture': {
                 'title': '강의',
                 'text': '학교에서 강의 공지가 올라왔다! 참여해볼까?',
+                'image': 'assets/imgs/events/lecture.png',
                 'probability': 0.4,
                 'repeatable': True,
                 'time_trigger': {
