@@ -5,6 +5,8 @@ class Stat:
     def Good(cls):
         if cls.good > 100:
             cls.good = 100
+        elif cls.good < 0:
+            cls.good = 0
         return cls.good
             
     evil = 0
@@ -13,6 +15,8 @@ class Stat:
     def Evil(cls):
         if cls.evil > 100:
             cls.evil = 100
+        elif cls.evil < 0:
+            cls.evil = 0
         return cls.evil
             
     responsibility = 0
@@ -21,6 +25,8 @@ class Stat:
     def Responsibility(cls):
         if cls.responsibility > 100:
             cls.responsibility = 100
+        elif cls.responsibility < 0:
+            cls.responsibility = 0
         return cls.responsibility
             
     intuitivePoint = 0    
@@ -39,13 +45,14 @@ class Stat:
     def Fame(cls):
         if cls.fame > 100:
             cls.fame = 100
+        elif cls.fame < 0:
+            cls.fame = 0
         return cls.fame
             
     fatigue = 0
     ''' 피로도 (100이 되면 사망) '''
     @classmethod
     def Fatigue(cls):
-        print(cls.fatigue)
         if cls.fatigue >= 100:
             cls.fatigue = 100
             from game import Game
@@ -53,6 +60,8 @@ class Stat:
             game.endingText.set_text("과로사!")
             game.endingPanel.show()
             game.time_manager.pause_time()
+        elif cls.fatigue < 0:
+            cls.fatigue = 0
         return cls.fatigue
             
     major = None
