@@ -55,6 +55,9 @@ class Study:
                 Stat.interpretPoint = 0
             
             Study.studyList[subject.value][level] = True
+            from game import Game
+            game = Game()
+            game.techTree.buttons[subject.value][level].button.set_text("이미 공부함")
         else:
             self.fail()
     
@@ -65,6 +68,9 @@ class Study:
             Stat.normalSubjectPoint = Stat.normalSubjectPoint - price
             
             Study.studyList[subject.value][level] = True
+            from game import Game
+            game = Game()
+            game.techTree.buttons[subject.value][level].button.set_text("이미 공부함")
         else:
             self.fail()
     
@@ -75,6 +81,9 @@ class Study:
             Stat.normalSubjectPoint = Stat.normalSubjectPoint - price
             
             Study.studyList[subject.value][level] = True
+            from game import Game
+            game = Game()
+            game.techTree.buttons[subject.value][level].button.set_text("이미 공부함")
         else:
             self.fail()
     
