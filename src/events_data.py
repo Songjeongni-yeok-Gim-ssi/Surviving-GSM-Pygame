@@ -222,6 +222,7 @@ def get_events_data():
             'functional_competition_prep': {
                 'title': '기능 대회 대비 출결',
                 'text': '기능 대회를 위한 준비 시간입니다. 어떻게 공부할까요?',
+                'image': 'assets/imgs/events/example.png',
                 'time_trigger': {
                     'week': 15,
                     'day': 1,
@@ -464,6 +465,7 @@ def get_events_data():
             'principal_recommendation': {
                 'title': '학교장 추천서',
                 'text': '"00아 너 성적이 좋더라, ~~기업 추천서 넣어줄테니까 한번 해볼래?" 선생님께서 나에게 ~~기업 추천서를 써주시겠다고 여쭤보셨다..! ~~기업은 복지가 좋기로 유명하다 한번 해볼까?',
+                'image': 'assets/imgs/events/example.png',
                 'probability': 0.3,
                 'repeatable': False,
                 'requirements': {'fame': 70},
@@ -537,6 +539,7 @@ def get_events_data():
             'study_time': {
                 'title': '학교 - 자습',
                 'text': '2학년이 되면서 자습 시간이 늘어났다. 무엇을 하면 좋을까?',
+                'image': 'assets/imgs/events/example.png',
                 'probability': 0.6,
                 'repeatable': True,
                 'time_trigger': {
