@@ -170,7 +170,7 @@ def get_events_data():
                     'week': 2,
                     'day': 3,
                     'hour': 12,
-                    'grade_range': [2, 3]
+                    'grade_range': [2, 2]
                 },
                 'requirements': {'major': 'functional'},
                 'repeatable': True,
@@ -189,7 +189,7 @@ def get_events_data():
                     'week': 2,
                     'day': 3,
                     'hour': 13,
-                    'grade_range': [2, 3]
+                    'grade_range': [2, 2]
                 },
                 'requirements': {'major': 'functional', 'success' : True},
                 'repeatable': True,
@@ -208,7 +208,7 @@ def get_events_data():
                     'week': 2,
                     'day': 3,
                     'hour': 13,
-                    'grade_range': [2, 3]
+                    'grade_range': [2, 2]
                 },
                 'requirements': {'major': 'functional', 'success' : False},
                 'repeatable': True,
@@ -227,7 +227,7 @@ def get_events_data():
                     'week': 15,
                     'day': 1,
                     'hour': 8,
-                    'grade_range': [1, 3]
+                    'grade_range': [1, 2]
                 },
                 'requirements': {'major': 'functional'},
                 'repeatable': True,
@@ -277,7 +277,7 @@ def get_events_data():
                     'week': 8,
                     'day': 1,
                     'hour': 9,
-                    'grade_range': [2, 3]
+                    'grade_range': [2, 2]
                 },
                 'requirements': {'major': 'developer'},
                 'repeatable': True,
@@ -450,7 +450,8 @@ def get_events_data():
                 'requirements': {'major': 'functional'},
                 'time_trigger': {
                     'day': 5,           # 금요일
-                    'hour': [16, 16]    # 오후 4시
+                    'hour': [16, 16],    # 오후 4시
+                    'grade_range': [1, 2]
                 },
                 'choices': [
                     {
@@ -469,10 +470,10 @@ def get_events_data():
                 'image': 'assets/imgs/events/principal_recommendation.png',
                 'probability': 0.3,
                 'repeatable': False,
-                'requirements': {'fame': 70},
+                'requirements': {'fame': 70, 'major': 'public'},
                 'time_trigger': {
                     'week': [20, 30],
-                    'grade_range': [2, 3]
+                    'grade_range': [2, 2]
                 },
                 'choices': [
                     {
@@ -494,7 +495,8 @@ def get_events_data():
                 'time_trigger': {
                     'week': [10, 28],
                     'day': [1, 5],
-                    'hour': [9, 21]
+                    'hour': [9, 21],
+                    'grade_range': [1, 2]
                 },
                 'choices': [
                     {
@@ -520,7 +522,8 @@ def get_events_data():
                 'time_trigger': {
                     'week': [1, 30],
                     'day': [1, 5],
-                    'hour': [9, 18]
+                    'hour': [9, 18],
+                    'grade_range': [1, 2]
                 },
                 'choices': [
                     {
@@ -546,7 +549,8 @@ def get_events_data():
                 'time_trigger': {
                     'week': [5, 25],
                     'day': [1, 5],
-                    'hour': [16, 21]
+                    'hour': [16, 21],
+                    'grade_range': [1, 2]
                 },
                 'choices': {
                     'developer': [
@@ -595,7 +599,7 @@ def get_events_data():
                     'week': 8,
                     'day': [1, 5],
                     'hour': [9, 21],
-                    'grade_range': [2, 3]
+                    'grade_range': [2, 2]
                 },
                 'choices': [
                     {
@@ -617,7 +621,8 @@ def get_events_data():
                 'time_trigger': {
                     'week': [5, 30],
                     'day': [1, 5],
-                    'hour': [9, 21]
+                    'hour': [9, 21],
+                    'grade_range': [1, 2]
                 },
                 'choices': {
                     'developer': [
@@ -649,7 +654,8 @@ def get_events_data():
                 'time_trigger': {
                     'week': [1, 30],
                     'day': [1, 5],
-                    'hour': [21, 1]  # 자정을 걸치는 경우
+                    'hour': [21, 1],  # 자정을 걸치는 경우
+                    'grade_range': [1, 2]
                 },
                 'choices': [
                     {
@@ -673,7 +679,8 @@ def get_events_data():
                 'probability': 0.5,
                 'repeatable': True,
                 'time_trigger': {
-                    'hour': [21, 23]
+                    'hour': [21, 23],
+                    'grade_range': [1, 2]
                 },
                 'choices': {
                     'developer' : [

@@ -232,20 +232,29 @@ class EventManager:
                 if (trigger.get('week') == current_week and 
                     trigger.get('day') == current_day):
                     
-                    # 정확한 시간에 발생하는 경우
-                    if trigger.get('hour') == current_hour:
-                        if self.check_requirements(event):
-                            print(f"\n[고정 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
-                            triggered_events.append(event_name)
-                            if not event.get('repeatable', False):
-                                self.triggered_events.add(event_name)
-                            self.today_triggered = True
-                            return triggered_events
-                    # 시간이 지났고 아직 큐에 없는 경우
-                    elif trigger.get('hour') < current_hour and event_name not in self.fixed_event_queue:
-                        print(f"\n[고정 이벤트 큐 추가] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
-                        self.fixed_event_queue.append(event_name)
-                        return triggered_events  # 큐에 추가했으면 즉시 반환
+                    
+                    if (not isinstance(trigger.get('hour'), list)):
+                        # 정확한 시간에 발생하는 경우
+                        if trigger.get('hour') == current_hour:
+                            if self.check_requirements(event):
+                                print(f"\n[고정 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
+                                triggered_events.append(event_name)
+                                if not event.get('repeatable', False):
+                                    self.triggered_events.add(event_name)
+                                self.today_triggered = True
+                                return triggered_events
+                        # 시간이 지났고 아직 큐에 없는 경우
+                        elif trigger.get('hour') < current_hour and event_name not in self.fixed_event_queue:
+                            print(f"\n[고정 이벤트 큐 추가] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
+                            self.fixed_event_queue.append(event_name)
+                            return triggered_events  # 큐에 추가했으면 즉시 반환
+                    else:
+                        temp = trigger.get('hour')
+                        if temp[0] <= current_hour <= temp[1]:
+                            print(f"\n[고정 이벤트 큐 추가] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
+                            self.fixed_event_queue.append(event_name)
+                            print(self.fixed_event_queue)
+                            return triggered_events  # 큐에 추가했으면 즉시 반환
         
         # 고정 이벤트가 발생하지 않고, 오늘 랜덤 이벤트가 아직 발생하지 않은 경우에만 랜덤 이벤트 체크
         if not triggered_events and not self.today_triggered and not getattr(self, '_random_event_triggered_today', False):
@@ -255,7 +264,7 @@ class EventManager:
                 for event_name, event in self.events['random_events'].items():
                     # 이벤트 쿨다운 체크 (5일)
                     last_day = self.last_event_days.get(event_name, 0)
-                    days_since_last = (current_week - 1) * 5 + current_day - last_day
+                    days_since_last = ((current_grade - 1) * 30) * 5 + (current_week - 1) * 5 + current_day - last_day
                     if days_since_last < 5 and event_name in self.last_event_days:
                         continue
 
@@ -286,7 +295,7 @@ class EventManager:
                                 print(f"\n[랜덤 이벤트 발생] {event['title']} - {time_info['week']}주차 {time_info['day']}일 {time_info['hour']}시")
                                 triggered_events.append(event_name)
                                 # 이벤트 발생 날짜 기록
-                                self.last_event_days[event_name] = (current_week - 1) * 5 + current_day
+                                self.last_event_days[event_name] = ((current_grade - 1) * 30) * 5 + (current_week - 1) * 5 + current_day
                                 # 반복 불가능한 이벤트는 triggered_events에 추가
                                 if not event.get('repeatable', False):
                                     self.triggered_events.add(event_name)

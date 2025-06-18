@@ -602,10 +602,6 @@ class Game:
         if hasattr(self, 'current_select_paper'):
             return
         
-        # 시간 업데이트
-        delta_time = self.clock.get_time() / 1000.0
-        self.time_manager.update(delta_time)
-        
         # 시간 정보 가져오기
         time_info = self.time_manager.get_current_time_info()
         

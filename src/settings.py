@@ -5,7 +5,7 @@ from enum import Enum, auto
 # Game settings
 SCREEN_WIDTH = 1440
 SCREEN_HEIGHT = 1024
-FPS = 60
+FPS = 120
 
 # Colors
 class Color(Enum):
