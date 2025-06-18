@@ -222,7 +222,7 @@ def get_events_data():
             'functional_competition_prep': {
                 'title': '기능 대회 대비 출결',
                 'text': '기능 대회를 위한 준비 시간입니다. 어떻게 공부할까요?',
-                'image': 'assets/imgs/events/example.png',
+                'image': 'assets/imgs/events/self_study.png',
                 'time_trigger': {
                     'week': 15,
                     'day': 1,
@@ -394,7 +394,8 @@ def get_events_data():
                 'time_trigger': {
                     'week': 29,
                     'day': 1,
-                    'hour': 9
+                    'hour': 9,
+                    'grade_range': [1, 2]
                 },
                 'repeatable': True,
                 'choices': [
@@ -443,7 +444,7 @@ def get_events_data():
             'stay_after_school': {
                 'title': '학교 - 잔류',
                 'text': '금요일 오후 4시 20분, 학교에 남아서 공부할까요?',
-                'image': 'assets/imgs/events/stay_after_school.png',
+                'image': 'assets/imgs/events/self_study.png',
                 'probability': 0.8,
                 'repeatable': True,
                 'requirements': {'major': 'functional'},
@@ -465,13 +466,13 @@ def get_events_data():
             'principal_recommendation': {
                 'title': '학교장 추천서',
                 'text': '"00아 너 성적이 좋더라, ~~기업 추천서 넣어줄테니까 한번 해볼래?" 선생님께서 나에게 ~~기업 추천서를 써주시겠다고 여쭤보셨다..! ~~기업은 복지가 좋기로 유명하다 한번 해볼까?',
-                'image': 'assets/imgs/events/example.png',
+                'image': 'assets/imgs/events/principal_recommendation.png',
                 'probability': 0.3,
                 'repeatable': False,
                 'requirements': {'fame': 70},
                 'time_trigger': {
                     'week': [20, 30],
-                    'grade_range': [3, 3]
+                    'grade_range': [2, 3]
                 },
                 'choices': [
                     {
@@ -539,7 +540,7 @@ def get_events_data():
             'study_time': {
                 'title': '학교 - 자습',
                 'text': '2학년이 되면서 자습 시간이 늘어났다. 무엇을 하면 좋을까?',
-                'image': 'assets/imgs/events/example.png',
+                'image': 'assets/imgs/events/self_study.png',
                 'probability': 0.6,
                 'repeatable': True,
                 'time_trigger': {
@@ -668,7 +669,7 @@ def get_events_data():
             'dormitory_study_room': {
                 'title': '기숙사 - 자습실',
                 'text': '기숙사에 도착했다! 피곤하긴 하지만 자습실을 사용할까 고민이 된다.',
-                'image': 'assets/imgs/events/dormitory_study_room.png',
+                'image': 'assets/imgs/events/self_study.png',
                 'probability': 0.5,
                 'repeatable': True,
                 'time_trigger': {
