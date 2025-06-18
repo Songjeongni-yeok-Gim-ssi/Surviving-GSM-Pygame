@@ -122,7 +122,7 @@ def get_events_data():
             'final_job_selection': {
                 'title': '최종 취업 선택',
                 'text': '최종 취업을 선택할 시간입니다.',
-                'image': 'assets/imgs/events/final_job_selection.png',
+                'image': 'assets/imgs/events/final_job_selection.jpeg',
                 'time_trigger': {
                     'week': 1,
                     'day': 1,
@@ -468,7 +468,8 @@ def get_events_data():
                 'repeatable': False,
                 'requirements': {'fame': 70},
                 'time_trigger': {
-                    'week': [20, 30]
+                    'week': [20, 30],
+                    'grade_range': [3, 3]
                 },
                 'choices': [
                     {

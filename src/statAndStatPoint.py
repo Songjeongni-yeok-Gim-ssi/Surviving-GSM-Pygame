@@ -56,8 +56,10 @@ class Stat:
         if cls.fatigue >= 100:
             cls.fatigue = 100
             from game import Game
+            import pygame
             game = Game()
             game.endingText.set_text("과로사!")
+            game.endingImage.set_image(pygame.image.load("assets/imgs/guarosa.png"))
             game.endingPanel.show()
             game.time_manager.pause_time()
         elif cls.fatigue < 0:

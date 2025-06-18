@@ -70,6 +70,7 @@ class EventManager:
                 return {
                     'title': event['title'],
                     'text': event['text'],
+                    'image': event['image'],
                     'choices': event['choices'].get(Stat.major, [])
                 }
             # 공통 선택지인 경우
@@ -87,6 +88,7 @@ class EventManager:
                 return {
                     'title': event['title'],
                     'text': event['text'],
+                    'image': event['image'],
                     'choices': event['choices'].get(Stat.major, event['choices'])
                 }
             # 공통 선택지인 경우
@@ -363,12 +365,12 @@ class EventManager:
             else:
                 self._handle_employment_failure()
         elif job_type == 'public_company':
-            if random.random() * 100 <= (employmentPercentages[Subject.PC.value] + Stat.responsibility) / 2:
+            if random.random() * 50 <= (employmentPercentages[Subject.PC.value] + Stat.responsibility) / 2:
                 self._handle_employment_success()
             else:
                 self._handle_employment_failure()
         elif job_type == 'bank':
-            if random.random() * 50 <= (employmentPercentages[Subject.PC.value] + Stat.responsibility) / 2:
+            if random.random() * 100 <= (employmentPercentages[Subject.PC.value] + Stat.responsibility) / 2:
                 self._handle_employment_success()
             else:
                 self._handle_employment_failure()
